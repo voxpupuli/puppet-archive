@@ -1,0 +1,8 @@
+fixtures:
+  repositories:
+    stdlib:
+      repo: 'https://github.com/puppetlabs/puppetlabs-stdlib.git'
+      ref: '4.2.2'
+    helper: 'https://github.com/bodeco/bodeco_module_helper.git'
+  symlink:
+    archive: "#{source_dir}"
