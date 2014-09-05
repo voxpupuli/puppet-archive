@@ -3,6 +3,7 @@ fixtures:
     stdlib:
       repo: 'https://github.com/puppetlabs/puppetlabs-stdlib.git'
       ref: '4.2.2'
+    pe_gem: 'https://github.com/puppetlabs/puppetlabs-pe_gem.git'
     helper: 'https://github.com/bodeco/bodeco_module_helper.git'
-  symlink:
+  symlinks:
     archive: "#{source_dir}"

@@ -4,56 +4,88 @@ begin
 rescue LoadError
   require 'pathname' # WORK_AROUND #14073 and #7788
   archive = Puppet::Module.find('archive', Puppet[:environment].to_s)
+  raise(LoadError, "Unable to find archive module in modulepath #{Puppet[:basemodulepath] || Puppet[:modulepath]}") unless archive
   require File.join archive.path, 'lib/puppet_x/bodeco/archive'
+  require File.join archive.path, 'lib/puppet_x/bodeco/util'
 end
 
 Puppet::Type.type(:archive).provide(:default) do
+  attr_reader :archive_checksum
+
   def exists?
-    if resource[:creates] and File.exists? resource[:creates]
+    if extracted?
+      cleanup
       true
-    elsif File.exists? archive_filepath
-      checksum?
     else
-      false
+      checksum?
     end
   end
 
   def create
-    download(resource[:source], archive_filepath)
-    archive = PuppetX::Bodeco::Archive.new(archive_filepath)
-    #archive.extract if resource[:extract] == :true
-    #destroy if resource[:cleanup] == :true
-    true
+    PuppetX::Bodeco::Util.download(resource[:source], archive_filepath) unless checksum?
+    verify_checksum
+    extract
+    cleanup
   end
 
   def destroy
-    filepath = File.join(resource[:path], resource[:name])
-    if File.exists? filepath
-      Puppet.debug("Cleanup archive file: #{archive_filepath}")
-      #FileUtils.rm_f(filepath)
-    end
+    FileUtils.rm_f(archive_filepath) if File.exists?(archive_filepath)
   end
-
-  private
 
   def archive_filepath
     File.join(resource[:path], resource[:name])
   end
 
-  # Private: See if local archive checksum matches.
-  # returns boolean
-  def checksum?
-    if resource[:checksum_type] == :none
-      File.exists? archive_filepath
+  def creates
+    if resource[:extract] == :true
+      extracted? ? resource[:creates] : 'archive not extracted'
     else
-      checksum = resource[:checksum] # TODO: || rest_get(resource[:checksum_url])
-      archive = PuppetX::Bodeco::Archive.new(archive_filepath)
-      checksum == archive.checksum(resource[:checksum_type])
+      resource[:creates]
     end
   end
 
-  def download
+  def creates=(value)
+    extract
+  end
 
+  private
+  def checksum
+    # TODO: || rest_get(resource[:checksum_url])
+    resource[:checksum]
+  end
 
+  # Private: See if local archive checksum matches.
+  # returns boolean
+  def checksum?(store_checksum=true)
+    archive_exist = File.exists? archive_filepath
+    if archive_exist and resource[:checksum_type] != :none
+      archive = PuppetX::Bodeco::Archive.new(archive_filepath)
+      archive_checksum = archive.checksum(resource[:checksum_type])
+      @archive_checksum = archive_checksum if store_checksum
+      checksum == archive_checksum
+    else
+      archive_exist
+    end
+  end
+
+  def cleanup
+    if extracted? and resource[:cleanup] == :true
+      Puppet.debug("Cleanup archive #{archive_filepath}")
+      destroy
+    end
+  end
+
+  def extract
+    PuppetX::Bodeco::Archive.new(archive_filepath).extract(resource[:extract_path], nil, resource[:extract_flags])
+  end
+
+  def extracted?
+    resource[:creates] and File.exists? resource[:creates]
+  end
+
+  def verify_checksum
+    if resource[:checksum_verify] == :true
+      fail "Downloaded archive #{archive_filepath} checksum #{resource[:checksum_type]} #{@archive_checksum} does not match resource specification #{checksum}" unless checksum?(false)
+    end
   end
 end

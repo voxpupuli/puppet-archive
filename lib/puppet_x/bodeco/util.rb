@@ -1,7 +1,7 @@
 module PuppetX
   module Bodeco
     module Util
-      def download(url, filepath, options = {})
+      def self.download(url, filepath, options = {})
         username = options[:username] || nil
         password = options[:password] || nil
         uri = URI(url)

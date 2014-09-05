@@ -29,8 +29,8 @@ module PuppetX
             cmd = command(options)
           end
 
-          Puppet.debug("Extracting #{@file}: #{cmd}")
-          #Puppet::Util::Execution.execute(cmd)
+          Puppet.debug("Archive extracting #{@file} in #{path}: #{cmd}")
+          Puppet::Util::Execution.execute(cmd)
         end
       end
 
@@ -50,12 +50,9 @@ module PuppetX
             opt = parse_flags('xzf', options, 'tar')
             "tar #{opt} #{@file}"
           end
-        when /\.zip$/
+        when /(\.zip|\.war|\.jar)$/
           opt = parse_flags('', options, 'zip')
-          "unzip #{opt}  #{@file}"
-        when /(\.war|\.jar)$/
-          opt = parse_flags('', options, 'jar')
-          "jar #{opt} #{@file}"
+          "unzip #{opt} #{@file}"
         else
           raise Error, "Unknown filetype: #{@file}"
         end
