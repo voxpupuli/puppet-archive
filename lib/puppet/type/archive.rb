@@ -109,7 +109,7 @@ Puppet::Type.newtype(:archive) do
     desc "archive remote source file."
     validate do |value|
       unless value =~ URI.regexp(['http', 'https', 'file', 'ftp'])
-        raise ArgumentError.new("%s is not a valid URL" % value)
+        raise ArgumentError, "invalid source url: #{value}"
       end
     end
   end
@@ -135,7 +135,17 @@ Puppet::Type.newtype(:archive) do
     defaultto(:true)
   end
 
+  newparam(:username) do
+  end
+
+  newparam(:password) do
+  end
+
   autorequire(:class) do
     'archive'
+  end
+
+  validate do
+    raise(ArgumentError, "missing archive file path") unless self[:path]
   end
 end
