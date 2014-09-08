@@ -77,6 +77,7 @@ Puppet::Type.type(:archive).provide(:default) do
 
   def extract
     if resource[:extract] == :true
+      raise(ArgumentError, "missing archive extract_path") unless resource[:extract_path]
       PuppetX::Bodeco::Archive.new(archive_filepath).extract(resource[:extract_path], nil, resource[:extract_flags])
     end
   end

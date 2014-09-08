@@ -145,6 +145,14 @@ Puppet::Type.newtype(:archive) do
     'archive'
   end
 
+  autorequire(:file) do
+    self[:path]
+  end
+
+  autorequire(:file) do
+    self[:extract_path]
+  end
+
   validate do
     raise(ArgumentError, "missing archive file path") unless self[:path]
   end
