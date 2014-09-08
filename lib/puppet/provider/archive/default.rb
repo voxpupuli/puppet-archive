@@ -76,7 +76,9 @@ Puppet::Type.type(:archive).provide(:default) do
   end
 
   def extract
-    PuppetX::Bodeco::Archive.new(archive_filepath).extract(resource[:extract_path], nil, resource[:extract_flags])
+    if resource[:extract] == :true
+      PuppetX::Bodeco::Archive.new(archive_filepath).extract(resource[:extract_path], nil, resource[:extract_flags])
+    end
   end
 
   def extracted?
