@@ -30,7 +30,7 @@ module PuppetX
       rescue Faraday::Error::ClientError
         f.close
         File.unlink(file_path)
-        raise $!, "Unable to download file #{url_path}. #{$!}", $!.backtrace
+        raise $!, "Unable to download file #{url_path} from #{@connection.url_prefix}. #{$!}", $!.backtrace
       end
     end
 
