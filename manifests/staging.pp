@@ -1,0 +1,16 @@
+# backwards compatibility with staging:
+class archive::staging (
+  $path  = $archive::params::path,
+  $owner = $archive::params::owner,
+  $group = $archive::params::group,
+  $mode  = $archive::params::mode,
+) inherits archive::params {
+  include '::archive'
+
+  file { $path:
+    ensure => directory,
+    owner  => $owner,
+    group  => $group,
+    mode   => $mode,
+  }
+}
