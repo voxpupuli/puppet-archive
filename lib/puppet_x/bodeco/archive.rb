@@ -42,7 +42,7 @@ module PuppetX
           opt = parse_flags('xf', options, 'tar')
           "tar #{opt} #{@file}"
         when /(\.tgz|\.tar\.gz)$/
-          if Facter.value[:osfamily] == 'Solaris'
+          if Facter.value(:osfamily) == 'Solaris'
             gunzip_opt = parse_flags('-dc', options, 'gunzip')
             tar_opt = parse_flags('xf', options, 'tar')
             "gunzip #{gunzip_opt} #{@file} | tar #{tar_opt} -"
