@@ -54,7 +54,7 @@ module PuppetX
           opt = parse_flags('', options, 'zip')
           "unzip #{opt} #{@file}"
         else
-          raise Error, "Unknown filetype: #{@file}"
+          raise NotImplementedError, "Unknown filetype: #{@file}"
         end
       end
 
