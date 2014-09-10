@@ -28,14 +28,11 @@ module Puppet::Parser::Functions
       conn.adapter  Faraday.default_adapter  # make requests with Net::HTTP
     end
 
-    require 'pry'
-    binding.pry
     begin
       response = connection.get(uri.path)
     rescue Faraday::Error::ClientError
       raise $!, "unable to download go file info #{url}. #{$!}", $!.backtrace
     end
-
 
     checksums = response.body.split("\n")
     line = checksums.find {|x| x =~ /#{file}=/}
