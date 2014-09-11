@@ -18,3 +18,7 @@ archive { '/tmp/jta-1.1.jar':
   cleanup       => true,
 }
 ```
+
+## Known Limitations
+
+The archive::artifactory and archive::go resource need the faraday_middleware gem, and network access to the artifactory/go server to obtain the archive checksum. This gem is installed as a dependency for r10k, or otherwise this dependency should be installed as part of the puppet master initial deployment and configuration.
