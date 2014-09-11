@@ -4,9 +4,13 @@ define archive::go (
   $port,
   $url_path,
   $md5_url_path,
-  $archive_path,
   $username,
   $password,
+  $path         = $name,
+  $owner        = undef,
+  $group        = undef,
+  $mode         = undef,
+  $archive_path = undef,
   $ensure       = present,
   $extract      = undef,
   $extract_path = undef,
@@ -14,13 +18,23 @@ define archive::go (
   $cleanup      = undef,
 ) {
 
+  include archive::params
+
+  if $archive_path {
+    $file_path = "${archive_path}/${name}"
+  } else {
+    $file_path = $path
+  }
+
+  validate_absolute_path($file_path)
+
   $go_url = "http://${server}:${port}"
   $file_url = "${go_url}/${url_path}"
   $md5_url = "${go_url}/${md5_url_path}"
 
   archive { $name:
     ensure        => $ensure,
-    path          => $archive_path,
+    path          => $file_path,
     extract       => $extract,
     extract_path  => $extract_path,
     source        => $file_url,
@@ -30,5 +44,12 @@ define archive::go (
     cleanup       => $cleanup,
     username      => $username,
     password      => $password,
+  }
+
+  file { $file_path:
+    owner   => pick($owner, $archive::params::owner),
+    group   => pick($group, $archive::params::group),
+    mode    => pick($mode, $archive::params::mode),
+    require => Archive[$name],
   }
 }

@@ -11,8 +11,8 @@ module PuppetX
     end
 
     class HTTP
-      require 'faraday_middleware'
       def initialize(url, username, password)
+        require 'faraday_middleware'
         @connection = Faraday.new(url) do |conn|
           conn.basic_auth(username, password) if username and password
 

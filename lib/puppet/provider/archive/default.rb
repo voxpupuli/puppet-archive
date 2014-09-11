@@ -33,7 +33,7 @@ Puppet::Type.type(:archive).provide(:default) do
   end
 
   def archive_filepath
-    File.join(resource[:path], resource[:name])
+    resource[:path]
   end
 
   def creates
