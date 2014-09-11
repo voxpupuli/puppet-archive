@@ -7,10 +7,12 @@ class archive::staging (
 ) inherits archive::params {
   include '::archive'
 
-  file { $path:
-    ensure => directory,
-    owner  => $owner,
-    group  => $group,
-    mode   => $mode,
+  if !defined(File[$path]) {
+    file { $path:
+      ensure => directory,
+      owner  => $owner,
+      group  => $group,
+      mode   => $mode,
+    }
   }
 }
