@@ -1,6 +1,6 @@
 # Puppet Archive
 
-This module manages download and deployment of archive files.
+This module manages download and deployment of archive files. Instead of using execs, this module uses types and provider for the archive download/extraction, and it can cleanup archive files after they have been extracted.
 
 ## Usage
 
