@@ -17,7 +17,15 @@ module PuppetX
         raise $!, "invalid checksum type #{type}. #{$!}", $!.backtrace
       end
 
-      def extract(path = '/', custom_command = nil, options = '')
+      def root_dir
+        if Facter.value('osfamily') == 'windows'
+          'C:\\'
+        else
+          '/'
+        end
+      end
+
+      def extract(path = root_dir, custom_command = nil, options = '')
         Dir.chdir(path) do
           if custom_command
             if custom_command =~ /%s/
@@ -36,25 +44,42 @@ module PuppetX
 
       private
 
-      def command(options)
-        case @file
-        when /\.tar$/
-          opt = parse_flags('xf', options, 'tar')
-          "tar #{opt} #{@file}"
-        when /(\.tgz|\.tar\.gz)$/
-          if Facter.value(:osfamily) == 'Solaris'
-            gunzip_opt = parse_flags('-dc', options, 'gunzip')
-            tar_opt = parse_flags('xf', options, 'tar')
-            "gunzip #{gunzip_opt} #{@file} | tar #{tar_opt} -"
-          else
-            opt = parse_flags('xzf', options, 'tar')
-            "tar #{opt} #{@file}"
-          end
-        when /(\.zip|\.war|\.jar)$/
-          opt = parse_flags('', options, 'zip')
-          "unzip #{opt} #{@file}"
+      def win_7zip
+        if ENV['path'].include?('7-Zip')
+          '7z.exe'
+        elsif File.directory?('C:\\Program Files\\7-Zip')
+          'C:\\Program Files\\7-Zip\\7z.exe'
+        elsif File.directory?('C:\\Program Files (x86)\\7-zip')
+          'C:\\Program Files\\7-Zip (x86)\\7z.exe'
         else
-          raise NotImplementedError, "Unknown filetype: #{@file}"
+          raise Exception, '7z.exe not available'
+        end
+      end
+
+      def command(options)
+        if Facter.value('osfamily') == 'windows'
+          opt = parse_flags('x', options, '7z')
+          "#{win_7zip} #{opt} #{@file}"
+        else
+          case @file
+          when /\.tar$/
+            opt = parse_flags('xf', options, 'tar')
+            "tar #{opt} #{@file}"
+          when /(\.tgz|\.tar\.gz)$/
+            if Facter.value(:osfamily) == 'Solaris'
+              gunzip_opt = parse_flags('-dc', options, 'gunzip')
+              tar_opt = parse_flags('xf', options, 'tar')
+              "gunzip #{gunzip_opt} #{@file} | tar #{tar_opt} -"
+            else
+              opt = parse_flags('xzf', options, 'tar')
+              "tar #{opt} #{@file}"
+            end
+          when /(\.zip|\.war|\.jar)$/
+            opt = parse_flags('', options, 'zip')
+            "unzip #{opt} #{@file}"
+          else
+            raise NotImplementedError, "Unknown filetype: #{@file}"
+          end
         end
       end
 
