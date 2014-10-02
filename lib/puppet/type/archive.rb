@@ -141,8 +141,8 @@ Puppet::Type.newtype(:archive) do
   newparam(:password) do
   end
 
-  autorequire(:class) do
-    'archive'
+  autorequire(:package) do
+    'faraday_middleware'
   end
 
   autorequire(:file) do

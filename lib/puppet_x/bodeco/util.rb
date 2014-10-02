@@ -1,3 +1,5 @@
+require 'faraday_middleware' if Puppet.features.faraday_middleware?
+
 module PuppetX
   module Bodeco
     module Util
@@ -12,14 +14,18 @@ module PuppetX
 
     class HTTP
       def initialize(url, username, password)
-        require 'faraday_middleware'
-        @connection = Faraday.new(url) do |conn|
+        # Try one last time since PUP-1879 isn't always available:
+        unless defined? ::Faraday
+          Gem.clear_paths unless defined? ::Bundler
+          require 'faraday_middleware'
+        end
+        @connection = ::Faraday.new(url) do |conn|
           conn.basic_auth(username, password) if username and password
 
           conn.response :raise_error # This let's us know if the transfer failed.
           conn.response :follow_redirects, :limit => 5
 
-          conn.adapter Faraday.default_adapter
+          conn.adapter ::Faraday.default_adapter
         end
       end
 
