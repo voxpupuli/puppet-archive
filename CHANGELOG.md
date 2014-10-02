@@ -1,3 +1,7 @@
+##2014/10/02 - 0.1.2
+
+* Fix autorequire and installation of dependencies
+
 ##2014/10/01 - 0.1.1
 
 * Add windows extraction support via 7zip
