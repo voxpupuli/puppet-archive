@@ -1,3 +1,7 @@
+##2014/10/03 - 0.1.4
+
+* Fix file overwrite and re-extract
+
 ##2014/10/03 - 0.1.3
 
 * Fix windows x86 path bug
