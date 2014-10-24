@@ -58,7 +58,7 @@ module PuppetX
 
       def command(options)
         if Facter.value('osfamily') == 'windows'
-          opt = parse_flags('x', options, '7z')
+          opt = parse_flags('x -aoa', options, '7z')
           "#{win_7zip} #{opt} #{@file}"
         else
           case @file
@@ -75,7 +75,7 @@ module PuppetX
               "tar #{opt} #{@file}"
             end
           when /(\.zip|\.war|\.jar)$/
-            opt = parse_flags('', options, 'zip')
+            opt = parse_flags('-o', options, 'zip')
             "unzip #{opt} #{@file}"
           else
             raise NotImplementedError, "Unknown filetype: #{@file}"
