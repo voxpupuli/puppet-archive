@@ -14,8 +14,12 @@ Puppet::Type.type(:archive).provide(:default) do
 
   def exists?
     if extracted?
-      cleanup
-      true
+      if File.exists? archive_filepath
+        checksum?
+      else
+        cleanup
+        true
+      end
     else
       checksum?
     end
