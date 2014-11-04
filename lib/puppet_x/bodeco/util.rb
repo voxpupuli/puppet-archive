@@ -6,14 +6,15 @@ module PuppetX
       def self.download(url, filepath, options = {})
         username = options[:username] || nil
         password = options[:password] || nil
+        cookie = options[:cookie] || nil
         uri = URI(url)
-        @connection = PuppetX::Bodeco.const_get(uri.scheme.upcase).new("#{uri.scheme}://#{uri.host}:#{uri.port}", username, password)
+        @connection = PuppetX::Bodeco.const_get(uri.scheme.upcase).new("#{uri.scheme}://#{uri.host}:#{uri.port}", username, password, cookie)
         @connection.download(uri.path, filepath)
       end
     end
 
     class HTTP
-      def initialize(url, username, password)
+      def initialize(url, username, password, cookie)
         # Try one last time since PUP-1879 isn't always available:
         unless defined? ::Faraday
           Gem.clear_paths unless defined? ::Bundler
@@ -24,7 +25,7 @@ module PuppetX
 
           conn.response :raise_error # This let's us know if the transfer failed.
           conn.response :follow_redirects, :limit => 5
-
+          conn.headers['cookie'] = cookie if cookie
           conn.adapter ::Faraday.default_adapter
         end
       end

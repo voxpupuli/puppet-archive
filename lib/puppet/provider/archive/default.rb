@@ -22,7 +22,7 @@ Puppet::Type.type(:archive).provide(:default) do
   end
 
   def create
-    PuppetX::Bodeco::Util.download(resource[:source], archive_filepath, :username => resource[:username], :password => resource[:password] ) unless checksum?
+    PuppetX::Bodeco::Util.download(resource[:source], archive_filepath, :username => resource[:username], :password => resource[:password], :cookie => resource[:cookie] ) unless checksum?
     verify_checksum
     extract
     cleanup
