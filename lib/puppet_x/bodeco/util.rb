@@ -20,6 +20,11 @@ module PuppetX
           Gem.clear_paths unless defined? ::Bundler
           require 'faraday_middleware'
         end
+
+        if Facter.value(:osfamily) == 'windows' and !ENV.has_key?("SSL_CERT_FILE")
+          ENV["SSL_CERT_FILE"] = File.expand_path(File.join(__FILE__, '..', '..', '..', '..', 'files', 'cacert.pem'))
+        end
+
         @connection = ::Faraday.new(url) do |conn|
           conn.basic_auth(username, password) if username and password
 
