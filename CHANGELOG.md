@@ -1,3 +1,11 @@
+##2014/11/05 - 0.1.6
+
+* Fix Windows SSL authentication issues.
+
+##2014/11/04 - 0.1.5
+
+* Add cookie support
+
 ##2014/10/03 - 0.1.4
 
 * Fix file overwrite and re-extract
