@@ -1,1 +1,1 @@
-require 'puppetlabs_spec_helper/rake_tasks'
+require 'bodeco_module_helper/rake_tasks'
