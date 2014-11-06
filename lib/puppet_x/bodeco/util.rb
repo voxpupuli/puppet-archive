@@ -7,14 +7,15 @@ module PuppetX
         username = options[:username] || nil
         password = options[:password] || nil
         cookie = options[:cookie] || nil
+        tls_verify = (options[:tls_verify] == :true) # thanks Ruby and booleans
         uri = URI(url)
-        @connection = PuppetX::Bodeco.const_get(uri.scheme.upcase).new("#{uri.scheme}://#{uri.host}:#{uri.port}", username, password, cookie)
+        @connection = PuppetX::Bodeco.const_get(uri.scheme.upcase).new("#{uri.scheme}://#{uri.host}:#{uri.port}", username, password, cookie, tls_verify)
         @connection.download(uri.path, filepath)
       end
     end
 
     class HTTP
-      def initialize(url, username, password, cookie)
+      def initialize(url, username, password, cookie, tls_verify)
         # Try one last time since PUP-1879 isn't always available:
         unless defined? ::Faraday
           Gem.clear_paths unless defined? ::Bundler
@@ -27,10 +28,10 @@ module PuppetX
 
         @connection = ::Faraday.new(url) do |conn|
           conn.basic_auth(username, password) if username and password
-
           conn.response :raise_error # This let's us know if the transfer failed.
           conn.response :follow_redirects, :limit => 5
           conn.headers['cookie'] = cookie if cookie
+          conn.ssl.verify = tls_verify
           conn.adapter ::Faraday.default_adapter
         end
       end
