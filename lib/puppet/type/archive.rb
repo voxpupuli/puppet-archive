@@ -120,7 +120,7 @@ Puppet::Type.newtype(:archive) do
 
   newparam(:checksum) do
     desc "archive checksum"
-    newvalues(/\b[0-9a-f]{5,40}\b/)
+    newvalues(/\b[0-9a-f]{5,64}\b/)
   end
 
   newparam(:checksum_source) do
