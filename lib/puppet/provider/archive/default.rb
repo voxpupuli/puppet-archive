@@ -52,7 +52,6 @@ Puppet::Type.type(:archive).provide(:default) do
     extract
   end
 
-  private
   def checksum
     # TODO: || rest_get(resource[:checksum_url])
     resource[:checksum]
