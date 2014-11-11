@@ -15,7 +15,7 @@ class archive::params {
     }
   }
 
-  if $::is_pe and $::osfamily != 'Windows' {
+  if $::puppetversion =~ /Puppet Enterprise/ and $::osfamily != 'Windows' {
     $gem_provider = 'pe_gem'
   } else {
     $gem_provider = 'gem'
