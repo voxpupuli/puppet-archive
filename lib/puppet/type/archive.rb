@@ -139,6 +139,12 @@ Puppet::Type.newtype(:archive) do
     defaultto(:true)
   end
 
+  newparam(:tls_verify) do
+    desc "verify certificate for https downloads"
+    newvalues(:true, :false)
+    defaultto(:true)
+  end
+
   newparam(:username) do
   end
 
