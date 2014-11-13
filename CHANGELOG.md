@@ -1,6 +1,13 @@
+##2014/11/13- 0.1.7
+
+* Fix Puppet Enterprise detection
+* Fix checksum length restriction
+* Add puppetlabs stdlib/pe_gem dependency
+* Add spec testing
+
 ##2014/11/05 - 0.1.6
 
-* Fix Windows SSL authentication issues.
+* Fix Windows SSL authentication issues
 
 ##2014/11/04 - 0.1.5
 
