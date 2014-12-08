@@ -2,7 +2,14 @@
 
 [![Build Status](https://travis-ci.org/nanliu/puppet-archive.png)](https://travis-ci.org/nanliu/puppet-archive)
 
-This module manages download and deployment of archive files. Instead of using execs, this module uses types and provider for the archive download/extraction, and it can cleanup archive files after they have been extracted.
+This module manages download and deployment of archive files. The benefits over existing modules such as [puppet-staging](https://github.com/nanliu/puppet-staging):
+
+* Implemented via types and provider instead of exec resource.
+* Follows 302 redirect and propogate download failure.
+* Optional checksum verification of archive files.
+* Automatic dependency to parent directory.
+* Support Windows file extraction via 7zip.
+* Able to cleanup archive files after extraction.
 
 ## Usage
 
