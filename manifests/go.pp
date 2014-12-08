@@ -46,10 +46,14 @@ define archive::go (
     password      => $password,
   }
 
+  $file_owner = pick($owner, $archive::params::owner)
+  $file_group = pick($group, $archive::params::group)
+  $file_mode  = pick($mode, $archive::params::mode)
+
   file { $file_path:
-    owner   => pick($owner, $archive::params::owner),
-    group   => pick($group, $archive::params::group),
-    mode    => pick($mode, $archive::params::mode),
+    owner   => $file_owner,
+    group   => $file_group,
+    mode    => $file_mode,
     require => Archive[$name],
   }
 }
