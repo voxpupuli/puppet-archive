@@ -92,7 +92,7 @@
     }
   ],
   "name": "nanliu-archive",
-  "version": "0.1.7",
+  "version": "0.1.8",
   "source": "http://github.com/nanliu/puppet-archive",
   "author": "Nan Liu",
   "license": "Apache-2.0",

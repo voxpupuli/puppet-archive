@@ -1,3 +1,8 @@
+##2014/11/13- 0.1.8
+
+* Update documentation
+* puppet-lint, metadata.json cleanup
+
 ##2014/11/13- 0.1.7
 
 * Fix Puppet Enterprise detection
