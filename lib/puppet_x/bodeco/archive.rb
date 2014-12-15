@@ -63,16 +63,16 @@ module PuppetX
         else
           case @file
           when /\.tar$/
-            opt = parse_flags('xf', options, 'tar')
-            "tar #{opt} #{@file}"
+            opt = parse_flags("xf #{@file} ", options, 'tar')
+            "tar #{opt}"
           when /(\.tgz|\.tar\.gz)$/
             if Facter.value(:osfamily) == 'Solaris'
               gunzip_opt = parse_flags('-dc', options, 'gunzip')
               tar_opt = parse_flags('xf', options, 'tar')
               "gunzip #{gunzip_opt} #{@file} | tar #{tar_opt} -"
             else
-              opt = parse_flags('xzf', options, 'tar')
-              "tar #{opt} #{@file}"
+              opt = parse_flags("xzf #{@file} ", options, 'tar')
+              "tar #{opt}"
             end
           when /(\.zip|\.war|\.jar)$/
             opt = parse_flags('-o', options, 'zip')
