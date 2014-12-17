@@ -78,8 +78,8 @@ Puppet::Type.newtype(:archive) do
   end
 
   newparam(:extract_flags) do
-    desc "custom extract command."
-    defaultto('')
+    desc "custom extract options, this replaces the default flags. A string such as 'xvf' for a tar file would replace the default xf flag. A hash is useful when custom flags are needed for different platforms. {'tar' => 'xzf', '7z' => 'x -aot'}."
+    defaultto(:undef)
   end
 
   newparam(:path) do

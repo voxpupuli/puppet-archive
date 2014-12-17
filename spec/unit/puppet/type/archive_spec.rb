@@ -14,6 +14,7 @@ describe Puppet::Type::type(:archive) do
     resource[:checksum_type].should eq :none
     resource[:checksum_verify].should eq :true
     resource[:path].should eq '/tmp/example.zip'
+    resource[:extract_flags].should eq :undef
   end
 
   it 'verify resource[:path] is absolute filepath' do

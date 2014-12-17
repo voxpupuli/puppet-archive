@@ -18,7 +18,7 @@ module PuppetX
       end
 
       def root_dir
-        if Facter.value('osfamily') == 'windows'
+        if Facter.value(:osfamily) == 'windows'
           'C:\\'
         else
           '/'
@@ -57,7 +57,7 @@ module PuppetX
       end
 
       def command(options)
-        if Facter.value('osfamily') == 'windows'
+        if Facter.value(:osfamily) == 'windows'
           opt = parse_flags('x -aoa', options, '7z')
           "#{win_7zip} #{opt} #{@file}"
         else
@@ -85,10 +85,12 @@ module PuppetX
 
       def parse_flags(default, options, command=nil)
         case options
+        when :undef
+          default
         when ::String
-          "#{default}#{options}"
+          options
         when ::Hash
-          "#{default}#{options[command]}"
+          options[command]
         else
           raise ArgumentError, "Invalid options for command #{command}: #{options.inspect}"
         end
