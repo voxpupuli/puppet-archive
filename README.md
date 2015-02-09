@@ -48,6 +48,16 @@ archive { '/tmp/jta-1.1.jar':
 }
 ```
 
+Archive module dependency is managed by the archive class. By default 7zip is installed via chocolatey, but can be adjusted to use the msi package instead:
+
+```puppet
+class { 'archive':
+  7zip_name     => '7-Zip 9.20 (x64 edition)',
+  7zip_source   => 'C:/Windows/Temp/7z920-x64.msi',
+  7zip_provider => 'windows',
+}
+
+```
 ## Reference
 
 ### Classes
