@@ -4,6 +4,7 @@ fixtures:
       repo: 'https://github.com/puppetlabs/puppetlabs-stdlib.git'
       ref: '4.2.2'
     pe_gem: 'https://github.com/puppetlabs/puppetlabs-pe_gem.git'
+    yardoc: 'https://github.com/Sharpie/puppet-puppet_yardoc.git'
     helper: 'https://github.com/bodeco/bodeco_module_helper.git'
   symlinks:
     archive: "#{source_dir}"
