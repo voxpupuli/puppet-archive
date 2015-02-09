@@ -9,6 +9,8 @@ rescue LoadError
   require File.join archive.path, 'lib/puppet_x/bodeco/util'
 end
 
+require 'tempfile'
+
 Puppet::Type.type(:archive).provide(:default) do
   attr_reader :archive_checksum
 
@@ -26,8 +28,7 @@ Puppet::Type.type(:archive).provide(:default) do
   end
 
   def create
-    PuppetX::Bodeco::Util.download(resource[:source], archive_filepath, :username => resource[:username], :password => resource[:password], :cookie => resource[:cookie] ) unless checksum?
-    verify_checksum
+    download(archive_filepath) unless checksum?
     extract
     cleanup
   end
@@ -38,6 +39,20 @@ Puppet::Type.type(:archive).provide(:default) do
 
   def archive_filepath
     resource[:path]
+  end
+
+  def download(archive_filepath)
+    tempfile=Tempfile.new(resource[:name])
+    PuppetX::Bodeco::Util.download(resource[:source], tempfile.path, :username => resource[:username], :password => resource[:password], :cookie => resource[:cookie] )
+    tempfile.close
+
+    # conditionally verify checksum:
+    if resource[:checksum_verify] == :true and resource[:checksum_type] != :none
+      archive = PuppetX::Bodeco::Archive.new(tempfile.path)
+      raise(Puppet::Error, 'Download file checksum mismatch') unless archive.checksum(resource[:checksum_type]) == checksum
+    end
+
+    FileUtils.mv(tempfile.path, archive_filepath)
   end
 
   def creates
@@ -87,11 +102,5 @@ Puppet::Type.type(:archive).provide(:default) do
 
   def extracted?
     resource[:creates] and File.exists? resource[:creates]
-  end
-
-  def verify_checksum
-    if resource[:checksum_verify] == :true
-      fail "Downloaded archive #{archive_filepath} checksum #{resource[:checksum_type]} #{@archive_checksum} does not match resource specification #{checksum}" unless checksum?(false)
-    end
   end
 end
