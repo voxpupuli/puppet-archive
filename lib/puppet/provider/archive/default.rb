@@ -42,17 +42,19 @@ Puppet::Type.type(:archive).provide(:default) do
   end
 
   def download(archive_filepath)
-    tempfile=Tempfile.new(resource[:name])
-    PuppetX::Bodeco::Util.download(resource[:source], tempfile.path, :username => resource[:username], :password => resource[:password], :cookie => resource[:cookie] )
-    tempfile.close
+    tempfile = Tempfile.new(resource[:name])
+    temppath = tempfile.path
+    tempfile.close!
+
+    PuppetX::Bodeco::Util.download(resource[:source], temppath, :username => resource[:username], :password => resource[:password], :cookie => resource[:cookie] )
 
     # conditionally verify checksum:
     if resource[:checksum_verify] == :true and resource[:checksum_type] != :none
-      archive = PuppetX::Bodeco::Archive.new(tempfile.path)
+      archive = PuppetX::Bodeco::Archive.new(temppath)
       raise(Puppet::Error, 'Download file checksum mismatch') unless archive.checksum(resource[:checksum_type]) == checksum
     end
 
-    FileUtils.mv(tempfile.path, archive_filepath)
+    FileUtils.mv(temppath, archive_filepath)
   end
 
   def creates
