@@ -2,6 +2,8 @@ require 'uri'
 require 'puppet/util'
 
 Puppet::Type.newtype(:archive) do
+  @doc = 'Manage archive file download, extraction, and cleanup.'
+
   ensurable do
     newvalue(:present) do
       provider.create
@@ -45,7 +47,7 @@ Puppet::Type.newtype(:archive) do
   end
 
   newparam(:name, :namevar => true) do
-    desc "archive filename"
+    desc "archive file name (accepts absolute target filepath)"
     munge do |value|
       if Puppet::Util.absolute_path? value
         require 'pathname'
@@ -59,7 +61,7 @@ Puppet::Type.newtype(:archive) do
   end
 
   newparam(:extract) do
-    desc "extract archive"
+    desc "should archive be extracted after download (true|false)"
     newvalues(:true, :false)
     defaultto(:false)
   end
@@ -74,7 +76,7 @@ Puppet::Type.newtype(:archive) do
   end
 
   newparam(:extract_command) do
-    desc "custom extract command, supports printf format."
+    desc "custom extraction command ('tar xvf example.tar.gz'), also support sprintf format ('tar xvf %s') which will be processed with the filename: sprintf('tar xvf %s', filename)"
   end
 
   newparam(:extract_flags) do
@@ -92,7 +94,7 @@ Puppet::Type.newtype(:archive) do
   end
 
   newproperty(:creates) do
-    desc "if file exists, will not download/extract archive"
+    desc "if file/directory exists, will not download/extract archive"
 
     def should_to_s(value)
       "extracting in #{resource[:extract_path]} to create #{value}"
@@ -100,13 +102,13 @@ Puppet::Type.newtype(:archive) do
   end
 
   newparam(:cleanup) do
-    desc "remove archive file after extraction"
+    desc "should archive file be removed after extraction (true|false)"
     newvalues(:true, :false)
     defaultto(:true)
   end
 
   newparam(:source) do
-    desc "archive remote source file."
+    desc "archive source file, supports http/https/ftp/file."
     validate do |value|
       unless value =~ URI.regexp(['http', 'https', 'file', 'ftp'])
         raise ArgumentError, "invalid source url: #{value}"
@@ -115,7 +117,7 @@ Puppet::Type.newtype(:archive) do
   end
 
   newparam(:cookie) do
-    desc "archive remote download cookie."
+    desc "archive download cookie."
   end
 
   newparam(:checksum) do
@@ -128,23 +130,23 @@ Puppet::Type.newtype(:archive) do
   end
 
   newparam(:checksum_type) do
-    desc "archive checksum type"
+    desc "archive checksum type (none|md5|sha1|sha2|sh256|sha384|sha512)"
     newvalues(:none, :md5, :sha1, :sha2, :sha256, :sha384, :sha512)
     defaultto(:none)
   end
 
   newparam(:checksum_verify) do
-    desc "verify checksum after initial archive download"
+    desc "should checksum be verified (true|false)"
     newvalues(:true, :false)
     defaultto(:true)
   end
 
   newparam(:username) do
-    desc "source file access username"
+    desc "username to download source file"
   end
 
   newparam(:password) do
-    desc "source file access password"
+    desc "password to download source file"
   end
 
   newparam(:user) do
