@@ -9,4 +9,6 @@ archive { '/tmp/jta-1.1.jar':
   checksum_type => 'sha1',
   creates       => '/tmp/javax',
   cleanup       => true,
+  user          => 'vagrant',
+  group         => 'vagrant',
 }
