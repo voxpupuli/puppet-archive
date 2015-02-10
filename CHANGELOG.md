@@ -1,9 +1,16 @@
-##2014/11/13- 0.1.8
+##2015/2/23 - 0.2.0
+
+* fix custom flags options
+* add msi installation option for 7zip
+* add support for configuring extract command user/group
+* use temporary filepath for download
+
+##2014/12/08 - 0.1.8
 
 * Update documentation
 * puppet-lint, metadata.json cleanup
 
-##2014/11/13- 0.1.7
+##2014/11/13 - 0.1.7
 
 * Fix Puppet Enterprise detection
 * Fix checksum length restriction
