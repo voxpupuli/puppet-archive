@@ -140,9 +140,19 @@ Puppet::Type.newtype(:archive) do
   end
 
   newparam(:username) do
+    desc "source file access username"
   end
 
   newparam(:password) do
+    desc "source file access password"
+  end
+
+  newparam(:user) do
+    desc "extract command user (using this option will configure the archive file permission to 0644 so the user can read the file)."
+  end
+
+  newparam(:group) do
+    desc "extract command group (using this option will configure the archive file permisison to 0644 so the user can read the file)."
   end
 
   autorequire(:package) do
