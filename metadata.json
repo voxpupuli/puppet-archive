@@ -92,7 +92,7 @@
     }
   ],
   "name": "nanliu-archive",
-  "version": "0.1.8",
+  "version": "0.2.0",
   "source": "http://github.com/nanliu/puppet-archive",
   "author": "Nan Liu",
   "license": "Apache-2.0",
@@ -100,7 +100,13 @@
   "description": "Manages compressed file download and extraction with optional cleanup .",
   "project_page": "https://github.com/nanliu/puppet-archive",
   "dependencies": [
-    {"name":"puppetlabs/stdlib","version_requirement":">= 2.2.1"},
-    {"name":"puppetlabs/pe_gem","version_requirement":">= 0.0.1"}
+    {
+      "name": "puppetlabs/stdlib",
+      "version_requirement": ">= 2.2.1"
+    },
+    {
+      "name": "puppetlabs/pe_gem",
+      "version_requirement": ">= 0.0.1"
+    }
   ]
 }
