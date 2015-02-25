@@ -27,8 +27,8 @@ class archive (
 
   if $::osfamily == 'Windows' and $7zip_provider {
     package { '7zip':
-      name     => $7zip_name,
       ensure   => present,
+      name     => $7zip_name,
       source   => $7zip_source,
       provider => $7zip_provider,
     }
