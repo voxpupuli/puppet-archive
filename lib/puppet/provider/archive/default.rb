@@ -104,7 +104,7 @@ Puppet::Type.type(:archive).provide(:default) do
           :custom_command => resource[:extract_command],
           :options => resource[:extract_flags],
           :uid => resource[:user],
-          :gid => resource[:group],
+          :gid => resource[:group]
         )
     end
   end
