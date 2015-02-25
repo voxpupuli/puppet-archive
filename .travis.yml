@@ -9,6 +9,7 @@ matrix:
     env: PUPPET_GEM_VERSION="~> 3.0"
   - rvm: 2.0.0
     env: PUPPET_GEM_VERSION="~> 3.0"
+sudo: false
 notifications:
   email: false
   flowdock: 330d85ed4bb7657fc334633f4b9209ee
