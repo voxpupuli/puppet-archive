@@ -1,3 +1,7 @@
+##2015/2/26 - 0.2.1
+
+* fix ruby 1.8.7 syntax error
+
 ##2015/2/23 - 0.2.0
 
 * fix custom flags options
