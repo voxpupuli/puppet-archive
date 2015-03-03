@@ -52,5 +52,14 @@ module PuppetX
     class FTP
       require 'net/http'
     end
+
+    class FILE
+      def initialize(url, username, password, cookie)
+      end
+
+      def download(url_path, file_path)
+        FileUtils.copy(url_path, file_path)
+      end
+    end
   end
 end
