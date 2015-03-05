@@ -46,6 +46,19 @@ archive { '/tmp/jta-1.1.jar':
   creates       => '/tmp/javax',
   cleanup       => true,
 }
+
+archive { '/tmp/test100k.db':
+  source   => 'ftp://ftp.otenet.gr/test100k.db',
+  username => 'speedtest',
+  password => 'speedtest',
+}
+
+archive { '/tmp/test.zip':
+  # NOTE: a copy will be created if source is different from archive path
+  source       => 'file:///vagrant/files/test.zip',
+  extract      => true,
+  extract_path => '/tmp',
+}
 ```
 
 Archive module dependency is managed by the archive class. By default 7zip is installed via chocolatey, but can be adjusted to use the msi package instead:
