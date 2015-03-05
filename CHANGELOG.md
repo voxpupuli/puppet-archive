@@ -1,3 +1,7 @@
+##2015/3/5 - 0.2.2
+
+* add FTP and File support
+
 ##2015/2/26 - 0.2.1
 
 * fix ruby 1.8.7 syntax error
