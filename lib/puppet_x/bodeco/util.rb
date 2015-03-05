@@ -4,17 +4,17 @@ module PuppetX
   module Bodeco
     module Util
       def self.download(url, filepath, options = {})
-        username = options[:username] || nil
-        password = options[:password] || nil
-        cookie = options[:cookie] || nil
         uri = URI(url)
-        @connection = PuppetX::Bodeco.const_get(uri.scheme.upcase).new("#{uri.scheme}://#{uri.host}:#{uri.port}", username, password, cookie)
+        @connection = PuppetX::Bodeco.const_get(uri.scheme.upcase).new("#{uri.scheme}://#{uri.host}:#{uri.port}", options)
         @connection.download(uri.path, filepath)
       end
     end
 
     class HTTP
-      def initialize(url, username, password, cookie)
+      def initialize(url, options)
+        username = options[:username]
+        password = options[:password]
+        cookie = options[:cookie]
         # Try one last time since PUP-1879 isn't always available:
         unless defined? ::Faraday
           Gem.clear_paths unless defined? ::Bundler
@@ -50,11 +50,28 @@ module PuppetX
     end
 
     class FTP
-      require 'net/http'
+      require 'net/ftp'
+      def initialize(url, options)
+        uri = URI(url)
+        username = options[:username]
+        password = options[:password]
+
+        @ftp = Net::FTP.new
+        @ftp.connect(uri.host, uri.port)
+        if username
+          @ftp.login(username, password)
+        else
+          @ftp.login
+        end
+      end
+
+      def download(url, file_path)
+        @ftp.getbinaryfile(url, file_path)
+      end
     end
 
     class FILE
-      def initialize(url, username, password, cookie)
+      def initialize(url, options)
       end
 
       def download(url_path, file_path)
