@@ -53,7 +53,6 @@ Puppet::Type.newtype(:archive) do
         require 'pathname'
         filepath = Pathname.new(value)
         resource[:path] = filepath.to_s
-        filepath.basename.to_s
       else
         value
       end
