@@ -42,7 +42,8 @@ Puppet::Type.type(:archive).provide(:default) do
   end
 
   def download(archive_filepath)
-    tempfile = Tempfile.new(resource[:name])
+    require 'pathname'
+    tempfile = Tempfile.new(Pathname.new(resource[:name]).basename.to_s)
     temppath = tempfile.path
     tempfile.close!
 
