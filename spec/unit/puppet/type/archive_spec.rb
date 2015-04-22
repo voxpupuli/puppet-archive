@@ -3,17 +3,17 @@ require 'puppet'
 
 describe Puppet::Type::type(:archive) do
   let(:resource) { Puppet::Type.type(:archive).new(
-    :name => '/tmp/example.zip',
+    :path   => '/tmp/example.zip',
     :source => 'http://home.lan/example.zip'
   )}
 
   it 'resource defaults' do
-    resource[:name].should eq 'example.zip'
+    resource[:path].should eq '/tmp/example.zip'
+    resource[:filename].should eq 'example.zip'
     resource[:extract].should eq :false
     resource[:cleanup].should eq :true
     resource[:checksum_type].should eq :none
     resource[:checksum_verify].should eq :true
-    resource[:path].should eq '/tmp/example.zip'
     resource[:extract_flags].should eq :undef
   end
 

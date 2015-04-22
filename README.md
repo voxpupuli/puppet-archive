@@ -8,6 +8,7 @@
 Release 0.3.x contains breaking changes
 
 * The parameter 7zip have been changed to seven_zip to conform to Puppet 4.x variable name requirements.
+* The namevar name have been changed to path to allow files with the same filename to exists in different filepath.
 
 #### Table of Contents
 

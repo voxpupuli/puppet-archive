@@ -55,7 +55,7 @@ describe 'archive::go' do
       :mode => '0400',
     }}
 
-    it { should contain_archive('example.zip').with({
+    it { should contain_archive('/opt/app/example.zip').with({
         :path => '/opt/app/example.zip',
         :source => 'http://home.lan:8081/go/example.zip',
         :checksum => '0d4f4b4b039c10917cfc49f6f6be71e4',
@@ -67,7 +67,7 @@ describe 'archive::go' do
         :owner => 'app',
         :group => 'app',
         :mode => '0400',
-        :require => 'Archive[example.zip]',
+        :require => 'Archive[/opt/app/example.zip]',
       })
     }
   end

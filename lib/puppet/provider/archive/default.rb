@@ -9,6 +9,7 @@ rescue LoadError
   require File.join archive.path, 'lib/puppet_x/bodeco/util'
 end
 
+require 'securerandom'
 require 'tempfile'
 
 Puppet::Type.type(:archive).provide(:default) do
@@ -41,8 +42,16 @@ Puppet::Type.type(:archive).provide(:default) do
     resource[:path]
   end
 
+  def tempfile_name
+    if resource[:checksum] == 'none'
+      "#{resource[:filename]}_#{SecureRandom.base64}"
+    else
+      "#{resource[:filename]}_#{resource[:checksum]}"
+    end
+  end
+
   def download(archive_filepath)
-    tempfile = Tempfile.new(resource[:name])
+    tempfile = Tempfile.new(tempfile_name)
     temppath = tempfile.path
     tempfile.close!
 

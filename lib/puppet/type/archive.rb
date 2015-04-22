@@ -1,3 +1,4 @@
+require 'pathname'
 require 'uri'
 require 'puppet/util'
 
@@ -5,6 +6,8 @@ Puppet::Type.newtype(:archive) do
   @doc = 'Manage archive file download, extraction, and cleanup.'
 
   ensurable do
+    desc "whether archive file should be present/absent (default: present)"
+
     newvalue(:present) do
       provider.create
     end
@@ -46,18 +49,17 @@ Puppet::Type.newtype(:archive) do
     end
   end
 
-  newparam(:name, :namevar => true) do
-    desc "archive file name (accepts absolute target filepath)"
-    munge do |value|
-      if Puppet::Util.absolute_path? value
-        require 'pathname'
-        filepath = Pathname.new(value)
-        resource[:path] = filepath.to_s
-        filepath.basename.to_s
-      else
-        value
+  newparam(:path, :namevar => true) do
+    desc "archive file fully qualified file path."
+    validate do |value|
+      unless Puppet::Util.absolute_path? value
+        raise ArgumentError, "archive path must be absolute: #{value}"
       end
     end
+  end
+
+  newparam(:filename) do
+    desc "archive filename."
   end
 
   newparam(:extract) do
@@ -84,14 +86,6 @@ Puppet::Type.newtype(:archive) do
     defaultto(:undef)
   end
 
-  newparam(:path) do
-    desc "archive file path"
-    validate do |value|
-      unless Puppet::Util.absolute_path? value
-        raise ArgumentError, "archive path must be absolute: #{value}"
-      end
-    end
-  end
 
   newproperty(:creates) do
     desc "if file/directory exists, will not download/extract archive"
@@ -108,7 +102,7 @@ Puppet::Type.newtype(:archive) do
   end
 
   newparam(:source) do
-    desc "archive source file, supports http/https/ftp/file."
+    desc "archive file source, supports http|https|ftp|file uri."
     validate do |value|
       unless value =~ URI.regexp(['http', 'https', 'file', 'ftp'])
         raise ArgumentError, "invalid source url: #{value}"
@@ -117,26 +111,26 @@ Puppet::Type.newtype(:archive) do
   end
 
   newparam(:cookie) do
-    desc "archive download cookie."
+    desc "archive file download cookie."
   end
 
   newparam(:checksum) do
-    desc "archive checksum"
+    desc "archive file checksum (match checksum_type)"
     newvalues(/\b[0-9a-f]{5,64}\b/)
   end
 
   newparam(:checksum_source) do
-    desc "archive checksum source (instead of specify checksum)"
+    desc "archive file checksum source (instead of specify checksum)"
   end
 
   newparam(:checksum_type) do
-    desc "archive checksum type (none|md5|sha1|sha2|sh256|sha384|sha512)"
+    desc "archive file checksum type (none|md5|sha1|sha2|sh256|sha384|sha512)"
     newvalues(:none, :md5, :sha1, :sha2, :sha256, :sha384, :sha512)
     defaultto(:none)
   end
 
   newparam(:checksum_verify) do
-    desc "should checksum be verified (true|false)"
+    desc "whether checksum be verified (true|false)"
     newvalues(:true, :false)
     defaultto(:true)
   end
@@ -162,7 +156,7 @@ Puppet::Type.newtype(:archive) do
   end
 
   autorequire(:file) do
-    self[:path]
+    Pathname.new(self[:path]).parent.to_s
   end
 
   autorequire(:file) do
@@ -170,6 +164,7 @@ Puppet::Type.newtype(:archive) do
   end
 
   validate do
-    raise(ArgumentError, "missing archive file path") unless self[:path]
+    filepath = Pathname.new(self[:path])
+    self[:filename] = filepath.basename.to_s
   end
 end
