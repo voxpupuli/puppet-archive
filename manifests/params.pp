@@ -2,18 +2,18 @@
 class archive::params {
   case $::osfamily {
     default: {
-      $path      = '/opt/staging'
-      $owner     = '0'
-      $group     = '0'
-      $mode      = '0640'
+      $path  = '/opt/staging'
+      $owner = '0'
+      $group = '0'
+      $mode  = '0640'
     }
     'Windows': {
-      $path              = $::staging_windir
-      $owner             = 'S-1-5-32-544' # Adminstrators
-      $group             = 'S-1-5-18'     # SYSTEM
-      $mode              = '0640'
-      $sevenzip_name     = '7zip'
-      $sevenzip_provider = 'chocolatey'
+      $path               = $::staging_windir
+      $owner              = 'S-1-5-32-544' # Adminstrators
+      $group              = 'S-1-5-18'     # SYSTEM
+      $mode               = '0640'
+      $seven_zip_name     = '7zip'
+      $seven_zip_provider = 'chocolatey'
     }
   }
 

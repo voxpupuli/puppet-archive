@@ -5,15 +5,15 @@
 # == Examples:
 #
 # class { 'archive':
-#   sevenzip_name     => '7-Zip 9.20 (x64 edition)',
-#   sevenzip_source   => 'C:/Windows/Temp/7z920-x64.msi',
-#   sevenzip_provider => 'windows',
+#   seven_zip_name     => '7-Zip 9.20 (x64 edition)',
+#   seven_zip_source   => 'C:/Windows/Temp/7z920-x64.msi',
+#   seven_zip_provider => 'windows',
 # }
 #
 class archive (
-  $sevenzip_name     = $archive::params::sevenzip_name,
-  $sevenzip_provider = $archive::params::sevenzip_provider,
-  $sevenzip_source   = undef,
+  $seven_zip_name     = $archive::params::seven_zip_name,
+  $seven_zip_provider = $archive::params::seven_zip_provider,
+  $seven_zip_source   = undef,
 ) inherits archive::params {
   package { 'faraday':
     ensure   => present,
@@ -25,12 +25,12 @@ class archive (
     provider => $archive::params::gem_provider,
   }
 
-  if $::osfamily == 'Windows' and $sevenzip_provider {
+  if $::osfamily == 'Windows' and $seven_zip_provider {
     package { '7zip':
       ensure   => present,
-      name     => $sevenzip_name,
-      source   => $sevenzip_source,
-      provider => $sevenzip_provider,
+      name     => $seven_zip_name,
+      source   => $seven_zip_source,
+      provider => $seven_zip_provider,
     }
   }
 }

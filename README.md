@@ -65,9 +65,9 @@ Archive module dependency is managed by the archive class. By default 7zip is in
 
 ```puppet
 class { 'archive':
-  sevenzip_name     => '7-Zip 9.20 (x64 edition)',
-  sevenzip_source   => 'C:/Windows/Temp/7z920-x64.msi',
-  sevenzip_provider => 'windows',
+  seven_zip_name     => '7-Zip 9.20 (x64 edition)',
+  seven_zip_source   => 'C:/Windows/Temp/7z920-x64.msi',
+  seven_zip_provider => 'windows',
 }
 
 ```
