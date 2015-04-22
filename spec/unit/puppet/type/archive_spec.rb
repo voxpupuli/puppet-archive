@@ -9,6 +9,7 @@ describe Puppet::Type::type(:archive) do
 
   it 'resource defaults' do
     resource[:path].should eq '/tmp/example.zip'
+    resource[:name].should eq '/tmp/example.zip'
     resource[:filename].should eq 'example.zip'
     resource[:extract].should eq :false
     resource[:cleanup].should eq :true
@@ -59,5 +60,32 @@ describe Puppet::Type::type(:archive) do
     expect {
       resource[:checksum_type] = :crc32
     }.to raise_error(Puppet::Error, /Invalid value/)
+  end
+
+  describe 'autorequire parent path' do
+    # Need to import puppet's crazy monkey patch to test:
+    class Object
+      alias :must :should
+      alias :must_not :should_not
+    end
+
+    before :each do
+      @file_tmp = Puppet::Type.type(:file).new(:name => '/tmp')
+      @catalog = Puppet::Resource::Catalog.new
+      @catalog.add_resource @file_tmp
+    end
+
+    it 'should require archive parent' do
+      example_archive = described_class.new(
+        :path   => '/tmp/example.zip',
+        :source => 'http://home.lan/example.zip'
+      )
+      @catalog.add_resource example_archive
+
+      req = example_archive.autorequire
+      req.size.should == 1
+      req[0].target.must == example_archive
+      req[0].source.must == @file_tmp
+    end
   end
 end

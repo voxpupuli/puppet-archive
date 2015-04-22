@@ -156,11 +156,7 @@ Puppet::Type.newtype(:archive) do
   end
 
   autorequire(:file) do
-    Pathname.new(self[:path]).parent.to_s
-  end
-
-  autorequire(:file) do
-    self[:extract_path]
+    [ Pathname.new(self[:path]).parent.to_s, self[:extract_path] ]
   end
 
   validate do
