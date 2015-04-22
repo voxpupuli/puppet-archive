@@ -8,12 +8,12 @@ class archive::params {
       $mode      = '0640'
     }
     'Windows': {
-      $path          = $::staging_windir
-      $owner         = 'S-1-5-32-544' # Adminstrators
-      $group         = 'S-1-5-18'     # SYSTEM
-      $mode          = '0640'
-      $7zip_name     = '7zip'
-      $7zip_provider = 'chocolatey'
+      $path              = $::staging_windir
+      $owner             = 'S-1-5-32-544' # Adminstrators
+      $group             = 'S-1-5-18'     # SYSTEM
+      $mode              = '0640'
+      $sevenzip_name     = '7zip'
+      $sevenzip_provider = 'chocolatey'
     }
   }
 
