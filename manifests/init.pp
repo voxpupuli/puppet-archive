@@ -25,7 +25,7 @@ class archive (
     provider => $archive::params::gem_provider,
   }
 
-  if $::osfamily == 'Windows' and $seven_zip_provider {
+  if $::osfamily == 'Windows' and !($seven_zip_provider in ['', undef]) {
     package { '7zip':
       ensure   => present,
       name     => $seven_zip_name,
