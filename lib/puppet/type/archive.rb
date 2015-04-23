@@ -1,3 +1,4 @@
+require 'pathname'
 require 'uri'
 require 'puppet/util'
 
@@ -5,6 +6,8 @@ Puppet::Type.newtype(:archive) do
   @doc = 'Manage archive file download, extraction, and cleanup.'
 
   ensurable do
+    desc "whether archive file should be present/absent (default: present)"
+
     newvalue(:present) do
       provider.create
     end
@@ -46,28 +49,27 @@ Puppet::Type.newtype(:archive) do
     end
   end
 
-  newparam(:name, :namevar => true) do
-    desc "archive file name (accepts absolute target filepath)"
-    munge do |value|
-      if Puppet::Util.absolute_path? value
-        require 'pathname'
-        filepath = Pathname.new(value)
-        resource[:path] = filepath.to_s
-        filepath.basename.to_s
-      else
-        value
+  newparam(:path, :namevar => true) do
+    desc "namevar, archive file fully qualified file path."
+    validate do |value|
+      unless Puppet::Util.absolute_path? value
+        raise ArgumentError, "archive path must be absolute: #{value}"
       end
     end
   end
 
+  newparam(:filename) do
+    desc "archive file name (derived from path)."
+  end
+
   newparam(:extract) do
-    desc "should archive be extracted after download (true|false)"
+    desc "should archive be extracted after download (true|false)."
     newvalues(:true, :false)
     defaultto(:false)
   end
 
   newparam(:extract_path) do
-    desc "target path to extract archive"
+    desc "target folder path to extract archive."
     validate do |value|
       unless Puppet::Util.absolute_path? value
         raise ArgumentError, "archive extract_path must be absolute: #{value}"
@@ -80,21 +82,13 @@ Puppet::Type.newtype(:archive) do
   end
 
   newparam(:extract_flags) do
-    desc "custom extract options, this replaces the default flags. A string such as 'xvf' for a tar file would replace the default xf flag. A hash is useful when custom flags are needed for different platforms. {'tar' => 'xzf', '7z' => 'x -aot'}."
+    desc "custom extraction options, this replaces the default flags. A string such as 'xvf' for a tar file would replace the default xf flag. A hash is useful when custom flags are needed for different platforms. {'tar' => 'xzf', '7z' => 'x -aot'}."
     defaultto(:undef)
   end
 
-  newparam(:path) do
-    desc "archive file path"
-    validate do |value|
-      unless Puppet::Util.absolute_path? value
-        raise ArgumentError, "archive path must be absolute: #{value}"
-      end
-    end
-  end
 
   newproperty(:creates) do
-    desc "if file/directory exists, will not download/extract archive"
+    desc "if file/directory exists, will not download/extract archive."
 
     def should_to_s(value)
       "extracting in #{resource[:extract_path]} to create #{value}"
@@ -102,13 +96,13 @@ Puppet::Type.newtype(:archive) do
   end
 
   newparam(:cleanup) do
-    desc "should archive file be removed after extraction (true|false)"
+    desc "whether archive file be removed after extraction (true|false)."
     newvalues(:true, :false)
     defaultto(:true)
   end
 
   newparam(:source) do
-    desc "archive source file, supports http/https/ftp/file."
+    desc "archive file source, supports http|https|ftp|file uri."
     validate do |value|
       unless value =~ URI.regexp(['http', 'https', 'file', 'ftp'])
         raise ArgumentError, "invalid source url: #{value}"
@@ -117,36 +111,36 @@ Puppet::Type.newtype(:archive) do
   end
 
   newparam(:cookie) do
-    desc "archive download cookie."
+    desc "archive file download cookie."
   end
 
   newparam(:checksum) do
-    desc "archive checksum"
+    desc "archive file checksum (match checksum_type)."
     newvalues(/\b[0-9a-f]{5,64}\b/)
   end
 
   newparam(:checksum_source) do
-    desc "archive checksum source (instead of specify checksum)"
+    desc "archive file checksum source (instead of specify checksum)"
   end
 
   newparam(:checksum_type) do
-    desc "archive checksum type (none|md5|sha1|sha2|sh256|sha384|sha512)"
+    desc "archive file checksum type (none|md5|sha1|sha2|sh256|sha384|sha512)."
     newvalues(:none, :md5, :sha1, :sha2, :sha256, :sha384, :sha512)
     defaultto(:none)
   end
 
   newparam(:checksum_verify) do
-    desc "should checksum be verified (true|false)"
+    desc "whether checksum be verified (true|false)."
     newvalues(:true, :false)
     defaultto(:true)
   end
 
   newparam(:username) do
-    desc "username to download source file"
+    desc "username to download source file."
   end
 
   newparam(:password) do
-    desc "password to download source file"
+    desc "password to download source file."
   end
 
   newparam(:user) do
@@ -162,14 +156,11 @@ Puppet::Type.newtype(:archive) do
   end
 
   autorequire(:file) do
-    self[:path]
-  end
-
-  autorequire(:file) do
-    self[:extract_path]
+    [ Pathname.new(self[:path]).parent.to_s, self[:extract_path] ]
   end
 
   validate do
-    raise(ArgumentError, "missing archive file path") unless self[:path]
+    filepath = Pathname.new(self[:path])
+    self[:filename] = filepath.basename.to_s
   end
 end

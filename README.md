@@ -3,6 +3,13 @@
 [![Puppet Forge](http://img.shields.io/puppetforge/v/nanliu/archive.svg)](https://forge.puppetlabs.com/nanliu/archive)
 [![Build Status](https://travis-ci.org/nanliu/puppet-archive.png)](https://travis-ci.org/nanliu/puppet-archive)
 
+## Warning
+
+Release 0.3.x contains breaking changes
+
+* The parameter 7zip have been changed to seven_zip to conform to Puppet 4.x variable name requirements.
+* The namevar name have been changed to path to allow files with the same filename to exists in different filepath.
+
 #### Table of Contents
 
 1. [Overview](#overview)
@@ -65,9 +72,9 @@ Archive module dependency is managed by the archive class. By default 7zip is in
 
 ```puppet
 class { 'archive':
-  7zip_name     => '7-Zip 9.20 (x64 edition)',
-  7zip_source   => 'C:/Windows/Temp/7z920-x64.msi',
-  7zip_provider => 'windows',
+  seven_zip_name     => '7-Zip 9.20 (x64 edition)',
+  seven_zip_source   => 'C:/Windows/Temp/7z920-x64.msi',
+  seven_zip_provider => 'windows',
 }
 
 ```
@@ -85,6 +92,29 @@ class { 'archive':
 
 ### Resources
 
+#### Archive
+
+* `ensure`: whether archive file should be present/absent (default: present)
+* `path`: namevar, archive file fully qualified file path.
+* `filename`: archive file name (derived from path).
+* `source`: archive file source, supports http|https|ftp|file uri.
+* `username`: username to download source file.
+* `password`: password to download source file.
+* `cookie`: archive file download cookie.
+* `checksum_type` archive file checksum type (none|md5|sha1|sha2|sh256|sha384|sha512). (default: none)
+* `checksum`: archive file checksum (match checksum_type)
+* `checksum_source`: archive file checksum source (instead of specify checksum)
+* `checksum_verify`: whether checksum be verified (true|false). (default: true)
+* `extract`: whether archive be extracted after download (true|false). (default: false)
+* `extract_path`: target folder path to extract archive.
+* `extract_command`: custom extraction command ('tar xvf example.tar.gz'), also support sprintf format ('tar xvf %s') which will be processed with the filename: sprintf('tar xvf %s', filename)
+* `extract_flags`: custom extraction options, this replaces the default flags. A string such as 'xvf' for a tar file would replace the default xf flag. A hash is useful when custom flags are needed for different platforms. {'tar' => 'xzf', '7z' => 'x -aot'}.
+* `user`: extract command user (using this option will configure the archive file permission to 0644 so the user can read the file).
+* `group`: extract command group (using this option will configure the archive file permisison to 0644 so the user can read the file).
+* `cleanup`: whether archive file be removed after extraction (true|false). (default: true)
+* `creates`: if file/directory exists, will not download/extract archive.
+
+#### Example:
 ```puppet
 archive { '/tmp/jta-1.1.jar':
   ensure        => present,

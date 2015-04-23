@@ -21,7 +21,7 @@ describe archive_provider do
 
   it '#checksum?' do
     Dir.mktmpdir do |dir|
-      resource[:path] = File.join(dir, resource[:name])
+      resource[:path] = File.join(dir, resource[:filename])
       FileUtils.cp(zipfile, resource[:path])
 
       resource[:checksum] = '377ec712d7fdb7266221db3441e3af2055448ead'
@@ -40,7 +40,7 @@ describe archive_provider do
 
   it '#extract' do
     Dir.mktmpdir do |dir|
-      resource[:path] = File.join(dir, resource[:name])
+      resource[:path] = File.join(dir, resource[:filename])
       extracted_file = File.join(dir, 'test')
       FileUtils.cp(zipfile, resource[:path])
 
@@ -55,7 +55,7 @@ describe archive_provider do
 
   it '#extracted?' do
     Dir.mktmpdir do |dir|
-      resource[:path] = File.join(dir, resource[:name])
+      resource[:path] = File.join(dir, resource[:filename])
       extracted_file = File.join(dir, 'test')
       FileUtils.cp(zipfile, resource[:path])
 
@@ -71,7 +71,7 @@ describe archive_provider do
 
   it '#cleanup' do
     Dir.mktmpdir do |dir|
-      resource[:path] = File.join(dir, resource[:name])
+      resource[:path] = File.join(dir, resource[:filename])
       extracted_file = File.join(dir, 'test')
       FileUtils.cp(zipfile, resource[:path])
 
@@ -88,7 +88,7 @@ describe archive_provider do
 
   it '#create' do
     Dir.mktmpdir do |dir|
-      resource[:path] = File.join(dir, resource[:name])
+      resource[:path] = File.join(dir, resource[:filename])
       extracted_file = File.join(dir, 'test')
       FileUtils.cp(zipfile, resource[:path])
 

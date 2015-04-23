@@ -29,7 +29,7 @@ define archive::artifactory (
   $file_url = "${art_url}/${url_path}"
   $sha1_url = "${art_url}/api/storage/${url_path}"
 
-  archive { $name:
+  archive { $file_path:
     ensure        => $ensure,
     path          => $file_path,
     extract       => $extract,
@@ -49,6 +49,6 @@ define archive::artifactory (
     owner   => $file_owner,
     group   => $file_group,
     mode    => $file_mode,
-    require => Archive[$name],
+    require => Archive[$file_path],
   }
 }
