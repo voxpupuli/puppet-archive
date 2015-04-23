@@ -1,3 +1,8 @@
+##2015/4/23 - 0.3.0
+
+* Fix Puppet 4 compatability issues
+* Fix archive namevar to use path
+
 ##2015/3/5 - 0.2.2
 
 * add FTP and File support
