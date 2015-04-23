@@ -50,7 +50,7 @@ Puppet::Type.newtype(:archive) do
   end
 
   newparam(:path, :namevar => true) do
-    desc "archive file fully qualified file path."
+    desc "namevar, archive file fully qualified file path."
     validate do |value|
       unless Puppet::Util.absolute_path? value
         raise ArgumentError, "archive path must be absolute: #{value}"
@@ -59,17 +59,17 @@ Puppet::Type.newtype(:archive) do
   end
 
   newparam(:filename) do
-    desc "archive filename."
+    desc "archive file name (derived from path)."
   end
 
   newparam(:extract) do
-    desc "should archive be extracted after download (true|false)"
+    desc "should archive be extracted after download (true|false)."
     newvalues(:true, :false)
     defaultto(:false)
   end
 
   newparam(:extract_path) do
-    desc "target path to extract archive"
+    desc "target folder path to extract archive."
     validate do |value|
       unless Puppet::Util.absolute_path? value
         raise ArgumentError, "archive extract_path must be absolute: #{value}"
@@ -82,13 +82,13 @@ Puppet::Type.newtype(:archive) do
   end
 
   newparam(:extract_flags) do
-    desc "custom extract options, this replaces the default flags. A string such as 'xvf' for a tar file would replace the default xf flag. A hash is useful when custom flags are needed for different platforms. {'tar' => 'xzf', '7z' => 'x -aot'}."
+    desc "custom extraction options, this replaces the default flags. A string such as 'xvf' for a tar file would replace the default xf flag. A hash is useful when custom flags are needed for different platforms. {'tar' => 'xzf', '7z' => 'x -aot'}."
     defaultto(:undef)
   end
 
 
   newproperty(:creates) do
-    desc "if file/directory exists, will not download/extract archive"
+    desc "if file/directory exists, will not download/extract archive."
 
     def should_to_s(value)
       "extracting in #{resource[:extract_path]} to create #{value}"
@@ -96,7 +96,7 @@ Puppet::Type.newtype(:archive) do
   end
 
   newparam(:cleanup) do
-    desc "should archive file be removed after extraction (true|false)"
+    desc "whether archive file be removed after extraction (true|false)."
     newvalues(:true, :false)
     defaultto(:true)
   end
@@ -115,7 +115,7 @@ Puppet::Type.newtype(:archive) do
   end
 
   newparam(:checksum) do
-    desc "archive file checksum (match checksum_type)"
+    desc "archive file checksum (match checksum_type)."
     newvalues(/\b[0-9a-f]{5,64}\b/)
   end
 
@@ -124,23 +124,23 @@ Puppet::Type.newtype(:archive) do
   end
 
   newparam(:checksum_type) do
-    desc "archive file checksum type (none|md5|sha1|sha2|sh256|sha384|sha512)"
+    desc "archive file checksum type (none|md5|sha1|sha2|sh256|sha384|sha512)."
     newvalues(:none, :md5, :sha1, :sha2, :sha256, :sha384, :sha512)
     defaultto(:none)
   end
 
   newparam(:checksum_verify) do
-    desc "whether checksum be verified (true|false)"
+    desc "whether checksum be verified (true|false)."
     newvalues(:true, :false)
     defaultto(:true)
   end
 
   newparam(:username) do
-    desc "username to download source file"
+    desc "username to download source file."
   end
 
   newparam(:password) do
-    desc "password to download source file"
+    desc "password to download source file."
   end
 
   newparam(:user) do

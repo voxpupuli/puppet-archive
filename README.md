@@ -92,6 +92,29 @@ class { 'archive':
 
 ### Resources
 
+#### Archive
+
+* `ensure`: whether archive file should be present/absent (default: present)
+* `path`: namevar, archive file fully qualified file path.
+* `filename`: archive file name (derived from path).
+* `source`: archive file source, supports http|https|ftp|file uri.
+* `username`: username to download source file.
+* `password`: password to download source file.
+* `cookie`: archive file download cookie.
+* `checksum_type` archive file checksum type (none|md5|sha1|sha2|sh256|sha384|sha512). (default: none)
+* `checksum`: archive file checksum (match checksum_type)
+* `checksum_source`: archive file checksum source (instead of specify checksum)
+* `checksum_verify`: whether checksum be verified (true|false). (default: true)
+* `extract`: whether archive be extracted after download (true|false). (default: false)
+* `extract_path`: target folder path to extract archive.
+* `extract_command`: custom extraction command ('tar xvf example.tar.gz'), also support sprintf format ('tar xvf %s') which will be processed with the filename: sprintf('tar xvf %s', filename)
+* `extract_flags`: custom extraction options, this replaces the default flags. A string such as 'xvf' for a tar file would replace the default xf flag. A hash is useful when custom flags are needed for different platforms. {'tar' => 'xzf', '7z' => 'x -aot'}.
+* `user`: extract command user (using this option will configure the archive file permission to 0644 so the user can read the file).
+* `group`: extract command group (using this option will configure the archive file permisison to 0644 so the user can read the file).
+* `cleanup`: whether archive file be removed after extraction (true|false). (default: true)
+* `creates`: if file/directory exists, will not download/extract archive.
+
+#### Example:
 ```puppet
 archive { '/tmp/jta-1.1.jar':
   ensure        => present,
