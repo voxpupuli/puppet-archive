@@ -1,7 +1,7 @@
 # Puppet Archive
 
 [![Puppet Forge](http://img.shields.io/puppetforge/v/nanliu/archive.svg)](https://forge.puppetlabs.com/nanliu/archive)
-[![Build Status](https://travis-ci.org/nanliu/puppet-archive.png)](https://travis-ci.org/nanliu/puppet-archive)
+[![Build Status](https://travis-ci.org/puppet-community/puppet-archive.png)](https://travis-ci.org/puppet-community/puppet-archive)
 
 ## Warning
 
@@ -9,6 +9,7 @@ Release 0.3.x contains breaking changes
 
 * The parameter 7zip have been changed to seven_zip to conform to Puppet 4.x variable name requirements.
 * The namevar name have been changed to path to allow files with the same filename to exists in different filepath.
+* This project have been migrated to [puppet-community](https://github.com/puppet-community/puppet-archive), please adjust your repo git source.
 
 #### Table of Contents
 
@@ -111,7 +112,7 @@ class { 'archive':
 * `extract_flags`: custom extraction options, this replaces the default flags. A string such as 'xvf' for a tar file would replace the default xf flag. A hash is useful when custom flags are needed for different platforms. {'tar' => 'xzf', '7z' => 'x -aot'}.
 * `user`: extract command user (using this option will configure the archive file permission to 0644 so the user can read the file).
 * `group`: extract command group (using this option will configure the archive file permisison to 0644 so the user can read the file).
-* `cleanup`: whether archive file be removed after extraction (true|false). (default: true)
+* `cleanup`: whether archive file will be removed after extraction (true|false). (default: true)
 * `creates`: if file/directory exists, will not download/extract archive.
 
 #### Example:

@@ -17,3 +17,14 @@ sudo: false
 notifications:
   email: false
   flowdock: 330d85ed4bb7657fc334633f4b9209ee
+deploy:
+  provider: puppetforge
+  user: puppet
+  password:
+    secure: "S8pxtUQSCxezeHuMTOa2nmbOC1Ln37evcDBd6rcAPse4DhrwzdJ7Ijme2tE+cPcdyYgO66jL0wWUBNia+10vOoYs1mCMj3mUq2bgySRhML0CQxGIvKYu8R6PbijljSK7LYplD1THQRgFLyHQ+f4Mh7+8yFpjXSmxuAQMdCPfPv8="
+  on:
+    tags: true
+    # all_branches is required to use tags
+    all_branches: true
+    # Only publish if our main Ruby target builds
+    rvm: 1.9.3

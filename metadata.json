@@ -95,14 +95,14 @@
       "version_requirement": ">=2.7.0"
     }
   ],
-  "name": "nanliu-archive",
+  "name": "puppet-archive",
   "version": "0.3.0",
-  "source": "http://github.com/nanliu/puppet-archive",
-  "author": "Nan Liu",
-  "license": "Apache-2.0",
-  "summary": "Compressed file download and extraction with native types/providers",
-  "description": "Manages compressed file download and extraction with optional cleanup .",
-  "project_page": "https://github.com/nanliu/puppet-archive",
+  "source": "https://github.com/puppet-community/puppet-archive",
+  "author": "puppetcommunity",
+  "license": "Apache 2.0",
+  "summary": "Compressed archive file download and extraction with native types/providers for Windows and Unix",
+  "description": "The archive module provides native puppet resources for managing compressed file download and extraction with optional checksum verification and cleanup.",
+  "project_page": "https://github.com/puppet-community/puppet-archive",
   "dependencies": [
     {
       "name": "puppetlabs/stdlib",
