@@ -3,13 +3,21 @@
 [![Puppet Forge](http://img.shields.io/puppetforge/v/nanliu/archive.svg)](https://forge.puppetlabs.com/nanliu/archive)
 [![Build Status](https://travis-ci.org/puppet-community/puppet-archive.png)](https://travis-ci.org/puppet-community/puppet-archive)
 
-## Warning
+_*Warning*_:
 
 Release 0.3.x contains breaking changes
 
 * The parameter 7zip have been changed to seven_zip to conform to Puppet 4.x variable name requirements.
 * The namevar name have been changed to path to allow files with the same filename to exists in different filepath.
 * This project have been migrated to [puppet-community](https://github.com/puppet-community/puppet-archive), please adjust your repo git source.
+
+_*Experimental*_:
+
+The following define type/features are experimental:
+
+* archive::artifactory
+* archive::go
+* checksum_url (to support nexus files)
 
 #### Table of Contents
 
