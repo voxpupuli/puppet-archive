@@ -6,7 +6,13 @@ module PuppetX
       def self.download(url, filepath, options = {})
         uri = URI(url)
         @connection = PuppetX::Bodeco.const_get(uri.scheme.upcase).new("#{uri.scheme}://#{uri.host}:#{uri.port}", options)
-        @connection.download(uri.path, filepath)
+        @connection.download("#{uri.path}?#{uri.query}", filepath)
+      end
+
+      def self.content(url, filepath, options = {})
+        uri = URI(url)
+        @connection = PuppetX::Bodeco.const_get(uri.scheme.upcase).new("#{uri.scheme}://#{uri.host}:#{uri.port}", options)
+        @connection.content("#{uri.path}?#{uri.query}")
       end
     end
 
@@ -43,6 +49,12 @@ module PuppetX
         f.close
         File.unlink(file_path)
         raise $!, "Unable to download file #{url_path} from #{@connection.url_prefix}. #{$!}", $!.backtrace
+      end
+
+      def content(url_path)
+        @connection.get(url_path).body
+      rescue Faraday::Error::ClientError
+        raise $!, "Unable to retrieve content #{url_path} from #{@connection.url_prefix}. #{$!}", $!.backtrace
       end
     end
 

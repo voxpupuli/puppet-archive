@@ -63,7 +63,7 @@ Puppet::Type.newtype(:archive) do
   end
 
   newparam(:extract) do
-    desc "should archive be extracted after download (true|false)."
+    desc "whether archive will be extracted after download (true|false)."
     newvalues(:true, :false)
     defaultto(:false)
   end
@@ -96,7 +96,7 @@ Puppet::Type.newtype(:archive) do
   end
 
   newparam(:cleanup) do
-    desc "whether archive file be removed after extraction (true|false)."
+    desc "whether archive file will be removed after extraction (true|false)."
     newvalues(:true, :false)
     defaultto(:true)
   end
@@ -119,7 +119,7 @@ Puppet::Type.newtype(:archive) do
     newvalues(/\b[0-9a-f]{5,64}\b/)
   end
 
-  newparam(:checksum_source) do
+  newparam(:checksum_url) do
     desc "archive file checksum source (instead of specify checksum)"
   end
 
@@ -130,7 +130,7 @@ Puppet::Type.newtype(:archive) do
   end
 
   newparam(:checksum_verify) do
-    desc "whether checksum be verified (true|false)."
+    desc "whether checksum wil be verified (true|false)."
     newvalues(:true, :false)
     defaultto(:true)
   end
