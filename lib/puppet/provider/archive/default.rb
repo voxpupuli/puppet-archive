@@ -59,6 +59,7 @@ Puppet::Type.type(:archive).provide(:default) do
 
     # conditionally verify checksum:
     if resource[:checksum_verify] == :true and resource[:checksum_type] != :none
+
       archive = PuppetX::Bodeco::Archive.new(temppath)
       raise(Puppet::Error, 'Download file checksum mismatch') unless archive.checksum(resource[:checksum_type]) == checksum
     end
@@ -79,8 +80,13 @@ Puppet::Type.type(:archive).provide(:default) do
   end
 
   def checksum
-    # TODO: || rest_get(resource[:checksum_url])
-    resource[:checksum]
+    resource[:checksum] || remote_checksum
+  end
+
+  def remote_checksum
+    if resource[:checksum_url]
+      @remote_checksum ||= PuppetX::Bodeco::Util.content(resource[:checksum_url], :username => resource[:username], :password => resource[:password], :cookie => resource[:cookie])
+    end
   end
 
   # Private: See if local archive checksum matches.
