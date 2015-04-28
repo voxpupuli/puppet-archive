@@ -1,8 +1,10 @@
 #
 # Download from Nexus using REST API
+# More info here: https://repository.sonatype.org/nexus-restlet1x-plugin/default/docs/path__artifact_maven_content.html
 #
 define archive::nexus (
   $ensure       = present,
+  $checksum_type = 'md5',
   $nexus_url    = undef,
   $gav          = undef,
   $repository   = undef,
@@ -10,6 +12,7 @@ define archive::nexus (
   $classifier   = undef,
   $extension    = undef,
   $user         = undef,
+  $owner        = undef,
   $group        = undef,
   $archive_path = undef,
   $extract      = undef,
@@ -17,6 +20,8 @@ define archive::nexus (
   $creates      = undef,
   $cleanup      = undef,
 ) {
+
+  include archive::params
 
   $artifact_info = split($gav, ':')
 
@@ -37,19 +42,28 @@ define archive::nexus (
   }
 
   $artifact_url = assemble_nexus_url($nexus_url, delete_undef_values($query_params))
+  $checksum_url = regsubst($artifact_url, "p=${packaging}", "p=${packaging}.${checksum_type}")
 
   archive { $name:
     ensure        => $ensure,
-    path          => $path,
+    source        => $artifact_url,
+    checksum_url  => $checksum_url,
+    checksum_type => $checksum_type,
     extract       => $extract,
     extract_path  => $extract_path,
-    source        => $artifact_url,
-#    checksum      => artifactory_sha1($sha1_url),
-#    checksum_type => 'sha1',
-    user          =>   $user,
+    user          => $user,
     group         => $group,
     creates       => $creates,
     cleanup       => $cleanup
+  }
+
+  $file_owner = pick($owner, $archive::params::owner)
+  $file_group = pick($group, $archive::params::group)
+
+  file { $name:
+    owner   => $file_owner,
+    group   => $file_group,
+    require => Archive[$name],
   }
 
 }
