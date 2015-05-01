@@ -5,10 +5,10 @@
 define archive::nexus (
   $ensure       = present,
   $checksum_type = 'md5',
+  $packaging    = 'jar',
   $url          = undef,
   $gav          = undef,
   $repository   = undef,
-  $packaging    = undef,
   $classifier   = undef,
   $extension    = undef,
   $user         = undef,
