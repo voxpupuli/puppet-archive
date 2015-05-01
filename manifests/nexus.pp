@@ -5,7 +5,7 @@
 define archive::nexus (
   $ensure       = present,
   $checksum_type = 'md5',
-  $nexus_url    = undef,
+  $url          = undef,
   $gav          = undef,
   $repository   = undef,
   $packaging    = undef,
@@ -14,7 +14,6 @@ define archive::nexus (
   $user         = undef,
   $owner        = undef,
   $group        = undef,
-  $archive_path = undef,
   $extract      = undef,
   $extract_path = undef,
   $creates      = undef,
@@ -41,7 +40,7 @@ define archive::nexus (
 
   }
 
-  $artifact_url = assemble_nexus_url($nexus_url, delete_undef_values($query_params))
+  $artifact_url = assemble_nexus_url($url, delete_undef_values($query_params))
   $checksum_url = regsubst($artifact_url, "p=${packaging}", "p=${packaging}.${checksum_type}")
 
   archive { $name:
