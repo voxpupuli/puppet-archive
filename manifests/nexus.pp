@@ -3,21 +3,21 @@
 # More info here: https://repository.sonatype.org/nexus-restlet1x-plugin/default/docs/path__artifact_maven_content.html
 #
 define archive::nexus (
-  $ensure       = present,
-  $checksum_type = 'md5',
-  $packaging    = 'jar',
   $url,
   $gav,
   $repository,
-  $classifier   = undef,
-  $extension    = undef,
-  $user         = undef,
-  $owner        = undef,
-  $group        = undef,
-  $extract      = undef,
-  $extract_path = undef,
-  $creates      = undef,
-  $cleanup      = undef,
+  $ensure        = present,
+  $checksum_type = 'md5',
+  $packaging     = 'jar',
+  $classifier    = undef,
+  $extension     = undef,
+  $user          = undef,
+  $owner         = undef,
+  $group         = undef,
+  $extract       = undef,
+  $extract_path  = undef,
+  $creates       = undef,
+  $cleanup       = undef,
 ) {
 
   include archive::params
