@@ -6,6 +6,8 @@ class archive::params {
       $owner = '0'
       $group = '0'
       $mode  = '0640'
+      $seven_zip_name = undef
+      $seven_zip_provider = undef
     }
     'Windows': {
       $path               = $::staging_windir
