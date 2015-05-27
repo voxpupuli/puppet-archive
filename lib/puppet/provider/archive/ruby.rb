@@ -12,7 +12,7 @@ end
 require 'securerandom'
 require 'tempfile'
 
-Puppet::Type.type(:archive).provide(:default) do
+Puppet::Type.type(:archive).provide(:ruby) do
   attr_reader :archive_checksum
 
   def exists?

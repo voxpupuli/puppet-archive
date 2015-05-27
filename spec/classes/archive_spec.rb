@@ -1,5 +1,4 @@
 require 'spec_helper'
-require 'shared_contexts'
 
 describe 'archive' do
   context 'RHEL Puppet opensource' do
