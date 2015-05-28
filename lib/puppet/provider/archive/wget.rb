@@ -1,7 +1,7 @@
 Puppet::Type.type(:archive).provide(:wget, :parent => :ruby ) do
 
-  commands   :wget => '/usr/bin/wget'
-  defaultfor :operatingsystem => :linux
+  commands   :wget => 'wget'
+  defaultfor :feature => :posix
 
   def download(archive_filepath)
     tempfile = Tempfile.new(tempfile_name)
