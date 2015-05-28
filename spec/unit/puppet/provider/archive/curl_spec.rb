@@ -12,9 +12,11 @@ RSpec.describe curl_provider do
 
     let(:default_options) {[
       'http://home.lan/example.zip',
-      '-O',
+      '-o',
       String,
-      '--max-redirs 5']}
+      '--max-redirs',
+      5,
+      ]}
 
     before do
       allow(FileUtils).to receive(:mv)
@@ -43,7 +45,7 @@ RSpec.describe curl_provider do
       }}
 
       it 'calls curl with default options and username' do
-        expect(provider).to receive(:curl).with(default_options << '--user foo')
+        expect(provider).to receive(:curl).with(default_options << '--user' << 'foo')
         provider.download(name)
       end
 
@@ -59,7 +61,7 @@ RSpec.describe curl_provider do
       }}
 
       it 'calls curl with default options and password' do
-        expect(provider).to receive(:curl).with(default_options << '--user foo:bar')
+        expect(provider).to receive(:curl).with(default_options << '--user' << 'foo:bar')
         provider.download(name)
       end
 
@@ -74,7 +76,7 @@ RSpec.describe curl_provider do
       }}
 
       it 'calls curl with default options cookie' do
-        expect(provider).to receive(:curl).with(default_options << '--cookie foo=bar')
+        expect(provider).to receive(:curl).with(default_options << '--cookie' << 'foo=bar')
         provider.download(name)
       end
 

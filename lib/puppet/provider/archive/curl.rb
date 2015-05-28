@@ -10,18 +10,19 @@ Puppet::Type.type(:archive).provide(:curl, :parent => :ruby ) do
 
     @curl_params = [
       resource[:source],
-      '-O',
+      '-o',
       temppath,
-      '--max-redirs 5',
+      '--max-redirs',
+      5
     ]
 
     #
     # Manage username and password parameters
     #
     if resource[:username] and resource[:password]
-      @curl_params << "--user #{resource[:username]}:#{resource[:password]}"
+      @curl_params << "--user" << "#{resource[:username]}:#{resource[:password]}"
     elsif resource[:username]
-      @curl_params << "--user #{resource[:username]}"
+      @curl_params << "--user" << "#{resource[:username]}"
     elsif resource[:password]
       fail 'password specfied without username.'
     end
@@ -30,7 +31,7 @@ Puppet::Type.type(:archive).provide(:curl, :parent => :ruby ) do
     # Manage cookie parameter
     #
     if resource[:cookie]
-      @curl_params << "--cookie #{resource[:cookie]}"
+      @curl_params << "--cookie" <<  "#{resource[:cookie]}"
     end
     
     curl(@curl_params)
