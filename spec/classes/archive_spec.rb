@@ -4,25 +4,25 @@ describe 'archive' do
   context 'RHEL Puppet opensource' do
     let(:facts) {{ :osfamily => 'RedHat', :puppetversion => '3.7.3' }}
 
-    it { should contain_package('faraday').with_provider('gem') }
-    it { should contain_package('faraday_middleware').with_provider('gem') }
-    it { should_not contain_package('7zip') }
+    it { is_expected.to contain_package('faraday').with_provider('gem') }
+    it { is_expected.to contain_package('faraday_middleware').with_provider('gem') }
+    it { is_expected.to_not contain_package('7zip') }
   end
 
   context 'RHEL Puppet Enterprise' do
     let(:facts) {{ :osfamily => 'RedHat', :puppetversion => '3.4.3 (Puppet Enterprise 3.2.3)' }}
 
-    it { should contain_package('faraday').with_provider('pe_gem') }
-    it { should contain_package('faraday_middleware').with_provider('pe_gem') }
-    it { should_not contain_package('7zip') }
+    it { is_expected.to contain_package('faraday').with_provider('pe_gem') }
+    it { is_expected.to contain_package('faraday_middleware').with_provider('pe_gem') }
+    it { is_expected.to_not contain_package('7zip') }
   end
 
 
   context 'Windows Puppet opensource' do
     let(:facts) {{ :osfamily => 'Windows', :puppetversion => '3.7.3' }}
 
-    it { should contain_package('faraday').with_provider('gem') }
-    it { should contain_package('faraday_middleware').with_provider('gem') }
+    it { is_expected.to contain_package('faraday').with_provider('gem') }
+    it { is_expected.to contain_package('faraday_middleware').with_provider('gem') }
     it {
       should contain_package('7zip').with({
         :name     => '7zip',
@@ -34,8 +34,8 @@ describe 'archive' do
   context 'Windows Puppet Enterprise' do
     let(:facts) {{ :osfamily => 'Windows', :puppetversion => '3.4.3 (Puppet Enterprise 3.2.3)' }}
 
-    it { should contain_package('faraday').with_provider('gem') }
-    it { should contain_package('faraday_middleware').with_provider('gem') }
+    it { is_expected.to contain_package('faraday').with_provider('gem') }
+    it { is_expected.to contain_package('faraday_middleware').with_provider('gem') }
     it {
       should contain_package('7zip').with({
         :name     => '7zip',
@@ -53,8 +53,8 @@ describe 'archive' do
       :'seven_zip_provider' => 'windows'
     }}
 
-    it { should contain_package('faraday').with_provider('gem') }
-    it { should contain_package('faraday_middleware').with_provider('gem') }
+    it { is_expected.to contain_package('faraday').with_provider('gem') }
+    it { is_expected.to contain_package('faraday_middleware').with_provider('gem') }
     it {
       should contain_package('7zip').with({
         :name     => '7-Zip 9.20 (x64 edition)',
@@ -71,8 +71,8 @@ describe 'archive' do
       :'seven_zip_provider' => ''
     }}
 
-    it { should contain_package('faraday').with_provider('gem') }
-    it { should contain_package('faraday_middleware').with_provider('gem') }
-    it { should_not contain_package('7zip') }
+    it { is_expected.to contain_package('faraday').with_provider('gem') }
+    it { is_expected.to contain_package('faraday_middleware').with_provider('gem') }
+    it { is_expected.to_not contain_package('7zip') }
   end
 end
