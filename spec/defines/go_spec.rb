@@ -1,5 +1,4 @@
 require 'spec_helper'
-require 'shared_contexts'
 
 describe 'archive::go' do
   let!(:go_md5) do

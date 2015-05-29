@@ -6,4 +6,5 @@ group :development, :test do
   gem 'faraday'
   gem 'faraday_middleware'
   gem 'rspec-puppet-utils'
+  gem 'rspec-mocks'
 end

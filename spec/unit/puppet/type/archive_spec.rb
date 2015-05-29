@@ -8,14 +8,14 @@ describe Puppet::Type::type(:archive) do
   )}
 
   it 'resource defaults' do
-    resource[:path].should eq '/tmp/example.zip'
-    resource[:name].should eq '/tmp/example.zip'
-    resource[:filename].should eq 'example.zip'
-    resource[:extract].should eq :false
-    resource[:cleanup].should eq :true
-    resource[:checksum_type].should eq :none
-    resource[:checksum_verify].should eq :true
-    resource[:extract_flags].should eq :undef
+    expect(resource[:path]).to eq '/tmp/example.zip'
+    expect(resource[:name]).to eq '/tmp/example.zip'
+    expect(resource[:filename]).to eq 'example.zip'
+    expect(resource[:extract]).to eq :false
+    expect(resource[:cleanup]).to eq :true
+    expect(resource[:checksum_type]).to eq :none
+    expect(resource[:checksum_verify]).to eq :true
+    expect(resource[:extract_flags]).to eq :undef
   end
 
   it 'verify resource[:path] is absolute filepath' do
@@ -63,11 +63,6 @@ describe Puppet::Type::type(:archive) do
   end
 
   describe 'autorequire parent path' do
-    # Need to import puppet's crazy monkey patch to test:
-    class Object
-      alias :must :should
-      alias :must_not :should_not
-    end
 
     before :each do
       @file_tmp = Puppet::Type.type(:file).new(:name => '/tmp')
@@ -83,9 +78,9 @@ describe Puppet::Type::type(:archive) do
       @catalog.add_resource example_archive
 
       req = example_archive.autorequire
-      req.size.should == 1
-      req[0].target.must == example_archive
-      req[0].source.must == @file_tmp
+      expect(req.size).to eql 1
+      expect(req[0].target).to  eql example_archive
+      expect(req[0].source).to eql @file_tmp
     end
   end
 end

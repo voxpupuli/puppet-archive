@@ -1,5 +1,4 @@
 require 'spec_helper'
-require 'shared_contexts'
 
 describe 'archive::artifactory' do
   let!(:artifactory_sha1) do
