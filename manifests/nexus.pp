@@ -14,6 +14,7 @@ define archive::nexus (
   $user          = undef,
   $owner         = undef,
   $group         = undef,
+  $mode          = undef,
   $extract       = undef,
   $extract_path  = undef,
   $creates       = undef,
@@ -58,10 +59,12 @@ define archive::nexus (
 
   $file_owner = pick($owner, $archive::params::owner)
   $file_group = pick($group, $archive::params::group)
+  $file_mode  = pick($mode, $archive::params::mode)
 
   file { $name:
     owner   => $file_owner,
     group   => $file_group,
+    mode    => $file_mode,
     require => Archive[$name],
   }
 
