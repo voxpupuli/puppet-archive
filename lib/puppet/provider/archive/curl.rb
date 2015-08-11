@@ -12,6 +12,7 @@ Puppet::Type.type(:archive).provide(:curl, :parent => :ruby ) do
       resource[:source],
       '-o',
       temppath,
+      '-L',
       '--max-redirs',
       5
     ]
