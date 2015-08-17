@@ -19,7 +19,9 @@ class archive::params {
     }
   }
 
-  if $::puppetversion =~ /Puppet Enterprise/ and $::osfamily != 'Windows' {
+  if versioncmp($::puppetversion, '4.0.0') >= 0 {
+    $gem_provider = 'puppet_gem'
+  } elsif $::puppetversion =~ /Puppet Enterprise/ and $::osfamily != 'Windows' {
     $gem_provider = 'pe_gem'
   } else {
     $gem_provider = 'gem'
