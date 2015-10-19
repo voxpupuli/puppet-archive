@@ -88,7 +88,7 @@ module PuppetX
             if Facter.value(:osfamily) == 'Solaris'
               bunzip_opt = parse_flags('-dc', options, 'bunzip')
               tar_opt = parse_flags('xf', options, 'tar')
-              "bunzip #{bunzip_opt} #{@file} | tar #{tar_opt} -"
+              "bunzip2 #{bunzip_opt} #{@file} | tar #{tar_opt} -"
             else
               opt = parse_flags('xjf', options, 'tar')
               "tar #{opt} #{@file}"
