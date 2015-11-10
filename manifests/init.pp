@@ -14,15 +14,16 @@ class archive (
   $seven_zip_name     = $archive::params::seven_zip_name,
   $seven_zip_provider = $archive::params::seven_zip_provider,
   $seven_zip_source   = undef,
+  $gem_provider       = $archive::params::gem_provider,
 ) inherits archive::params {
   package { 'faraday':
     ensure   => present,
-    provider => $archive::params::gem_provider,
+    provider => $gem_provider,
   }
 
   package { 'faraday_middleware':
     ensure   => present,
-    provider => $archive::params::gem_provider,
+    provider => $gem_provider,
   }
 
   if $::osfamily == 'Windows' and !($seven_zip_provider in ['', undef]) {
