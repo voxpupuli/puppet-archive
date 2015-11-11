@@ -17,6 +17,7 @@ define archive::nexus (
   $mode          = undef,
   $extract       = undef,
   $extract_path  = undef,
+  $extract_flags = undef,
   $creates       = undef,
   $cleanup       = undef,
 ) {
@@ -51,6 +52,7 @@ define archive::nexus (
     checksum_type => $checksum_type,
     extract       => $extract,
     extract_path  => $extract_path,
+    extract_flags => $extract_flags,
     user          => $user,
     group         => $group,
     creates       => $creates,
