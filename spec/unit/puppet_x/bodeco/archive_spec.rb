@@ -31,6 +31,10 @@ describe PuppetX::Bodeco::Archive do
     tar = PuppetX::Bodeco::Archive.new('test.tar.gz')
     expect(tar.send(:command, :undef)).to eq 'tar xzf test.tar.gz'
     expect(tar.send(:command, 'xvf')).to eq 'tar xvf test.tar.gz'
+    
+    tar = PuppetX::Bodeco::Archive.new('test.tar.bz2')
+    expect(tar.send(:command, :undef)).to eq 'tar xjf test.tar.bz2'
+    expect(tar.send(:command, 'xjf')).to eq 'tar xjf test.tar.bz2'
 
     zip = PuppetX::Bodeco::Archive.new('test.zip')
     expect(zip.send(:command, :undef)).to eq 'unzip -o test.zip'
