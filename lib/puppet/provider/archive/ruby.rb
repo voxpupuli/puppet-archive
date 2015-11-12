@@ -17,7 +17,7 @@ Puppet::Type.type(:archive).provide(:ruby) do
 
   def exists?
     if extracted?
-      if File.exists? archive_filepath
+      if File.exist? archive_filepath
         checksum?
       else
         cleanup
@@ -35,7 +35,7 @@ Puppet::Type.type(:archive).provide(:ruby) do
   end
 
   def destroy
-    FileUtils.rm_f(archive_filepath) if File.exists?(archive_filepath)
+    FileUtils.rm_f(archive_filepath) if File.exist?(archive_filepath)
   end
 
   def archive_filepath
@@ -58,7 +58,7 @@ Puppet::Type.type(:archive).provide(:ruby) do
     end
   end
 
-  def creates=(value)
+  def creates=(_value)
     extract
   end
 
@@ -67,16 +67,14 @@ Puppet::Type.type(:archive).provide(:ruby) do
   end
 
   def remote_checksum
-    if resource[:checksum_url]
-      @remote_checksum ||= PuppetX::Bodeco::Util.content(resource[:checksum_url], :username => resource[:username], :password => resource[:password], :cookie => resource[:cookie])
-    end
+    @remote_checksum ||= PuppetX::Bodeco::Util.content(resource[:checksum_url], :username => resource[:username], :password => resource[:password], :cookie => resource[:cookie]) if resource[:checksum_url]
   end
 
   # Private: See if local archive checksum matches.
   # returns boolean
-  def checksum?(store_checksum=true)
-    archive_exist = File.exists? archive_filepath
-    if archive_exist and resource[:checksum_type] != :none
+  def checksum?(store_checksum = true)
+    archive_exist = File.exist? archive_filepath
+    if archive_exist && resource[:checksum_type] != :none
       archive = PuppetX::Bodeco::Archive.new(archive_filepath)
       archive_checksum = archive.checksum(resource[:checksum_type])
       @archive_checksum = archive_checksum if store_checksum
@@ -87,27 +85,23 @@ Puppet::Type.type(:archive).provide(:ruby) do
   end
 
   def cleanup
-    if extracted? and resource[:cleanup] == :true
-      Puppet.debug("Cleanup archive #{archive_filepath}")
-      destroy
-    end
+    (Puppet.debug("Cleanup archive #{archive_filepath}")
+     destroy) if extracted? && resource[:cleanup] == :true
   end
 
   def extract
-    if resource[:extract] == :true
-      raise(ArgumentError, "missing archive extract_path") unless resource[:extract_path]
-      PuppetX::Bodeco::Archive.new(archive_filepath).
-        extract(
-          resource[:extract_path],
-          :custom_command => resource[:extract_command],
-          :options => resource[:extract_flags],
-          :uid => resource[:user],
-          :gid => resource[:group]
+    (fail(ArgumentError, 'missing archive extract_path') unless resource[:extract_path]
+     PuppetX::Bodeco::Archive.new(archive_filepath).extract(
+       resource[:extract_path],
+       :custom_command => resource[:extract_command],
+       :options => resource[:extract_flags],
+       :uid => resource[:user],
+       :gid => resource[:group]
         )
-    end
+    ) if resource[:extract] == :true
   end
 
   def extracted?
-    resource[:creates] and File.exists? resource[:creates]
+    resource[:creates] && File.exist?(resource[:creates])
   end
 end

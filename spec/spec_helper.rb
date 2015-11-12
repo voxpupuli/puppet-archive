@@ -5,7 +5,7 @@ require 'rspec/mocks'
 #
 # Require all support files
 #
-Dir["./spec/support/**/*.rb"].sort.each { |f| require f}
+Dir['./spec/support/**/*.rb'].sort.each { |f| require f }
 
 RSpec.configure do |c|
   c.formatter = 'documentation'

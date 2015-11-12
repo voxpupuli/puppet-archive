@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 describe 'archive::nexus' do
-  let(:facts) {{ :osfamily => 'RedHat', :puppetversion => '3.7.3' }}
+  let(:facts) { { :osfamily => 'RedHat', :puppetversion => '3.7.3' } }
 
   context 'nexus archive with defaults' do
     let :title do

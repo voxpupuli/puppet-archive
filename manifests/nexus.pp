@@ -22,7 +22,7 @@ define archive::nexus (
   $cleanup       = undef,
 ) {
 
-  include archive::params
+  include ::archive::params
 
   $artifact_info = split($gav, ':')
 
@@ -56,7 +56,7 @@ define archive::nexus (
     user          => $user,
     group         => $group,
     creates       => $creates,
-    cleanup       => $cleanup
+    cleanup       => $cleanup,
   }
 
   $file_owner = pick($owner, $archive::params::owner)

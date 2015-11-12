@@ -99,7 +99,7 @@
   "version": "0.3.0",
   "source": "https://github.com/puppet-community/puppet-archive",
   "author": "puppetcommunity",
-  "license": "Apache 2.0",
+  "license": "Apache-2.0",
   "summary": "Compressed archive file download and extraction with native types/providers for Windows and Unix",
   "description": "The archive module provides native puppet resources for managing compressed file download and extraction with optional checksum verification and cleanup.",
   "project_page": "https://github.com/puppet-community/puppet-archive",
