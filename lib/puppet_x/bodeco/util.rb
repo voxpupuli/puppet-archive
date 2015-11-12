@@ -27,12 +27,12 @@ module PuppetX
           require 'faraday_middleware'
         end
 
-        if Facter.value(:osfamily) == 'windows' and !ENV.key?('SSL_CERT_FILE')
+        if Facter.value(:osfamily) == 'windows' && !ENV.key?('SSL_CERT_FILE')
           ENV['SSL_CERT_FILE'] = File.expand_path(File.join(__FILE__, '..', '..', '..', '..', 'files', 'cacert.pem'))
         end
 
         @connection = ::Faraday.new(url) do |conn|
-          conn.basic_auth(username, password) if username and password
+          conn.basic_auth(username, password) if username && password
 
           conn.response :raise_error # This let's us know if the transfer failed.
           conn.response :follow_redirects, :limit => 5

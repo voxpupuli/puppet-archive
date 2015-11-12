@@ -6,7 +6,7 @@ Puppet::Type.newtype(:archive) do
   @doc = 'Manage archive file download, extraction, and cleanup.'
 
   ensurable do
-    desc "whether archive file should be present/absent (default: present)"
+    desc 'whether archive file should be present/absent (default: present)'
 
     newvalue(:present) do
       provider.create
@@ -19,60 +19,60 @@ Puppet::Type.newtype(:archive) do
     defaultto(:present)
 
     # The following changes allows us to notify if the resource is being replaced
-    def is_to_s(value)
-      return "(#{resource[:checksum_type]})#{self.provider.archive_checksum}" if self.provider.archive_checksum
+    def is_to_s(value) # rubocop:disable Style/PredicateName
+      return "(#{resource[:checksum_type]})#{provider.archive_checksum}" if provider.archive_checksum
       super
     end
 
     def should_to_s(value)
-      return "(#{resource[:checksum_type]})#{resource[:checksum]}" if self.provider.archive_checksum
+      return "(#{resource[:checksum_type]})#{resource[:checksum]}" if provider.archive_checksum
       super
     end
 
     def change_to_s(currentvalue, newvalue)
-      if currentvalue == :absent or currentvalue.nil?
-        extract = resource[:extract] == :true ? "and extracted in #{resource[:extract_path]}" : ""
-        cleanup = resource[:cleanup] == :true ? "with cleanup" : "without cleanup"
+      if currentvalue == :absent || currentvalue.nil?
+        extract = resource[:extract] == :true ? "and extracted in #{resource[:extract_path]}" : ''
+        cleanup = resource[:cleanup] == :true ? 'with cleanup' : 'without cleanup'
 
-        if self.provider.archive_checksum
-          "replace archive: #{self.provider.archive_filepath} from #{is_to_s(currentvalue)} to #{should_to_s(newvalue)}"
+        if provider.archive_checksum
+          "replace archive: #{provider.archive_filepath} from #{is_to_s(currentvalue)} to #{should_to_s(newvalue)}"
         else
-          "download archive from #{resource[:source]} to #{self.provider.archive_filepath} #{extract} #{cleanup}"
+          "download archive from #{resource[:source]} to #{provider.archive_filepath} #{extract} #{cleanup}"
         end
       elsif newvalue == :absent
-        "remove archive: #{self.provider.archive_filepath} "
+        "remove archive: #{provider.archive_filepath} "
       else
         super
       end
-    rescue Exception
+    rescue StandardError
       super
     end
   end
 
   newparam(:path, :namevar => true) do
-    desc "namevar, archive file fully qualified file path."
+    desc 'namevar, archive file fully qualified file path.'
     validate do |value|
       unless Puppet::Util.absolute_path? value
-        raise ArgumentError, "archive path must be absolute: #{value}"
+        fail ArgumentError, "archive path must be absolute: #{value}"
       end
     end
   end
 
   newparam(:filename) do
-    desc "archive file name (derived from path)."
+    desc 'archive file name (derived from path).'
   end
 
   newparam(:extract) do
-    desc "whether archive will be extracted after download (true|false)."
+    desc 'whether archive will be extracted after download (true|false).'
     newvalues(:true, :false)
     defaultto(:false)
   end
 
   newparam(:extract_path) do
-    desc "target folder path to extract archive."
+    desc 'target folder path to extract archive.'
     validate do |value|
       unless Puppet::Util.absolute_path? value
-        raise ArgumentError, "archive extract_path must be absolute: #{value}"
+        fail ArgumentError, "archive extract_path must be absolute: #{value}"
       end
     end
   end
@@ -86,9 +86,8 @@ Puppet::Type.newtype(:archive) do
     defaultto(:undef)
   end
 
-
   newproperty(:creates) do
-    desc "if file/directory exists, will not download/extract archive."
+    desc 'if file/directory exists, will not download/extract archive.'
 
     def should_to_s(value)
       "extracting in #{resource[:extract_path]} to create #{value}"
@@ -96,59 +95,59 @@ Puppet::Type.newtype(:archive) do
   end
 
   newparam(:cleanup) do
-    desc "whether archive file will be removed after extraction (true|false)."
+    desc 'whether archive file will be removed after extraction (true|false).'
     newvalues(:true, :false)
     defaultto(:true)
   end
 
   newparam(:source) do
-    desc "archive file source, supports http|https|ftp|file uri."
+    desc 'archive file source, supports http|https|ftp|file uri.'
     validate do |value|
-      unless value =~ URI.regexp(['http', 'https', 'file', 'ftp'])
-        raise ArgumentError, "invalid source url: #{value}"
+      unless value =~ URI.regexp(%w(http https file ftp))
+        fail ArgumentError, "invalid source url: #{value}"
       end
     end
   end
 
   newparam(:cookie) do
-    desc "archive file download cookie."
+    desc 'archive file download cookie.'
   end
 
   newparam(:checksum) do
-    desc "archive file checksum (match checksum_type)."
+    desc 'archive file checksum (match checksum_type).'
     newvalues(/\b[0-9a-f]{5,64}\b/)
   end
 
   newparam(:checksum_url) do
-    desc "archive file checksum source (instead of specify checksum)"
+    desc 'archive file checksum source (instead of specify checksum)'
   end
 
   newparam(:checksum_type) do
-    desc "archive file checksum type (none|md5|sha1|sha2|sh256|sha384|sha512)."
+    desc 'archive file checksum type (none|md5|sha1|sha2|sh256|sha384|sha512).'
     newvalues(:none, :md5, :sha1, :sha2, :sha256, :sha384, :sha512)
     defaultto(:none)
   end
 
   newparam(:checksum_verify) do
-    desc "whether checksum wil be verified (true|false)."
+    desc 'whether checksum wil be verified (true|false).'
     newvalues(:true, :false)
     defaultto(:true)
   end
 
   newparam(:username) do
-    desc "username to download source file."
+    desc 'username to download source file.'
   end
 
   newparam(:password) do
-    desc "password to download source file."
+    desc 'password to download source file.'
   end
 
   newparam(:user) do
-    desc "extract command user (using this option will configure the archive file permission to 0644 so the user can read the file)."
+    desc 'extract command user (using this option will configure the archive file permission to 0644 so the user can read the file).'
   end
 
   newparam(:group) do
-    desc "extract command group (using this option will configure the archive file permisison to 0644 so the user can read the file)."
+    desc 'extract command group (using this option will configure the archive file permisison to 0644 so the user can read the file).'
   end
 
   autorequire(:package) do
@@ -156,7 +155,7 @@ Puppet::Type.newtype(:archive) do
   end
 
   autorequire(:file) do
-    [ Pathname.new(self[:path]).parent.to_s, self[:extract_path] ]
+    [Pathname.new(self[:path]).parent.to_s, self[:extract_path]]
   end
 
   validate do

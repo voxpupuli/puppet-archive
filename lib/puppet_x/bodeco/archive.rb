@@ -14,7 +14,7 @@ module PuppetX
         digest = Digest.const_get(type.to_s.upcase)
         digest.file(@file).hexdigest
       rescue LoadError
-        raise $!, "invalid checksum type #{type}. #{$!}", $!.backtrace
+        raise $ERROR_INFO, "invalid checksum type #{type}. #{$ERROR_INFO}", $ERROR_INFO.backtrace
       end
 
       def root_dir
@@ -38,7 +38,7 @@ module PuppetX
         Dir.chdir(path) do
           if custom_command
             if custom_command =~ /%s/
-              cmd = sprintf(custom_command, @file)
+              cmd = custom_command % @file
             else
               cmd = "#{custom_command} #{options} #{file}"
             end
@@ -62,7 +62,7 @@ module PuppetX
         elsif File.directory?('C:\\Program Files (x86)\\7-zip')
           'C:\\Program Files (x86)\\7-Zip\\7z.exe'
         else
-          raise Exception, '7z.exe not available'
+          fail Exception, '7z.exe not available'
         end
       end
 
@@ -97,12 +97,12 @@ module PuppetX
             opt = parse_flags('-o', options, 'zip')
             "unzip #{opt} #{@file}"
           else
-            raise NotImplementedError, "Unknown filetype: #{@file}"
+            fail NotImplementedError, "Unknown filetype: #{@file}"
           end
         end
       end
 
-      def parse_flags(default, options, command=nil)
+      def parse_flags(default, options, command = nil)
         case options
         when :undef
           default
@@ -111,7 +111,7 @@ module PuppetX
         when ::Hash
           options[command]
         else
-          raise ArgumentError, "Invalid options for command #{command}: #{options.inspect}"
+          fail ArgumentError, "Invalid options for command #{command}: #{options.inspect}"
         end
       end
     end

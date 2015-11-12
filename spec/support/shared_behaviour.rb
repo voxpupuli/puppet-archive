@@ -1,23 +1,19 @@
 require 'spec_helper'
 require 'tmpdir'
 
-RSpec.shared_examples "an archive provider" do | provider_class|
-
+RSpec.shared_examples 'an archive provider' do |provider_class|
   describe provider_class do
-    let(:resource){
-      Puppet::Type::Archive.new({
-        :name => '/tmp/example.zip',
-        :source => 'http://home.lan/example.zip'
-      })
-    }
+    let(:resource) do
+      Puppet::Type::Archive.new(:name => '/tmp/example.zip', :source => 'http://home.lan/example.zip')
+    end
 
-    let(:provider){
+    let(:provider) do
       provider_class.new(resource)
-    }
+    end
 
-    let(:zipfile){
-      File.expand_path(File.join(File.dirname(__FILE__),   '..', '..', 'files', 'test.zip'))
-    }
+    let(:zipfile) do
+      File.expand_path(File.join(File.dirname(__FILE__), '..', '..', 'files', 'test.zip'))
+    end
 
     it '#checksum?' do
       Dir.mktmpdir do |dir|
@@ -103,5 +99,4 @@ RSpec.shared_examples "an archive provider" do | provider_class|
       end
     end
   end
-
 end
