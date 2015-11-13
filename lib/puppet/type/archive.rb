@@ -150,6 +150,15 @@ Puppet::Type.newtype(:archive) do
     desc 'extract command group (using this option will configure the archive file permisison to 0644 so the user can read the file).'
   end
 
+  newparam(:proxy_type) do
+    desc 'proxy type (none|ftp|http|https)'
+    newvalues(:none, :ftp, :http, :https)
+  end
+
+  newparam(:proxy_server) do
+    desc 'proxy address to use when accessing source'
+  end
+
   autorequire(:package) do
     'faraday_middleware'
   end
@@ -161,5 +170,10 @@ Puppet::Type.newtype(:archive) do
   validate do
     filepath = Pathname.new(self[:path])
     self[:filename] = filepath.basename.to_s
+    if self[:proxy_server]
+      self[:proxy_type] ||= URI(self[:proxy_server]).scheme.to_sym
+    else
+      self[:proxy_type] = :none
+    end
   end
 end

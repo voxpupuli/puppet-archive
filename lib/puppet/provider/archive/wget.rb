@@ -16,6 +16,7 @@ Puppet::Type.type(:archive).provide(:wget, :parent => :ruby) do
     append_if(resource[:username], '--user=%s')
     append_if(resource[:password], '--password=%s')
     append_if(resource[:cookie], '--header="Cookie: "%s"')
+    append_if(resource[:proxy_server], "--#{resource[:proxy_type]}_proxy=#{resource[:proxy_server]}")
 
     wget(@wget_params)
 

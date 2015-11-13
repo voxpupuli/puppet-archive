@@ -82,5 +82,20 @@ RSpec.describe curl_provider do
         provider.download(name)
       end
     end
+
+    context 'using proxy' do
+      let(:resource_properties) do
+        {
+          :name => name,
+          :source => 'http://home.lan/example.zip',
+          :proxy_server => 'https://home.lan:8080'
+        }
+      end
+
+      it 'calls curl with proxy' do
+        expect(provider).to receive(:curl).with(default_options << '--proxy' << 'https://home.lan:8080')
+        provider.download(name)
+      end
+    end
   end
 end

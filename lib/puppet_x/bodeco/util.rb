@@ -21,6 +21,7 @@ module PuppetX
         username = options[:username]
         password = options[:password]
         cookie = options[:cookie]
+        proxy_server = options[:proxy_server]
         # Try one last time since PUP-1879 isn't always available:
         unless defined? ::Faraday
           Gem.clear_paths unless defined? ::Bundler
@@ -31,7 +32,10 @@ module PuppetX
           ENV['SSL_CERT_FILE'] = File.expand_path(File.join(__FILE__, '..', '..', '..', '..', 'files', 'cacert.pem'))
         end
 
-        @connection = ::Faraday.new(url) do |conn|
+        @connection = ::Faraday.new(
+          url,
+          :proxy => proxy_server
+          ) do |conn|
           conn.basic_auth(username, password) if username && password
 
           conn.response :raise_error # This let's us know if the transfer failed.
@@ -63,10 +67,15 @@ module PuppetX
 
     class FTP
       require 'net/ftp'
+
       def initialize(url, options)
         uri = URI(url)
         username = options[:username]
         password = options[:password]
+        proxy_server = options[:proxy_server]
+        proxy_type = options[:proxy_type]
+
+        ENV["#{proxy_type}_proxy"] = proxy_server
 
         @ftp = Net::FTP.new
         @ftp.connect(uri.host, uri.port)
