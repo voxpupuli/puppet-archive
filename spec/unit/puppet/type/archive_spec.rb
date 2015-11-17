@@ -44,6 +44,10 @@ describe Puppet::Type.type(:archive) do
     end.to_not raise_error
 
     expect do
+      resource[:checksum] = '557e2ebb67b35d1fddff18090b6bc26557e2ebb67b35d1fddff18090b6bc26bb'
+    end.to_not raise_error
+
+    expect do
       resource[:checksum] = 'too_short'
     end.to raise_error(Puppet::Error, /Invalid value/)
 
