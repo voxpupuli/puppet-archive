@@ -122,6 +122,8 @@ class { 'archive':
 * `group`: extract command group (using this option will configure the archive file permisison to 0644 so the user can read the file).
 * `cleanup`: whether archive file will be removed after extraction (true|false). (default: true)
 * `creates`: if file/directory exists, will not download/extract archive.
+* `proxy_server`: specify a proxy server, with port number if needed. ie: https://example.com:8080.
+* `proxy_type`: proxy server type (none|http|https|ftp)
 
 #### Example:
 ```puppet

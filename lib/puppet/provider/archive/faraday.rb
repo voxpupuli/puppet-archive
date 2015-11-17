@@ -13,7 +13,7 @@ Puppet::Type.type(:archive).provide(:faraday, :parent => :ruby) do
     temppath = tempfile.path
     tempfile.close!
 
-    PuppetX::Bodeco::Util.download(resource[:source], temppath, :username => resource[:username], :password => resource[:password], :cookie => resource[:cookie])
+    PuppetX::Bodeco::Util.download(resource[:source], temppath, :username => resource[:username], :password => resource[:password], :cookie => resource[:cookie], :proxy_server => resource[:proxy_server], :proxy_type => resource[:proxy_type])
 
     # conditionally verify checksum:
     if resource[:checksum_verify] == :true && resource[:checksum_type] != :none

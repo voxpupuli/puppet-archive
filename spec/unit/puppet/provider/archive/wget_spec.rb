@@ -78,5 +78,20 @@ RSpec.describe wget_provider do
         provider.download(name)
       end
     end
+
+    context 'proxy specified' do
+      let(:resource_properties) do
+        {
+          :name => name,
+          :source => 'http://home.lan/example.zip',
+          :proxy_server => 'https://home.lan:8080',
+        }
+      end
+
+      it 'calls wget with default options and header containing cookie' do
+        expect(provider).to receive(:wget).with(default_options << '--https_proxy=https://home.lan:8080')
+        provider.download(name)
+      end
+    end
   end
 end

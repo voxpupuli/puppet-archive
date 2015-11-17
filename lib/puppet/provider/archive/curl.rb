@@ -27,6 +27,10 @@ Puppet::Type.type(:archive).provide(:curl, :parent => :ruby) do
       fail 'password specfied without username.'
     end
 
+    if resource[:proxy_server]
+      @curl_params << '--proxy' << "#{resource[:proxy_server]}"
+    end
+
     #
     # Manage cookie parameter
     #
