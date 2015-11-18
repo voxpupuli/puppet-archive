@@ -19,7 +19,7 @@ class archive::params {
 
   if $::puppetversion =~ /Puppet Enterprise/ and $::osfamily != 'Windows' {
     $gem_provider = 'pe_gem'
-  } elsif pick($::aio_agent_version,false) {
+  } elsif $::aio_agent_version {
     $gem_provider = 'puppet_gem'
   } else {
     $gem_provider = 'gem'
