@@ -45,6 +45,7 @@ Puppet::Type.type(:archive).provide(:curl, :parent => :ruby) do
       fail(Puppet::Error, 'Download file checksum mismatch') unless archive.checksum(resource[:checksum_type]) == checksum
     end
 
+    FileUtils.mkdir_p(File.dirname(archive_filepath))
     FileUtils.mv(temppath, archive_filepath)
   end
 end
