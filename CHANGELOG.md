@@ -1,3 +1,7 @@
+##2015/11/25 - Releasing 0.4.1
+
+* Automate release :)
+
 ##2015/11/25 - Releasing 0.4.0
 
 * Migrate Module to Puppet-Community
