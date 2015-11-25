@@ -1,3 +1,14 @@
+##2015/11/25 - Releasing 0.4.0
+
+* Migrate Module to Puppet-Community
+* Make everything Rubocop Clean
+* Make everything lint clean
+* Various fixes concerning Jar handling
+* Support for wget
+* Spec Tests for curl
+* Support for bzip
+* More robust handling of sha512 checksums
+
 ##2015/4/23 - 0.3.0
 
 * Fix Puppet 4 compatability issues
