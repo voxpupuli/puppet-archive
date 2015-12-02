@@ -1,3 +1,13 @@
+##2015/12/2 - Releasing 0.4.4
+
+* Puppet-community release
+* Ignore files properly for functional release
+* Add authentication to archive::nexus
+* Create directory before transfering file
+* Refactor file download code
+* Create and use fact for archive_windir
+* Cleanup old testing code
+
 ##2015/11/25 - Releasing 0.4.3
 
 * Puppet-community release
