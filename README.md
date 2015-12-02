@@ -98,6 +98,7 @@ class { 'archive':
 
 * `archive::artifactory`: archive wrapper for [JFrog Artifactory](http://www.jfrog.com/open-source/#os-arti) files with checksum.
 * `archive::go`: archive wrapper for [GO Continuous Delivery](http://www.go.cd/) files with checksum.
+* `archive::nexus`: archive wrapper for [Sonatype Nexus](http://www.sonatype.org/nexus/) files with checksum.
 
 ### Resources
 
@@ -119,7 +120,7 @@ class { 'archive':
 * `extract_command`: custom extraction command ('tar xvf example.tar.gz'), also support sprintf format ('tar xvf %s') which will be processed with the filename: sprintf('tar xvf %s', filename)
 * `extract_flags`: custom extraction options, this replaces the default flags. A string such as 'xvf' for a tar file would replace the default xf flag. A hash is useful when custom flags are needed for different platforms. {'tar' => 'xzf', '7z' => 'x -aot'}.
 * `user`: extract command user (using this option will configure the archive file permission to 0644 so the user can read the file).
-* `group`: extract command group (using this option will configure the archive file permisison to 0644 so the user can read the file).
+* `group`: extract command group (using this option will configure the archive file permission to 0644 so the user can read the file).
 * `cleanup`: whether archive file will be removed after extraction (true|false). (default: true)
 * `creates`: if file/directory exists, will not download/extract archive.
 * `proxy_server`: specify a proxy server, with port number if needed. ie: https://example.com:8080.
@@ -139,6 +140,19 @@ archive { '/tmp/jta-1.1.jar':
 }
 ```
 
+#### Archive::Nexus
+
+#### Example:
+```puppet
+archive::nexus {
+  '/tmp/jtstand-ui-0.98.jar':
+    url          => 'https://oss.sonatype.org',
+    gav          => 'org.codehaus.jtstand:jtstand-ui:0.98',
+    repository   => 'codehaus-releases',
+    packaging    => 'jar',
+    extract      => false,
+}
+```
 ## Limitations
 
 The archive::artifactory and archive::go resource need the faraday_middleware gem, and network access to the artifactory/go server to obtain the archive checksum. This gem is installed as a dependency for r10k, or otherwise this dependency should be installed as part of the puppet master initial deployment and configuration.
