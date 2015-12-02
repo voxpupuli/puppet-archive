@@ -66,6 +66,23 @@ Puppet::Type.type(:archive).provide(:ruby) do
     resource[:checksum] || remote_checksum
   end
 
+  def download
+    tempfile = Tempfile.new(tempfile_name)
+    temppath = tempfile.path
+    tempfile.close!
+
+    yield temppath
+
+    # conditionally verify checksum:
+    if resource[:checksum_verify] == :true && resource[:checksum_type] != :none
+      archive = PuppetX::Bodeco::Archive.new(temppath)
+      fail(Puppet::Error, 'Download file checksum mismatch') unless archive.checksum(resource[:checksum_type]) == checksum
+    end
+
+    FileUtils.mkdir_p(File.dirname(archive_filepath))
+    FileUtils.mv(temppath, archive_filepath)
+  end
+
   def remote_checksum
     @remote_checksum ||= PuppetX::Bodeco::Util.content(resource[:checksum_url], :username => resource[:username], :password => resource[:password], :cookie => resource[:cookie]) if resource[:checksum_url]
   end
