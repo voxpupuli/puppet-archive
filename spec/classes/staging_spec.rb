@@ -39,7 +39,7 @@ describe 'archive::staging' do
       {
         :osfamily => 'Windows',
         :puppetversion => '3.4.3 (Puppet Enterprise 3.2.3)',
-        :staging_windir => 'C:/Windows/Temp/staging'
+        :archive_windir => 'C:/Windows/Temp/staging'
       }
     end
 
