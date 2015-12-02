@@ -5,6 +5,9 @@ sudo: false
 language: ruby
 cache: bundler
 bundler_args: --without system_tests
+branches:
+  only:
+    - master
 addons:
   apt:
     sources:
