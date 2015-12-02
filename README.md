@@ -1,6 +1,6 @@
 # Puppet Archive
 
-[![Puppet Forge](http://img.shields.io/puppetforge/v/puppet/archive.svg)](https://forge.puppetlabs.com/nanliu/archive)
+[![Puppet Forge](http://img.shields.io/puppetforge/v/puppet/archive.svg)](https://forge.puppetlabs.com/puppet/archive)
 [![Build Status](https://travis-ci.org/puppet-community/puppet-archive.png)](https://travis-ci.org/puppet-community/puppet-archive)
 
 _*Warning*_:
