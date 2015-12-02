@@ -10,7 +10,7 @@ class archive::params {
       $seven_zip_provider = undef
     }
     'Windows': {
-      $path               = $::staging_windir
+      $path               = $::archive_windir
       $owner              = 'S-1-5-32-544' # Adminstrators
       $group              = 'S-1-5-18'     # SYSTEM
       $mode               = '0640'
