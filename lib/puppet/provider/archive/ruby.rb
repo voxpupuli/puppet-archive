@@ -29,7 +29,7 @@ Puppet::Type.type(:archive).provide(:ruby) do
   end
 
   def create
-    download(archive_filepath) unless checksum?
+    transfer_download(archive_filepath) unless checksum?
     extract
     cleanup
   end
@@ -103,5 +103,26 @@ Puppet::Type.type(:archive).provide(:ruby) do
 
   def extracted?
     resource[:creates] && File.exist?(resource[:creates])
+  end
+
+  def transfer_download(archive_filepath)
+    tempfile = Tempfile.new(tempfile_name)
+    temppath = tempfile.path
+    tempfile.close!
+
+    download(temppath)
+
+    # conditionally verify checksum:
+    if resource[:checksum_verify] == :true && resource[:checksum_type] != :none
+      archive = PuppetX::Bodeco::Archive.new(temppath)
+      fail(Puppet::Error, 'Download file checksum mismatch') unless archive.checksum(resource[:checksum_type]) == checksum
+    end
+
+    FileUtils.mkdir_p(File.dirname(archive_filepath))
+    FileUtils.mv(temppath, archive_filepath)
+  end
+
+  def download
+    fail(NotImplementedError, 'The Ruby provider does not implement download method.')
   end
 end

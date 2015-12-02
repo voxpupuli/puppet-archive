@@ -8,21 +8,7 @@ rescue LoadError
 end
 
 Puppet::Type.type(:archive).provide(:faraday, :parent => :ruby) do
-  def download(archive_filepath)
-    tempfile = Tempfile.new(tempfile_name)
-    temppath = tempfile.path
-    tempfile.close!
-
-    PuppetX::Bodeco::Util.download(resource[:source], temppath, :username => resource[:username], :password => resource[:password], :cookie => resource[:cookie], :proxy_server => resource[:proxy_server], :proxy_type => resource[:proxy_type])
-
-    # conditionally verify checksum:
-    if resource[:checksum_verify] == :true && resource[:checksum_type] != :none
-
-      archive = PuppetX::Bodeco::Archive.new(temppath)
-      fail(Puppet::Error, 'Download file checksum mismatch') unless archive.checksum(resource[:checksum_type]) == checksum
-    end
-
-    FileUtils.mkdir_p(File.dirname(archive_filepath))
-    FileUtils.mv(temppath, archive_filepath)
+  def download(filepath)
+    PuppetX::Bodeco::Util.download(resource[:source], filepath, :username => resource[:username], :password => resource[:password], :cookie => resource[:cookie], :proxy_server => resource[:proxy_server], :proxy_type => resource[:proxy_type])
   end
 end
