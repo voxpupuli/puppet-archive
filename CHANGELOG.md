@@ -1,3 +1,7 @@
+##2015/11/25 - Releasing 0.4.3
+
+* Puppet-community release
+
 ##2015/11/25 - Releasing 0.4.1
 
 * Automate release :)
