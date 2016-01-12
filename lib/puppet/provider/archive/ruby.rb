@@ -67,7 +67,14 @@ Puppet::Type.type(:archive).provide(:ruby) do
   end
 
   def remote_checksum
-    @remote_checksum ||= PuppetX::Bodeco::Util.content(resource[:checksum_url], :username => resource[:username], :password => resource[:password], :cookie => resource[:cookie]) if resource[:checksum_url]
+    @remote_checksum ||= begin
+      PuppetX::Bodeco::Util.content(
+        resource[:checksum_url],
+        :username => resource[:username],
+        :password => resource[:password],
+        :cookie => resource[:cookie]
+      )[/\b[\da-f]{32,128}\b/i] if resource[:checksum_url]
+    end
   end
 
   # Private: See if local archive checksum matches.
