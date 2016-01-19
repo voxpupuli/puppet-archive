@@ -8,6 +8,8 @@ rescue LoadError
 end
 
 Puppet::Type.type(:archive).provide(:faraday, :parent => :ruby) do
+  confine :feature => :faraday_middleware
+
   def download(filepath)
     PuppetX::Bodeco::Util.download(resource[:source], filepath, :username => resource[:username], :password => resource[:password], :cookie => resource[:cookie], :proxy_server => resource[:proxy_server], :proxy_type => resource[:proxy_type])
   end

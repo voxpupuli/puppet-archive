@@ -26,7 +26,7 @@ group :test do
   gem 'rspec-puppet-facts',                                         :require => false
   gem 'rspec',                                                      :require => false
   gem 'puppet-blacksmith',                                          :require => false
-  gem 'rubocop',                                                    :require => false
+  gem 'rubocop', '0.35.0',                                          :require => false
   gem 'puppetlabs_spec_helper',                                     :require => false
   gem 'puppet-lint-absolute_classname-check',                       :require => false
   gem 'puppet-lint-leading_zero-check',                             :require => false
