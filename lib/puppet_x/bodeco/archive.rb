@@ -97,6 +97,9 @@ module PuppetX
             unxz_opt = parse_flags('-dc', options, 'unxz')
             tar_opt = parse_flags('xf', options, 'tar')
             "unxz #{unxz_opt} #{@file} | tar #{tar_opt} -"
+          when /\.gz$/
+            opt = parse_flags('-d', options, 'gunzip')
+            "gunzip #{opt} #{@file}"
           when /(\.zip|\.war|\.jar)$/
             opt = parse_flags('-o', options, 'zip')
             "unzip #{opt} #{@file}"
