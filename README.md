@@ -1,7 +1,7 @@
 # Puppet Archive
 
 [![Puppet Forge](http://img.shields.io/puppetforge/v/puppet/archive.svg)](https://forge.puppetlabs.com/puppet/archive)
-[![Build Status](https://travis-ci.org/puppet-community/puppet-archive.png)](https://travis-ci.org/puppet-community/puppet-archive)
+[![Build Status](https://travis-ci.org/voxpupuli/puppet-archive.png)](https://travis-ci.org/voxpupuli/puppet-archive)
 
 _*Warning*_:
 
@@ -111,7 +111,7 @@ class { 'archive':
 * `username`: username to download source file.
 * `password`: password to download source file.
 * `cookie`: archive file download cookie.
-* `checksum_type` archive file checksum type (none|md5|sha1|sha2|sh256|sha384|sha512). (default: none)
+* `checksum_type`: archive file checksum type (none|md5|sha1|sha2|sh256|sha384|sha512). (default: none)
 * `checksum`: archive file checksum (match checksum_type)
 * `checksum_url`: archive file checksum source (instead of specify checksum)
 * `checksum_verify`: whether checksum will be verified (true|false). (default: true)
