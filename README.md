@@ -87,6 +87,17 @@ class { 'archive':
 }
 
 ```
+
+Note: If you are writing a dependent module that include specs in it, you will
+need to set the puppetversion fact in your puppet-rspec tests. You can do that
+by adding it to the default facts of your spec/spec_helper.rb. Example:
+
+```
+RSpec.configure do |c|
+  c.default_facts = { :puppetversion => Puppet.version }
+end
+```
+
 ## Reference
 
 ### Classes
