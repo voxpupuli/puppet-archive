@@ -20,8 +20,8 @@ describe 'archive' do
   context 'RHEL Puppet 4.0.0 opensource' do
     let(:facts) { { :osfamily => 'RedHat', :puppetversion => '4.0.0' } }
 
-    it { is_expected.to contain_package('faraday').with_provider('pe_gem') }
-    it { is_expected.to contain_package('faraday_middleware').with_provider('pe_gem') }
+    it { is_expected.to contain_package('faraday').with_provider('puppet_gem') }
+    it { is_expected.to contain_package('faraday_middleware').with_provider('puppet_gem') }
     it { is_expected.to_not contain_package('7zip') }
   end
 
@@ -39,8 +39,8 @@ describe 'archive' do
   context 'Windows Puppet 4.3.1 opensource' do
     let(:facts) { { :osfamily => 'Windows', :archive_windir => 'C:/staging', :puppetversion => '4.3.1' } }
 
-    it { is_expected.to contain_package('faraday').with_provider('pe_gem') }
-    it { is_expected.to contain_package('faraday_middleware').with_provider('pe_gem') }
+    it { is_expected.to contain_package('faraday').with_provider('puppet_gem') }
+    it { is_expected.to contain_package('faraday_middleware').with_provider('puppet_gem') }
     it do
       should contain_package('7zip').with(:name     => '7zip',
                                           :provider => 'chocolatey',)
