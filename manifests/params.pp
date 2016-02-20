@@ -9,7 +9,7 @@ class archive::params {
       $seven_zip_name     = '7zip'
       $seven_zip_provider = 'chocolatey'
       if versioncmp($::puppetversion, '4.3.1') >= 0 {
-        $gem_provider = 'pe_gem'
+        $gem_provider = 'puppet_gem'
       } else {
         $gem_provider = 'gem'
       }
@@ -21,8 +21,10 @@ class archive::params {
       $mode  = '0640'
       $seven_zip_name = undef
       $seven_zip_provider = undef
-      if $::puppetversion =~ /Puppet Enterprise/ or versioncmp($::puppetversion, '4.0.0') >= 0 {
+      if $::puppetversion =~ /Puppet Enterprise/ {
         $gem_provider = 'pe_gem'
+      } elsif versioncmp($::puppetversion, '4.0.0') >= 0 {
+        $gem_provider = 'puppet_gem'
       } else {
         $gem_provider = 'gem'
       }
