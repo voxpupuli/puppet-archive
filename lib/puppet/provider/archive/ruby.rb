@@ -117,7 +117,16 @@ Puppet::Type.type(:archive).provide(:ruby) do
     temppath = tempfile.path
     tempfile.close!
 
-    download(temppath)
+    case resource[:source]
+    when /^(http|ftp)/
+      download(temppath)
+    when /^file/
+      uri = URI(resource[:source])
+      FileUtils.copy(Puppet::Util.uri_to_path(uri), temppath)
+    else
+      fail(Puppet::Error, "Source file: #{resource[:source]} does not exists.") unless File.exist?(resource[:source])
+      FileUtils.copy(resource[:source], temppath)
+    end
 
     # conditionally verify checksum:
     if resource[:checksum_verify] == :true && resource[:checksum_type] != :none
