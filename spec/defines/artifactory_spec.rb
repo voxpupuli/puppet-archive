@@ -13,9 +13,7 @@ describe 'archive::artifactory' do
     let(:title) { '/opt/app/example.zip' }
     let(:params) do
       {
-        :server => 'home.lan',
-        :port => '8081',
-        :url_path => 'path/example.zip'
+        :url => 'http://home.lan:8081/artifactory/path/example.zip',
       }
     end
 
@@ -39,9 +37,7 @@ describe 'archive::artifactory' do
     let(:params) do
       {
         :archive_path => '/opt/app',
-        :server => 'home.lan',
-        :port => '8081',
-        :url_path => 'path/example.zip',
+        :url => 'http://home.lan:8081/artifactory/path/example.zip',
         :owner => 'app',
         :group => 'app',
         :mode => '0400',

@@ -16,15 +16,6 @@ class archive (
   $seven_zip_source   = undef,
   $gem_provider       = $archive::params::gem_provider,
 ) inherits archive::params {
-  package { 'faraday':
-    ensure   => present,
-    provider => $gem_provider,
-  }
-
-  package { 'faraday_middleware':
-    ensure   => present,
-    provider => $gem_provider,
-  }
 
   if $::osfamily == 'Windows' and !($seven_zip_provider in ['', undef]) {
     package { '7zip':

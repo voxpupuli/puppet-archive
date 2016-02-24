@@ -1,19 +1,21 @@
 begin
   require 'puppet_x/bodeco/archive'
+  require 'puppet_x/bodeco/util'
 rescue LoadError
   require 'pathname' # WORK_AROUND #14073 and #7788
   archive = Puppet::Module.find('archive', Puppet[:environment].to_s)
   raise(LoadError, "Unable to find archive module in modulepath #{Puppet[:basemodulepath] || Puppet[:modulepath]}") unless archive
   require File.join archive.path, 'lib/puppet_x/bodeco/archive'
+  require File.join archive.path, 'lib/puppet_x/bodeco/util'
 end
 
 require 'securerandom'
 require 'tempfile'
 
 Puppet::Type.type(:archive).provide(:ruby) do
-  attr_reader :archive_checksum
+  defaultfor :feature => :microsoft_windows
 
-  confine :true => false # This is NEVER a valid provider. It is just used as a base class
+  attr_reader :archive_checksum
 
   def exists?
     if extracted?
@@ -139,7 +141,7 @@ Puppet::Type.type(:archive).provide(:ruby) do
     FileUtils.mv(temppath, archive_filepath)
   end
 
-  def download
-    raise(NotImplementedError, 'The Ruby provider does not implement download method.')
+  def download(filepath)
+    PuppetX::Bodeco::Util.download(resource[:source], filepath, :username => resource[:username], :password => resource[:password], :cookie => resource[:cookie], :proxy_server => resource[:proxy_server], :proxy_type => resource[:proxy_type])
   end
 end

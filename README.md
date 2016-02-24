@@ -7,6 +7,11 @@
 
 _*Warning*_:
 
+Release 0.5.x contains significant changes:
+
+* faraday, faraday_middleware no longer required.
+* ruby provider is the default for windows (using net::http).
+
 Release 0.3.x contains breaking changes
 
 * The parameter 7zip have been changed to seven_zip to conform to Puppet 4.x variable name requirements.
@@ -47,12 +52,12 @@ This module uses types and providers to download and manage compress files, with
 
 ## Setup
 
-The module requires faraday/faraday_middleware gems on the puppet master, which are typically present because they are a dependency of r10k. This dependency is managed by specifying 'include ::archive'.
+The module requires 7zip for windows clients which is installed via 'include "::archive"'.
 
 ## Usage
 
 ```puppet
-include 'archive'
+include '::archive'
 
 archive { '/tmp/jta-1.1.jar':
   ensure        => present,
@@ -104,7 +109,7 @@ end
 
 ### Classes
 
-* `archive`: install faraday/faraday_middleware gem, and 7zip package (Windows only).
+* `archive`: install 7zip package (Windows only).
 * `archive::staging`: install gem/package dependencies and creates staging directory for backwards compatibility. Use the archive class instead if you do not need the staging directory.
 
 ### Define Resources
@@ -166,7 +171,3 @@ archive::nexus {
     extract      => false,
 }
 ```
-## Limitations
-
-The archive::artifactory and archive::go resource need the faraday_middleware gem, and network access to the artifactory/go server to obtain the archive checksum. This gem is installed as a dependency for r10k, or otherwise this dependency should be installed as part of the puppet master initial deployment and configuration.
-

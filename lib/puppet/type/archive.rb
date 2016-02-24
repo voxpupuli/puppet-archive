@@ -159,10 +159,6 @@ Puppet::Type.newtype(:archive) do
     desc 'proxy address to use when accessing source'
   end
 
-  autorequire(:package) do
-    'faraday_middleware'
-  end
-
   autorequire(:file) do
     [Pathname.new(self[:path]).parent.to_s, self[:extract_path]]
   end
