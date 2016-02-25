@@ -26,16 +26,34 @@ describe Puppet::Type.type(:archive) do
     end.to raise_error(Puppet::Error, /archive path must be absolute: /)
   end
 
-  it 'verify resoource[:source] is valid source' do
-    expect do
-      resource[:source] = 'http://home.lan/example.zip'
-      resource[:source] = 'https://home.lan/example.zip'
-      resource[:source] = 'ftp://home.lan/example.zip'
-    end.to_not raise_error
+  describe 'on posix', :if => Puppet.features.posix? do
+    it 'verify resoource[:source] is valid source' do
+      expect do
+        resource[:source] = 'http://home.lan/example.zip'
+        resource[:source] = 'https://home.lan/example.zip'
+        resource[:source] = 'ftp://home.lan/example.zip'
+        resource[:source] = '/tmp/example.zip'
+      end.to_not raise_error
 
-    expect do
-      resource[:source] = 'afp://home.lan/example.zip'
-    end.to raise_error(Puppet::Error, /invalid source url: /)
+      expect do
+        resource[:source] = 'afp://home.lan/example.zip'
+        resource[:source] = '\tmp'
+        resource[:source] = 'D:/example.zip'
+      end.to raise_error(Puppet::Error, /invalid source url: /)
+    end
+  end
+
+  describe 'on windows', :if => Puppet.features.microsoft_windows? do
+    it 'verify resoource[:source] is valid source' do
+      expect do
+        resource[:source] = 'D:/example.zip'
+      end.to_not raise_error
+
+      expect do
+        resource[:source] = '/tmp/example.zip'
+        resource[:source] = '\Z:'
+      end.to raise_error(Puppet::Error, /invalid source url: /)
+    end
   end
 
   it 'verify resource[:checksum] is valid' do

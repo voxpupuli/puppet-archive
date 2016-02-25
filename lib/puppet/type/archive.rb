@@ -103,7 +103,7 @@ Puppet::Type.newtype(:archive) do
   newparam(:source) do
     desc 'archive file source, supports http|https|ftp|file uri.'
     validate do |value|
-      unless value =~ URI.regexp(%w(http https file ftp))
+      unless value =~ URI.regexp(%w(http https file ftp)) || Puppet::Util.absolute_path?(value)
         fail ArgumentError, "invalid source url: #{value}"
       end
     end
