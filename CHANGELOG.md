@@ -1,3 +1,14 @@
+##2016/2/26 - Releasing 0.4.5
+
+* Puppet-community release
+* Update travis/forge badge location
+* Fix aio-agent detection
+* Support .gz .xz format
+* Fix local files for non faraday providers
+* Fix GH-77 allows local files to be specified without using file:///
+* Fix GH-78 allow local file:///c:/... on windows
+* Fix phantom v0.4.4 release.
+
 ##2015/12/2 - Releasing 0.4.4
 
 * Puppet-community release
