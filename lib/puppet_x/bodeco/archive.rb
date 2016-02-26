@@ -48,7 +48,7 @@ module PuppetX
 
           Puppet.debug("Archive extracting #{@file} in #{path}: #{cmd}")
           File.chmod(0644, @file) if opts[:uid] || opts[:gid]
-          Puppet::Util::Execution.execute(cmd, :uid => opts[:uid], :gid => opts[:gid])
+          Puppet::Util::Execution.execute(cmd, :uid => opts[:uid], :gid => opts[:gid], :failonfail => true, :squelch => false, :combine => true)
         end
       end
 
