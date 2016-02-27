@@ -96,7 +96,7 @@
     }
   ],
   "name": "puppet-archive",
-  "version": "0.4.6",
+  "version": "0.4.7",
   "source": "https://github.com/puppet-community/puppet-archive",
   "author": "puppetcommunity",
   "license": "Apache-2.0",
