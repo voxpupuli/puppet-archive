@@ -1,13 +1,8 @@
 ---
-notifications:
-  email: false
 sudo: false
 language: ruby
 cache: bundler
 bundler_args: --without system_tests
-branches:
-  only:
-    - master
 addons:
   apt:
     sources:
@@ -21,17 +16,26 @@ matrix:
   fast_finish: true
   include:
   - rvm: 1.9.3
-    env: PUPPET_VERSION="~> 3.4" CHECK=test
+    env: PUPPET_VERSION="~> 3.0" STRICT_VARIABLES="yes" CHECK=test
+  - rvm: 2.1.8
+    env: PUPPET_VERSION="~> 3.0" STRICT_VARIABLES="yes" CHECK=test
   - rvm: 1.9.3
-    env: PUPPET_VERSION="~> 3.0" STRICT_VARIABLES="yes" CHECK=test
-  - rvm: 2.1.6
-    env: PUPPET_VERSION="~> 3.0" STRICT_VARIABLES="yes" CHECK=test
-  - rvm: 2.1.6
+    env: PUPPET_VERSION="~> 3.0" STRICT_VARIABLES="yes" CHECK=test FUTURE_PARSER=yes
+  - rvm: 2.1.8
+    env: PUPPET_VERSION="~> 3.0" STRICT_VARIABLES="yes" CHECK=test FUTURE_PARSER=yes
+  - rvm: 2.1.8
     env: PUPPET_VERSION="~> 4.0" STRICT_VARIABLES="yes" CHECK=test
-  - rvm: 2.2.3
+  - rvm: 2.2.4
     env: PUPPET_VERSION="~> 4.0" STRICT_VARIABLES="yes" CHECK=test
-  - rvm: 2.2.3
+  - rvm: 2.2.4
     env: PUPPET_VERSION="~> 4.0" STRICT_VARIABLES="yes" CHECK=rubocop
+  - rvm: 2.3.0
+    env: PUPPET_VERSION="~> 4.0" STRICT_VARIABLES="yes" CHECK=test
+  allow_failures:
+    - rvm: 2.3.0
+      env: PUPPET_VERSION="~> 4.0" STRICT_VARIABLES="yes" CHECK=test
+notifications:
+  email: false
 deploy:
   provider: puppetforge
   user: puppet
@@ -42,4 +46,4 @@ deploy:
     # all_branches is required to use tags
     all_branches: true
     # Only publish if our main Ruby target builds
-    rvm: 2.1.6
+    rvm: 1.9.3
