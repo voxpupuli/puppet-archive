@@ -1,3 +1,7 @@
+##2016/2/26 - Releasing 0.4.7
+
+* VoxPupuli Release
+
 ##2016/2/26 - Releasing 0.4.6
 
 * VoxPupuli Release
