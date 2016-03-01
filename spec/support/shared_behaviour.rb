@@ -111,7 +111,7 @@ RSpec.shared_examples 'an archive provider' do |provider_class|
 
         provider.extract
         provider.cleanup
-        expect(File.exist? resource[:path]).to eq false
+        expect(File.exist?(resource[:path])).to eq false
       end
     end
 
@@ -128,7 +128,7 @@ RSpec.shared_examples 'an archive provider' do |provider_class|
 
         provider.create
         expect(File.read(extracted_file)).to eq "hello world\n"
-        expect(File.exist? resource[:path]).to eq false
+        expect(File.exist?(resource[:path])).to eq false
       end
     end
   end

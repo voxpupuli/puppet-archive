@@ -92,20 +92,21 @@ Puppet::Type.type(:archive).provide(:ruby) do
   end
 
   def cleanup
-    (Puppet.debug("Cleanup archive #{archive_filepath}")
-     destroy) if extracted? && resource[:cleanup] == :true
+    return unless extracted? && resource[:cleanup] == :true
+    Puppet.debug("Cleanup archive #{archive_filepath}")
+    destroy
   end
 
   def extract
-    (fail(ArgumentError, 'missing archive extract_path') unless resource[:extract_path]
-     PuppetX::Bodeco::Archive.new(archive_filepath).extract(
-       resource[:extract_path],
-       :custom_command => resource[:extract_command],
-       :options => resource[:extract_flags],
-       :uid => resource[:user],
-       :gid => resource[:group]
-        )
-    ) if resource[:extract] == :true
+    return unless resource[:extract] == :true
+    raise(ArgumentError, 'missing archive extract_path') unless resource[:extract_path]
+    PuppetX::Bodeco::Archive.new(archive_filepath).extract(
+      resource[:extract_path],
+      :custom_command => resource[:extract_command],
+      :options => resource[:extract_flags],
+      :uid => resource[:user],
+      :gid => resource[:group]
+    )
   end
 
   def extracted?
@@ -124,14 +125,14 @@ Puppet::Type.type(:archive).provide(:ruby) do
       uri = URI(resource[:source])
       FileUtils.copy(Puppet::Util.uri_to_path(uri), temppath)
     else
-      fail(Puppet::Error, "Source file: #{resource[:source]} does not exists.") unless File.exist?(resource[:source])
+      raise(Puppet::Error, "Source file: #{resource[:source]} does not exists.") unless File.exist?(resource[:source])
       FileUtils.copy(resource[:source], temppath)
     end
 
     # conditionally verify checksum:
     if resource[:checksum_verify] == :true && resource[:checksum_type] != :none
       archive = PuppetX::Bodeco::Archive.new(temppath)
-      fail(Puppet::Error, 'Download file checksum mismatch') unless archive.checksum(resource[:checksum_type]) == checksum
+      raise(Puppet::Error, 'Download file checksum mismatch') unless archive.checksum(resource[:checksum_type]) == checksum
     end
 
     FileUtils.mkdir_p(File.dirname(archive_filepath))
@@ -139,6 +140,6 @@ Puppet::Type.type(:archive).provide(:ruby) do
   end
 
   def download
-    fail(NotImplementedError, 'The Ruby provider does not implement download method.')
+    raise(NotImplementedError, 'The Ruby provider does not implement download method.')
   end
 end
