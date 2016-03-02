@@ -36,15 +36,13 @@ module PuppetX
         custom_command = opts.fetch(:custom_command, nil)
         options = opts.fetch(:options)
         Dir.chdir(path) do
-          if custom_command
-            if custom_command =~ /%s/
-              cmd = custom_command % @file
-            else
-              cmd = "#{custom_command} #{options} #{file}"
-            end
-          else
-            cmd = command(options)
-          end
+          cmd = if custom_command && custom_command =~ /%s/
+                  custom_command % @file
+                elsif custom_command
+                  "#{custom_command} #{options} #{file}"
+                else
+                  command(options)
+                end
 
           Puppet.debug("Archive extracting #{@file} in #{path}: #{cmd}")
           File.chmod(0644, @file) if opts[:uid] || opts[:gid]
@@ -62,7 +60,7 @@ module PuppetX
         elsif File.directory?('C:\\Program Files (x86)\\7-zip')
           'C:\\Program Files (x86)\\7-Zip\\7z.exe'
         else
-          fail Exception, '7z.exe not available'
+          raise Exception, '7z.exe not available'
         end
       end
 
@@ -104,7 +102,7 @@ module PuppetX
             opt = parse_flags('-o', options, 'zip')
             "unzip #{opt} #{@file}"
           else
-            fail NotImplementedError, "Unknown filetype: #{@file}"
+            raise NotImplementedError, "Unknown filetype: #{@file}"
           end
         end
       end
@@ -118,7 +116,7 @@ module PuppetX
         when ::Hash
           options[command]
         else
-          fail ArgumentError, "Invalid options for command #{command}: #{options.inspect}"
+          raise ArgumentError, "Invalid options for command #{command}: #{options.inspect}"
         end
       end
     end

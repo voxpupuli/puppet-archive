@@ -53,7 +53,7 @@ Puppet::Type.newtype(:archive) do
     desc 'namevar, archive file fully qualified file path.'
     validate do |value|
       unless Puppet::Util.absolute_path? value
-        fail ArgumentError, "archive path must be absolute: #{value}"
+        raise ArgumentError, "archive path must be absolute: #{value}"
       end
     end
   end
@@ -72,7 +72,7 @@ Puppet::Type.newtype(:archive) do
     desc 'target folder path to extract archive.'
     validate do |value|
       unless Puppet::Util.absolute_path? value
-        fail ArgumentError, "archive extract_path must be absolute: #{value}"
+        raise ArgumentError, "archive extract_path must be absolute: #{value}"
       end
     end
   end
@@ -104,7 +104,7 @@ Puppet::Type.newtype(:archive) do
     desc 'archive file source, supports http|https|ftp|file uri.'
     validate do |value|
       unless value =~ URI.regexp(%w(http https file ftp)) || Puppet::Util.absolute_path?(value)
-        fail ArgumentError, "invalid source url: #{value}"
+        raise ArgumentError, "invalid source url: #{value}"
       end
     end
   end

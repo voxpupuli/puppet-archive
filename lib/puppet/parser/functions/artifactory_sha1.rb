@@ -6,7 +6,7 @@ module Puppet::Parser::Functions
   # http://www.jfrog.com/confluence/display/RTF/Artifactory+REST+API#ArtifactoryRESTAPI-FileInfo
   # Returns sha1 from artifactory file info
   newfunction(:artifactory_sha1, :type => :rvalue) do |args|
-    fail(ArgumentError, "Invalid artifactory file info url #{args}") unless args.size == 1
+    raise(ArgumentError, "Invalid artifactory file info url #{args}") unless args.size == 1
 
     require 'faraday'
     require 'faraday_middleware'
@@ -28,7 +28,7 @@ module Puppet::Parser::Functions
     end
 
     sha1 = response.body['checksums'] && response.body['checksums']['sha1']
-    fail("Could not parse sha1 from url#{args[0]} response: #{response.body}") unless sha1 =~ /\b[0-9a-f]{5,40}\b/
+    raise("Could not parse sha1 from url#{args[0]} response: #{response.body}") unless sha1 =~ /\b[0-9a-f]{5,40}\b/
     sha1
   end
 end

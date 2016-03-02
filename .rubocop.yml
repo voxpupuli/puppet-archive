@@ -31,7 +31,9 @@ Metrics/ClassLength:
   Enabled: false
 
 # dealbreaker:
-Style/TrailingComma:
+Style/TrailingCommaInArguments:
+  Enabled: false
+Style/TrailingCommaInLiteral:
   Enabled: false
 Style/ClosingParenthesisIndentation:
   Enabled: false
@@ -55,3 +57,10 @@ Style/ClassAndModuleChildren:
 Style/Documentation:
   Description: 'Document classes and non-namespace modules.'
   Enabled: false
+
+# More comfortable block layouts
+Style/BlockDelimiters:
+  Enabled: False
+
+Style/MultilineBlockLayout:
+  Enabled: False
