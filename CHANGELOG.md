@@ -1,6 +1,13 @@
-##2016/2/26 - Releasing 0.4.7
+##2016/3/2 - Releasing 0.4.8
 
 * VoxPupuli Release
+* modulesync to fix forge release issues.
+* cosmetic changes due to rubocop update.
+
+##2016/3/1 - Releasing 0.4.7
+
+* VoxPupuli Release
+* raise exception when error occurs during extraction.
 
 ##2016/2/26 - Releasing 0.4.6
 
