@@ -1,8 +1,18 @@
-# == Class: archive
+# Class: archive
+# ==============
 #
 # Manages archive modules dependencies.
 #
-# == Examples:
+# Parameters
+# ----------
+#
+# * seven_zip_name: 7zip package name.
+# * seven_zip_provider: 7zip package provider (accepts windows/chocolatey).
+# * seven_zip_source: alternative package source.
+# * gem_provider: ruby gem provider (deprecated since we no longer install ruby gems).
+#
+# Examples
+# --------
 #
 # class { 'archive':
 #   seven_zip_name     => '7-Zip 9.20 (x64 edition)',
@@ -14,7 +24,7 @@ class archive (
   $seven_zip_name     = $archive::params::seven_zip_name,
   $seven_zip_provider = $archive::params::seven_zip_provider,
   $seven_zip_source   = undef,
-  $gem_provider       = $archive::params::gem_provider,
+  $gem_provider       = undef,
 ) inherits archive::params {
 
   if $::osfamily == 'Windows' and !($seven_zip_provider in ['', undef]) {

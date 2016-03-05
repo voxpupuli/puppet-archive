@@ -1,6 +1,22 @@
+# define: archive::nexus
+# ======================
 #
-# Download from Nexus using REST API
-# More info here: https://repository.sonatype.org/nexus-restlet1x-plugin/default/docs/path__artifact_maven_content.html
+# archive wrapper for downloading files from Nexus using REST API. Nexus API:
+# https://repository.sonatype.org/nexus-restlet1x-plugin/default/docs/path__artifact_maven_content.html
+#
+# Parameters
+# ----------
+#
+# Examples
+# --------
+#
+# archive::nexus { '/tmp/jtstand-ui-0.98.jar':
+#   url        => 'https://oss.sonatype.org',
+#   gav        => 'org.codehaus.jtstand:jtstand-ui:0.98',
+#   repository => 'codehaus-releases',
+#   packaging  => 'jar',
+#   extract    => false,
+# }
 #
 define archive::nexus (
   $url,
