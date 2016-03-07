@@ -40,45 +40,39 @@ module PuppetX
         request
       end
 
-      def download(uri, file_path, option = { :limit => FOLLOW_LIMIT })
+      def follow_redirect(uri, option = { :limit => FOLLOW_LIMIT }, &block)
         Net::HTTP.start(uri.host, uri.port, :use_ssl => (uri.scheme == 'https')) do |http|
           http.request(generate_request(uri)) do |response|
             case response
             when Net::HTTPSuccess
-              File.open file_path, 'w' do |io|
-                response.read_body do |chunk|
-                  io.write chunk
-                end
-              end
+              yield response
             when Net::HTTPRedirection
               limit = option[:limit] - 1
               raise Puppet::Error, "Redirect limit exceeded, last url: #{uri}" if limit < 0
               location = safe_escape(response['location'])
               new_uri = URI(location)
               new_uri = URI(uri.to_s + location) if new_uri.relative?
-              download(new_uri, file_path, :limit => limit)
+              follow_redirect(new_uri, :limit => limit, &block)
             else
-              raise Puppet::Error, "HTTP Error Code: #{response.code}\nMessage:\n#{response.body}"
+              raise Puppet::Error, "HTTP Error Code #{response.code}\nURL: #{uri}\nContent:\n#{response.body}"
+            end
+          end
+        end
+      end
+
+      def download(uri, file_path, option = { :limit => FOLLOW_LIMIT })
+        follow_redirect(uri, option) do |response|
+          File.open file_path, 'w' do |io|
+            response.read_body do |chunk|
+              io.write chunk
             end
           end
         end
       end
 
       def content(uri, option = { :limit => FOLLOW_LIMIT })
-        http = Net::HTTP.start(uri.host, uri.port, :use_ssl => (uri.scheme == 'https'))
-        response = http.request(generate_request(uri))
-        case response
-        when Net::HTTPSuccess
-          response.body
-        when Net::HTTPRedirection
-          limit = option[:limit] - 1
-          raise Puppet::Error, "Redirect limit exceeded, last url: #{uri}" if limit < 0
-          location = safe_escape(response['location'])
-          new_uri = URI(location)
-          new_uri = URI(uri.to_s + location) if new_uri.relative?
-          content(new_uri, :limit => limit)
-        else
-          raise Puppet::Error, "HTTP Error Code: #{response.code}\nMessage:\n#{response.body}"
+        follow_redirect(uri, option) do |response|
+          return response.body
         end
       end
 
