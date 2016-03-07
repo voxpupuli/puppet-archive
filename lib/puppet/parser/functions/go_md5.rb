@@ -12,28 +12,14 @@ module Puppet::Parser::Functions
   newfunction(:go_md5, :type => :rvalue) do |args|
     raise(ArgumentError, "Invalid go md5 info url #{args}") unless args.size == 4
 
-    require 'faraday'
-    require 'faraday_middleware'
+    require 'puppet_x/bodeco/util.rb'
 
     username, password, file, url = args
 
     uri = URI(url)
+    response = PuppetX::Bodeco::Util.content(uri, :username => username, :password => password)
 
-    connection = Faraday.new(:url => "#{uri.scheme}://#{uri.host}:#{uri.port}") do |conn|
-      conn.basic_auth(username, password)
-      conn.response :raise_error # This let's us know if the transfer failed.
-      conn.response :follow_redirects, :limit => 5
-
-      conn.adapter Faraday.default_adapter # make requests with Net::HTTP
-    end
-
-    begin
-      response = connection.get(uri.path)
-    rescue Faraday::Error::ClientError
-      raise($ERROR_INFO, "unable to download go file info #{url}. #{$ERROR_INFO}", $ERROR_INFO.backtrace)
-    end
-
-    checksums = response.body.split("\n")
+    checksums = response.split("\n")
     line = checksums.find { |x| x =~ /#{file}=/ }
     md5 = line.match(/\b[0-9a-f]{5,40}\b/)
     raise("Could not parse md5 from url#{url} response: #{response.body}") unless md5

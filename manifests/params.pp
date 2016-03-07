@@ -1,4 +1,8 @@
-# archive parameters
+# Class: archive::params
+# ======================
+#
+# archive settings such as default user and file mode.
+#
 class archive::params {
   case $::osfamily {
     'Windows': {
@@ -8,11 +12,6 @@ class archive::params {
       $mode               = '0640'
       $seven_zip_name     = '7zip'
       $seven_zip_provider = 'chocolatey'
-      if versioncmp($::puppetversion, '4.3.1') >= 0 {
-        $gem_provider = 'puppet_gem'
-      } else {
-        $gem_provider = 'gem'
-      }
     }
     default: {
       $path  = '/opt/staging'
@@ -21,13 +20,6 @@ class archive::params {
       $mode  = '0640'
       $seven_zip_name = undef
       $seven_zip_provider = undef
-      if $::puppetversion =~ /Puppet Enterprise/ {
-        $gem_provider = 'pe_gem'
-      } elsif versioncmp($::puppetversion, '4.0.0') >= 0 {
-        $gem_provider = 'puppet_gem'
-      } else {
-        $gem_provider = 'gem'
-      }
     }
   }
 }

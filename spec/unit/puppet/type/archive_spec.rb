@@ -6,7 +6,7 @@ describe Puppet::Type.type(:archive) do
     Puppet::Type.type(:archive).new(
       :path   => '/tmp/example.zip',
       :source => 'http://home.lan/example.zip'
-  )
+    )
   end
 
   it 'resource defaults' do

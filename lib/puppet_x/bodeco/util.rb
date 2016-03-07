@@ -1,5 +1,3 @@
-require 'faraday_middleware' if Puppet.features.faraday_middleware?
-
 module PuppetX
   module Bodeco
     module Util
@@ -17,48 +15,77 @@ module PuppetX
     end
 
     class HTTP
-      def initialize(url, options)
-        username = options[:username]
-        password = options[:password]
-        cookie = options[:cookie]
+      require 'net/http'
+
+      FOLLOW_LIMIT = 5
+      URI_UNSAFE = %r{[^\-_.!~*'()a-zA-Z\d;\/?:@&=+$,\[\]%]}
+
+      def initialize(_url, options)
+        @username = options[:username]
+        @password = options[:password]
+        @cookie = options[:cookie]
         proxy_server = options[:proxy_server]
-        # Try one last time since PUP-1879 isn't always available:
-        unless defined? ::Faraday
-          Gem.clear_paths unless defined? ::Bundler
-          require 'faraday_middleware'
-        end
+        proxy_type = options[:proxy_type]
 
-        if Facter.value(:osfamily) == 'windows' && !ENV.key?('SSL_CERT_FILE')
-          ENV['SSL_CERT_FILE'] = File.expand_path(File.join(__FILE__, '..', '..', '..', '..', 'files', 'cacert.pem'))
-        end
+        ENV["#{proxy_type}_proxy"] = proxy_server
 
-        @connection = ::Faraday.new(
-          url,
-          :proxy => proxy_server
-          ) do |conn|
-          conn.basic_auth(username, password) if username && password
+        ENV['SSL_CERT_FILE'] = File.expand_path(File.join(__FILE__, '..', '..', '..', '..', 'files', 'cacert.pem')) if Facter.value(:osfamily) == 'windows' && !ENV.key?('SSL_CERT_FILE')
+      end
 
-          conn.response :raise_error # This let's us know if the transfer failed.
-          conn.response :follow_redirects, :limit => 5
-          conn.headers['cookie'] = cookie if cookie
-          conn.adapter ::Faraday.default_adapter
+      def generate_request(uri)
+        header = @cookie && { 'Cookie' => @cookie }
+
+        request = Net::HTTP::Get.new(uri.request_uri, header)
+        request.basic_auth(@username, @password) if @username && @password
+        request
+      end
+
+      def download(uri, file_path, option = { :limit => FOLLOW_LIMIT })
+        Net::HTTP.start(uri.host, uri.port, :use_ssl => (uri.scheme == 'https')) do |http|
+          http.request(generate_request(uri)) do |response|
+            case response
+            when Net::HTTPSuccess
+              File.open file_path, 'w' do |io|
+                response.read_body do |chunk|
+                  io.write chunk
+                end
+              end
+            when Net::HTTPRedirection
+              limit = option[:limit] - 1
+              raise Puppet::Error, "Redirect limit exceeded, last url: #{uri}" if limit < 0
+              location = safe_escape(response['location'])
+              new_uri = URI(location)
+              new_uri = URI(uri.to_s + location) if new_uri.relative?
+              download(new_uri, file_path, :limit => limit)
+            else
+              raise Puppet::Error, "HTTP Error Code: #{response.code}\nMessage:\n#{response.body}"
+            end
+          end
         end
       end
 
-      def download(uri, file_path)
-        f = File.open(file_path, 'wb')
-        f.write(@connection.get(uri.request_uri).body)
-        f.close
-      rescue Faraday::Error::ClientError
-        f.close
-        File.unlink(file_path)
-        raise $ERROR_INFO, "Unable to download file #{uri.request_uri} from #{@connection.url_prefix}. #{$ERROR_INFO}", $ERROR_INFO.backtrace
+      def content(uri, option = { :limit => FOLLOW_LIMIT })
+        http = Net::HTTP.start(uri.host, uri.port, :use_ssl => (uri.scheme == 'https'))
+        response = http.request(generate_request(uri))
+        case response
+        when Net::HTTPSuccess
+          response.body
+        when Net::HTTPRedirection
+          limit = option[:limit] - 1
+          raise Puppet::Error, "Redirect limit exceeded, last url: #{uri}" if limit < 0
+          location = safe_escape(response['location'])
+          new_uri = URI(location)
+          new_uri = URI(uri.to_s + location) if new_uri.relative?
+          content(new_uri, :limit => limit)
+        else
+          raise Puppet::Error, "HTTP Error Code: #{response.code}\nMessage:\n#{response.body}"
+        end
       end
 
-      def content(uri)
-        @connection.get(uri.request_uri).body
-      rescue Faraday::Error::ClientError
-        raise $ERROR_INFO, "Unable to retrieve content #{uri.request_uri} from #{@connection.url_prefix}. #{$ERROR_INFO}", $ERROR_INFO.backtrace
+      def safe_escape(uri)
+        uri.to_s.gsub(URI_UNSAFE) do |match|
+          '%' + match.unpack('H2' * match.bytesize).join('%').upcase
+        end
       end
     end
 
