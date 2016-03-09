@@ -3,7 +3,7 @@ Puppet::Type.type(:archive).provide(:curl, :parent => :ruby) do
   defaultfor :feature => :posix
 
   def download(filepath)
-    @curl_params = [
+    params = [
       resource[:source],
       '-o',
       filepath,
@@ -12,26 +12,11 @@ Puppet::Type.type(:archive).provide(:curl, :parent => :ruby) do
       5
     ]
 
-    #
-    # Manage username and password parameters
-    #
-    if resource[:username] && resource[:password]
-      @curl_params << '--user' << "#{resource[:username]}:#{resource[:password]}"
-    elsif resource[:username]
-      @curl_params << '--user' << resource[:username]
-    elsif resource[:password]
-      raise(Puppet::Error, 'password specfied without username.')
-    end
+    account = [resource[:username], resource[:password]].compact.join(':') if resource[:username]
+    params += optional_switch(account, ['--user', '%s'])
+    params += optional_switch(resource[:cookie], ['--cookie', '%s'])
+    params += optional_switch(resource[:proxy_server], ['--proxy', '%s'])
 
-    if resource[:proxy_server]
-      @curl_params << '--proxy' << resource[:proxy_server]
-    end
-
-    #
-    # Manage cookie parameter
-    #
-    @curl_params << '--cookie' << resource[:cookie] if resource[:cookie]
-
-    curl(@curl_params)
+    curl(params)
   end
 end

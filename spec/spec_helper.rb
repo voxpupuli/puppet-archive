@@ -10,4 +10,5 @@ Dir['./spec/support/**/*.rb'].sort.each { |f| require f }
 RSpec.configure do |c|
   c.formatter = 'documentation'
   c.mock_framework = :rspec
+  c.default_facts = { :ec2_metadata => nil }
 end

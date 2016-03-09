@@ -101,9 +101,9 @@ Puppet::Type.newtype(:archive) do
   end
 
   newparam(:source) do
-    desc 'archive file source, supports http|https|ftp|file uri.'
+    desc 'archive file source, supports http|https|ftp|file|s3 uri.'
     validate do |value|
-      unless value =~ URI.regexp(%w(http https file ftp)) || Puppet::Util.absolute_path?(value)
+      unless value =~ URI.regexp(%w(http https ftp file s3)) || Puppet::Util.absolute_path?(value)
         raise ArgumentError, "invalid source url: #{value}"
       end
     end
@@ -160,7 +160,16 @@ Puppet::Type.newtype(:archive) do
   end
 
   autorequire(:file) do
-    [Pathname.new(self[:path]).parent.to_s, self[:extract_path]]
+    [
+      Pathname.new(self[:path]).parent.to_s,
+      self[:extract_path],
+      '/root/.aws/config',
+      '/root/.aws/credentials',
+    ]
+  end
+
+  autorequire(:exec) do
+    ['install_aws_cli']
   end
 
   validate do

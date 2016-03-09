@@ -14,6 +14,7 @@
    * [Example](#usage-example)
    * [File permission](#file-permission)
    * [Network files](#network-files)
+   * [S3 Bucket](#s3-bucket)
 5. [Reference](#reference)
 6. [Development](#development)
 
@@ -25,6 +26,7 @@ Release 0.5.x contains significant changes:
 * ruby provider is the default for windows (using net::http).
 * archive gem_provider attribute deprecated.
 * archive::artifactory server, port, url_path attributes deprecated.
+* S3 bucket support (experimental).
 
 Release 0.3.x contains breaking changes
 
@@ -209,11 +211,38 @@ archive { '/nfs/repo/software.zip':
 }
 ```
 
+### S3 bucket
+
+S3 support is implemented via the [AWS
+CLI](http://docs.aws.amazon.com/cli/latest/userguide/cli-chap-welcome.html).
+By default this dependency is only installed for Linux VMs running on AWS, or
+enabled via `aws_cli_install` option:
+
+```puppet
+class { '::archive':
+  aws_cli_install => true,
+}
+
+# See AWS cli guide for credential and configuration settings:
+# http://docs.aws.amazon.com/cli/latest/userguide/cli-chap-getting-started.html
+file { '/root/.aws/credential':
+  ensure => file,
+  ...
+}
+
+archive { '/tmp/gravatar.png':
+  ensure => present,
+  source => 's3://bodecoio/gravatar.png',
+}
+```
+
+NOTE: Alternative s3 provider support can be implemented by overriding the [s3_download method](lib/puppet/provider/archive/ruby.rb):
+
 ## Reference
 
 ### Classes
 
-* `archive`: install 7zip package (Windows only).
+* `archive`: install 7zip package (Windows only) and aws cli for s3 support.
 * `archive::staging`: install package dependencies and creates staging directory for backwards compatibility. Use the archive class instead if you do not need the staging directory.
 
 ### Define Resources
@@ -229,7 +258,7 @@ archive { '/nfs/repo/software.zip':
 * `ensure`: whether archive file should be present/absent (default: present)
 * `path`: namevar, archive file fully qualified file path.
 * `filename`: archive file name (derived from path).
-* `source`: archive file source, supports http|https|ftp|file uri.
+* `source`: archive file source, supports http|https|ftp|file|s3 uri.
 * `username`: username to download source file.
 * `password`: password to download source file.
 * `cookie`: archive file download cookie.

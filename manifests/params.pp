@@ -22,4 +22,11 @@ class archive::params {
       $seven_zip_provider = undef
     }
   }
+
+  # Amazon Linux already have aws cli installed:
+  if getvar('::ec2_metadata') and $::operatingsystem != 'Amazon' {
+    $aws_cli_install = true
+  } else {
+    $aws_cli_install = false
+  }
 }
