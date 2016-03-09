@@ -52,7 +52,7 @@ describe 'archive' do
       let(:params) { {
         :seven_zip_name     => '7-Zip 9.20 (x64 edition)',
         :seven_zip_source   => 'C:/Windows/Temp/7z920-x64.msi',
-        :seven_zip_provider => 'windows'
+        :seven_zip_provider => 'windows',
       } }
 
       it do
@@ -70,7 +70,7 @@ describe 'archive' do
       }.merge(default_facts) }
 
       let(:params) { {
-        :seven_zip_provider => ''
+        :seven_zip_provider => '',
       } }
 
       it { should_not contain_package('7zip') }
