@@ -13,8 +13,8 @@ require 'securerandom'
 require 'tempfile'
 
 Puppet::Type.type(:archive).provide(:ruby) do
+  optional_commands :aws => 'aws'
   defaultfor :feature => :microsoft_windows
-
   attr_reader :archive_checksum
 
   def exists?
@@ -126,6 +126,8 @@ Puppet::Type.type(:archive).provide(:ruby) do
     when /^file/
       uri = URI(resource[:source])
       FileUtils.copy(Puppet::Util.uri_to_path(uri), temppath)
+    when /^s3/
+      s3_download(temppath)
     else
       raise(Puppet::Error, "Source file: #{resource[:source]} does not exists.") unless File.exist?(resource[:source])
       FileUtils.copy(resource[:source], temppath)
@@ -143,5 +145,24 @@ Puppet::Type.type(:archive).provide(:ruby) do
 
   def download(filepath)
     PuppetX::Bodeco::Util.download(resource[:source], filepath, :username => resource[:username], :password => resource[:password], :cookie => resource[:cookie], :proxy_server => resource[:proxy_server], :proxy_type => resource[:proxy_type])
+  end
+
+  def s3_download(path)
+    params = [
+      's3',
+      'cp',
+      resource[:source],
+      path
+    ]
+
+    aws(params)
+  end
+
+  def optional_switch(value, option)
+    if value
+      option.collect { |flags| flags % value }
+    else
+      []
+    end
   end
 end
