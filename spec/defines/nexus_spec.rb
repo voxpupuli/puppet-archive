@@ -62,4 +62,45 @@ describe 'archive::nexus' do
       )
     end
   end
+
+  context 'nexus archive with checksum_verify => false' do
+    let :title do
+      '/tmp/artifact.war'
+    end
+
+    let :params do
+      {
+        url: 'https://oss.sonatype.org',
+        gav: 'io.hawt:hawtio-web:1.4.36',
+        repository: 'releases',
+        owner: 'tom',
+        group: 'worker',
+        user: 'tom',
+        extract: true,
+        extract_path: '/opt',
+        creates: '/opt/artifact/WEB-INF',
+        cleanup: true,
+        checksum_verify: false
+      }
+    end
+
+    it do
+      should contain_archive('/tmp/artifact.war').with(
+        'user' => 'tom',
+        'group' => 'worker',
+        'extract' => true,
+        'extract_path' => '/opt',
+        'creates' => '/opt/artifact/WEB-INF',
+        'cleanup' => true,
+        'checksum_verify' => false
+      )
+    end
+
+    it do
+      should contain_file('/tmp/artifact.war').that_requires('Archive[/tmp/artifact.war]').with(
+        'owner' => 'tom',
+        'group' => 'worker'
+      )
+    end
+  end
 end
