@@ -62,7 +62,7 @@ module PuppetX
 
       def download(uri, file_path, option = { :limit => FOLLOW_LIMIT })
         follow_redirect(uri, option) do |response|
-          File.open file_path, 'w' do |io|
+          File.open file_path, 'wb' do |io|
             response.read_body do |chunk|
               io.write chunk
             end
