@@ -14,6 +14,7 @@
    * [Example](#usage-example)
    * [File permission](#file-permission)
    * [Network files](#network-files)
+   * [Extract customization](#extract-customization)
    * [S3 Bucket](#s3-bucket)
 5. [Reference](#reference)
 6. [Development](#development)
@@ -105,7 +106,6 @@ class { 'archive':
   seven_zip_source   => 'C:/Windows/Temp/7z920-x64.msi',
   seven_zip_provider => 'windows',
 }
-
 ```
 
 ### Usage Example
@@ -208,6 +208,33 @@ archive { '/nfs/repo/software.zip':
   extract_path  => '/opt',
   checksum_type => 'none', # typically unecessary
   cleanup       => false,  # keep the file on the server
+}
+```
+
+### Extract Customization
+
+The `extract_flag` or `extract_command` parameters can be used to override the
+default extraction command/flag (defaults are specified in
+[achive.rb](lib/puppet_x/bodeco/archive.rb)).
+
+```puppet
+# tar striping directories:
+archive { '/var/lib/kafka/kafka_2.10-0.8.2.1.tgz':
+  ensure          => present,
+  extract         => true,
+  extract_command => 'tar xfz %s --strip-components=1',
+  extract_path    => '/opt/kafka_2.10-0.8.2.1',
+  cleanup         => true,
+  creates         => '/opt/kafka_2.10-0.8.2.1/config',
+}
+
+# zip freshen existing files (zip -of %s instead of zip -o %s):
+archive { '/var/lib/example.zip':
+  extract      => true,
+  extract_path => '/opt',
+  extract_flag => '-of',
+  cleanup      => true,
+  subscribe    => ...,
 }
 ```
 
@@ -336,7 +363,7 @@ Note: If you are writing a dependent module that include specs in it, you will
 need to set the puppetversion fact in your puppet-rspec tests. You can do that
 by adding it to the default facts of your spec/spec_helper.rb:
 
-```
+```ruby
 RSpec.configure do |c|
   c.default_facts = { :puppetversion => Puppet.version }
 end
