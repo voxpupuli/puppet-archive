@@ -74,7 +74,7 @@ RSpec.describe wget_provider do
       end
 
       it 'calls wget with default options and header containing cookie' do
-        expect(provider).to receive(:wget).with(default_options << '--header="Cookie: "foo"')
+        expect(provider).to receive(:wget).with(default_options << '--header="Cookie: foo"')
         provider.download(name)
       end
     end
