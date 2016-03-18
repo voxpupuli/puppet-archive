@@ -14,6 +14,9 @@ Puppet::Type.type(:archive).provide(:wget, :parent => :ruby) do
     params += optional_switch(resource[:cookie], ['--header="Cookie: %s"'])
     params += optional_switch(resource[:proxy_server], ["--#{resource[:proxy_type]}_proxy=#{resource[:proxy_server]}"])
 
-    wget(params)
+    # NOTE:
+    # Do NOT use wget(params) until https://tickets.puppetlabs.com/browse/PUP-6066 is resolved.
+    command = "wget #{params.join(' ')}"
+    Puppet::Util::Execution.execute(command)
   end
 end

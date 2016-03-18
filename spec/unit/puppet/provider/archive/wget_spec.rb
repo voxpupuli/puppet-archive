@@ -7,13 +7,16 @@ RSpec.describe wget_provider do
     let(:name)      { '/tmp/example.zip' }
     let(:resource)  { Puppet::Type::Archive.new(resource_properties) }
     let(:provider)  { wget_provider.new(resource) }
+    let(:execution) { Puppet::Util::Execution }
 
     let(:default_options) do
       [
+        'wget',
         'http://home.lan/example.zip',
         '-O',
-        String,
-        '--max-redirect=5']
+        '/tmp/example.zip',
+        '--max-redirect=5'
+      ]
     end
 
     before do
@@ -29,7 +32,7 @@ RSpec.describe wget_provider do
       end
 
       it 'calls wget with input, output and --max-redirects=5' do
-        expect(provider).to receive(:wget).with(default_options)
+        expect(execution).to receive(:execute).with(default_options.join(' '))
         provider.download(name)
       end
     end
@@ -44,7 +47,7 @@ RSpec.describe wget_provider do
       end
 
       it 'calls wget with default options and username' do
-        expect(provider).to receive(:wget).with(default_options << '--user=foo')
+        expect(execution).to receive(:execute).with([default_options, '--user=foo'].join(' '))
         provider.download(name)
       end
     end
@@ -59,7 +62,7 @@ RSpec.describe wget_provider do
       end
 
       it 'calls wget with default options and password' do
-        expect(provider).to receive(:wget).with(default_options << '--password=foo')
+        expect(execution).to receive(:execute).with([default_options, '--password=foo'].join(' '))
         provider.download(name)
       end
     end
@@ -74,7 +77,7 @@ RSpec.describe wget_provider do
       end
 
       it 'calls wget with default options and header containing cookie' do
-        expect(provider).to receive(:wget).with(default_options << '--header="Cookie: foo"')
+        expect(execution).to receive(:execute).with([default_options, '--header="Cookie: foo"'].join(' '))
         provider.download(name)
       end
     end
@@ -89,7 +92,7 @@ RSpec.describe wget_provider do
       end
 
       it 'calls wget with default options and header containing cookie' do
-        expect(provider).to receive(:wget).with(default_options << '--https_proxy=https://home.lan:8080')
+        expect(execution).to receive(:execute).with([default_options, '--https_proxy=https://home.lan:8080'].join(' '))
         provider.download(name)
       end
     end
