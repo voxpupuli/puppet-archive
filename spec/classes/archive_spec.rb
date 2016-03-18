@@ -10,6 +10,9 @@ describe 'archive' do
 
     context 'default' do
       it { should_not contain_package('7zip') }
+      it { should_not contain_file('/opt/awscli-bundle') }
+      it { should_not contain_archive('awscli-bundle.zip') }
+      it { should_not contain_exec('install_aws_cli') }
     end
 
     context 'with aws_cli' do

@@ -26,7 +26,7 @@ class archive (
   $seven_zip_provider = $archive::params::seven_zip_provider,
   $seven_zip_source   = undef,
   $gem_provider       = undef,
-  $aws_cli_install    = $archive::params::aws_cli_install,
+  $aws_cli_install    = false,
 ) inherits archive::params {
 
   if $::osfamily == 'Windows' and !($seven_zip_provider in ['', undef]) {
