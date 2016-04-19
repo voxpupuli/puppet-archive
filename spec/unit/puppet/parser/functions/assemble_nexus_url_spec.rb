@@ -1,7 +1,6 @@
 require 'spec_helper'
 
 describe :assemble_nexus_url do
-
   before :all do
     Puppet::Parser::Functions.autoloader.loadall
   end
@@ -37,5 +36,4 @@ describe :assemble_nexus_url do
 
     expect(scope.function_assemble_nexus_url([nexus_url, parameters])).to eq expected_url
   end
-
 end
