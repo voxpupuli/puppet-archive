@@ -41,7 +41,9 @@ module PuppetX
       end
 
       def follow_redirect(uri, option = { :limit => FOLLOW_LIMIT }, &block)
-        Net::HTTP.start(uri.host, uri.port, :use_ssl => (uri.scheme == 'https')) do |http|
+        req = Net::HTTP.new(uri.host, uri.port)
+        req.use_ssl = (uri.scheme == 'https')
+        req.start do |http|
           http.request(generate_request(uri)) do |response|
             case response
             when Net::HTTPSuccess
