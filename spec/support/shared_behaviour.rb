@@ -68,6 +68,7 @@ RSpec.shared_examples 'an archive provider' do |provider_class|
     end
 
     it '#extract' do
+      skip 'jruby not supported' if defined? JRUBY_VERSION
       Dir.mktmpdir do |dir|
         resource[:path] = File.join(dir, resource[:filename])
         extracted_file = File.join(dir, 'test')
@@ -83,6 +84,7 @@ RSpec.shared_examples 'an archive provider' do |provider_class|
     end
 
     it '#extracted?' do
+      skip 'jruby not supported' if defined? JRUBY_VERSION
       Dir.mktmpdir do |dir|
         resource[:path] = File.join(dir, resource[:filename])
         extracted_file = File.join(dir, 'test')
@@ -99,6 +101,7 @@ RSpec.shared_examples 'an archive provider' do |provider_class|
     end
 
     it '#cleanup' do
+      skip 'jruby not supported' if defined? JRUBY_VERSION
       Dir.mktmpdir do |dir|
         resource[:path] = File.join(dir, resource[:filename])
         extracted_file = File.join(dir, 'test')
@@ -116,6 +119,7 @@ RSpec.shared_examples 'an archive provider' do |provider_class|
     end
 
     it '#create' do
+      skip 'jruby not supported' if defined? JRUBY_VERSION
       Dir.mktmpdir do |dir|
         resource[:path] = File.join(dir, resource[:filename])
         extracted_file = File.join(dir, 'test')
