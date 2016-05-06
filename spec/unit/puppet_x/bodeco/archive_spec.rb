@@ -41,6 +41,10 @@ describe PuppetX::Bodeco::Archive do
     zip = PuppetX::Bodeco::Archive.new('test.zip')
     expect(zip.send(:command, :undef)).to eq 'unzip -o test.zip'
     expect(zip.send(:command, '-a')).to eq 'unzip -a test.zip'
+
+    zip = PuppetX::Bodeco::Archive.new('/tmp/fun folder/test.zip')
+    expect(zip.send(:command, :undef)).to eq 'unzip -o /tmp/fun\ folder/test.zip'
+    expect(zip.send(:command, '-a')).to eq 'unzip -a /tmp/fun\ folder/test.zip'
   end
 
   it '#command on Windows' do
@@ -54,5 +58,9 @@ describe PuppetX::Bodeco::Archive do
     zip = PuppetX::Bodeco::Archive.new('test.zip')
     zip.stubs(:win_7zip).returns('7z.exe')
     expect(zip.send(:command, :undef)).to eq '7z.exe x -aoa test.zip'
+
+    zip = PuppetX::Bodeco::Archive.new('C:/Program Files/test.zip')
+    zip.stubs(:win_7zip).returns('7z.exe')
+    expect(zip.send(:command, :undef)).to eq '7z.exe x -aoa C:/Program\ Files/test.zip'
   end
 end

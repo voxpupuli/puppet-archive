@@ -6,6 +6,7 @@ module PuppetX
     class Archive
       def initialize(file)
         @file = file
+        @file_path = Shellwords.shellescape file
       end
 
       def checksum(type)
@@ -37,9 +38,9 @@ module PuppetX
         options = opts.fetch(:options)
         Dir.chdir(path) do
           cmd = if custom_command && custom_command =~ /%s/
-                  custom_command % @file
+                  custom_command % @file_path
                 elsif custom_command
-                  "#{custom_command} #{options} #{file}"
+                  "#{custom_command} #{options} #{@file_path}"
                 else
                   command(options)
                 end
@@ -67,40 +68,40 @@ module PuppetX
       def command(options)
         if Facter.value(:osfamily) == 'windows'
           opt = parse_flags('x -aoa', options, '7z')
-          "#{win_7zip} #{opt} #{@file}"
+          "#{win_7zip} #{opt} #{@file_path}"
         else
           case @file
           when /\.tar$/
             opt = parse_flags('xf', options, 'tar')
-            "tar #{opt} #{@file}"
+            "tar #{opt} #{@file_path}"
           when /(\.tgz|\.tar\.gz)$/
             if Facter.value(:osfamily) == 'Solaris'
               gunzip_opt = parse_flags('-dc', options, 'gunzip')
               tar_opt = parse_flags('xf', options, 'tar')
-              "gunzip #{gunzip_opt} #{@file} | tar #{tar_opt} -"
+              "gunzip #{gunzip_opt} #{@file_path} | tar #{tar_opt} -"
             else
               opt = parse_flags('xzf', options, 'tar')
-              "tar #{opt} #{@file}"
+              "tar #{opt} #{@file_path}"
             end
           when /(\.tbz|\.tar\.bz2)$/
             if Facter.value(:osfamily) == 'Solaris'
               bunzip_opt = parse_flags('-dc', options, 'bunzip')
               tar_opt = parse_flags('xf', options, 'tar')
-              "bunzip2 #{bunzip_opt} #{@file} | tar #{tar_opt} -"
+              "bunzip2 #{bunzip_opt} #{@file_path} | tar #{tar_opt} -"
             else
               opt = parse_flags('xjf', options, 'tar')
-              "tar #{opt} #{@file}"
+              "tar #{opt} #{@file_path}"
             end
           when /(\.txz|\.tar\.xz)$/
             unxz_opt = parse_flags('-dc', options, 'unxz')
             tar_opt = parse_flags('xf', options, 'tar')
-            "unxz #{unxz_opt} #{@file} | tar #{tar_opt} -"
+            "unxz #{unxz_opt} #{@file_path} | tar #{tar_opt} -"
           when /\.gz$/
             opt = parse_flags('-d', options, 'gunzip')
-            "gunzip #{opt} #{@file}"
+            "gunzip #{opt} #{@file_path}"
           when /(\.zip|\.war|\.jar)$/
             opt = parse_flags('-o', options, 'zip')
-            "unzip #{opt} #{@file}"
+            "unzip #{opt} #{@file_path}"
           else
             raise NotImplementedError, "Unknown filetype: #{@file}"
           end
