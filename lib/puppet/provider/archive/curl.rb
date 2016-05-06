@@ -7,7 +7,7 @@ Puppet::Type.type(:archive).provide(:curl, parent: :ruby) do
       resource[:source],
       '-o',
       filepath,
-      '-L',
+      '-fsSL',
       '--max-redirs',
       5
     ]
