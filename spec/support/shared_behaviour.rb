@@ -4,7 +4,7 @@ require 'tmpdir'
 RSpec.shared_examples 'an archive provider' do |provider_class|
   describe provider_class do
     let(:resource) do
-      Puppet::Type::Archive.new(:name => '/tmp/example.zip', :source => 'http://home.lan/example.zip')
+      Puppet::Type::Archive.new(name: '/tmp/example.zip', source: 'http://home.lan/example.zip')
     end
 
     let(:provider) do

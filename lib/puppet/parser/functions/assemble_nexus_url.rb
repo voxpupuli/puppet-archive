@@ -1,7 +1,7 @@
 require 'cgi'
 
 module Puppet::Parser::Functions
-  newfunction(:assemble_nexus_url, :type => :rvalue) do |args|
+  newfunction(:assemble_nexus_url, type: :rvalue) do |args|
     service_relative_url = 'service/local/artifact/maven/content'
 
     nexus_url = args[0]

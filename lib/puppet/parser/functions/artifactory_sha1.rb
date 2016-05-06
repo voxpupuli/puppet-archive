@@ -5,7 +5,7 @@ module Puppet::Parser::Functions
   #
   # http://www.jfrog.com/confluence/display/RTF/Artifactory+REST+API#ArtifactoryRESTAPI-FileInfo
   # Returns sha1 from artifactory file info
-  newfunction(:artifactory_sha1, :type => :rvalue) do |args|
+  newfunction(:artifactory_sha1, type: :rvalue) do |args|
     raise(ArgumentError, "Invalid artifactory file info url #{args}") unless args.size == 1
 
     require 'json'

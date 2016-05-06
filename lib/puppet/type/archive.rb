@@ -49,7 +49,7 @@ Puppet::Type.newtype(:archive) do
     end
   end
 
-  newparam(:path, :namevar => true) do
+  newparam(:path, namevar: true) do
     desc 'namevar, archive file fully qualified file path.'
     validate do |value|
       unless Puppet::Util.absolute_path? value

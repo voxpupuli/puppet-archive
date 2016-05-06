@@ -1,5 +1,5 @@
-Puppet::Type.type(:archive).provide(:wget, :parent => :ruby) do
-  commands :wget => 'wget'
+Puppet::Type.type(:archive).provide(:wget, parent: :ruby) do
+  commands wget: 'wget'
 
   def download(filepath)
     params = [

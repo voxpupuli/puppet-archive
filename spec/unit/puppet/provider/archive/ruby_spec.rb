@@ -15,8 +15,8 @@ RSpec.describe ruby_provider do
     context 'default resource property' do
       let(:resource_properties) do
         {
-          :name => name,
-          :source => 's3://home.lan/example.zip'
+          name: name,
+          source: 's3://home.lan/example.zip'
         }
       end
 

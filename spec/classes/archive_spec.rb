@@ -3,9 +3,9 @@ require 'spec_helper'
 describe 'archive' do
   context 'RHEL' do
     let(:facts) { {
-      :osfamily        => 'RedHat',
-      :operatingsystem => 'RedHat',
-      :puppetversion   => '3.7.3',
+      osfamily: 'RedHat',
+      operatingsystem: 'RedHat',
+      puppetversion: '3.7.3',
     } }
 
     context 'default' do
@@ -17,7 +17,7 @@ describe 'archive' do
 
     context 'with aws_cli' do
       let(:params) { {
-        :aws_cli_install => true,
+        aws_cli_install: true,
       } }
 
       it { should contain_file('/opt/awscli-bundle') }
@@ -28,20 +28,20 @@ describe 'archive' do
 
   describe 'Windows' do
     let(:default_facts) { {
-      :osfamily        => 'Windows',
-      :operatingsystem => 'Windows',
-      :archive_windir  => 'C:/staging',
+      osfamily: 'Windows',
+      operatingsystem: 'Windows',
+      archive_windir: 'C:/staging',
     } }
 
     context 'default 7zip chcolatey package' do
       let(:facts) { {
-        :puppetversion => '3.7.3',
+        puppetversion: '3.7.3',
       }.merge(default_facts) }
 
       it do
         should contain_package('7zip').with(
-          :name     => '7zip',
-          :provider => 'chocolatey',
+          name: '7zip',
+          provider: 'chocolatey',
         )
       end
       it { should_not contain_archive('awscli-bundle.zip') }
@@ -49,31 +49,31 @@ describe 'archive' do
 
     context 'with 7zip msi package' do
       let(:facts) { {
-        :puppetversion => '3.4.3 (Puppet Enterprise 3.2.3)',
+        puppetversion: '3.4.3 (Puppet Enterprise 3.2.3)',
       }.merge(default_facts) }
 
       let(:params) { {
-        :seven_zip_name     => '7-Zip 9.20 (x64 edition)',
-        :seven_zip_source   => 'C:/Windows/Temp/7z920-x64.msi',
-        :seven_zip_provider => 'windows',
+        seven_zip_name: '7-Zip 9.20 (x64 edition)',
+        seven_zip_source: 'C:/Windows/Temp/7z920-x64.msi',
+        seven_zip_provider: 'windows',
       } }
 
       it do
         should contain_package('7zip').with(
-          :name     => '7-Zip 9.20 (x64 edition)',
-          :source   => 'C:/Windows/Temp/7z920-x64.msi',
-          :provider => 'windows',
+          name: '7-Zip 9.20 (x64 edition)',
+          source: 'C:/Windows/Temp/7z920-x64.msi',
+          provider: 'windows',
         )
       end
     end
 
     context 'without 7zip' do
       let(:facts) { {
-        :puppetversion => '3.4.3 (Puppet Enterprise 3.2.3)',
+        puppetversion: '3.4.3 (Puppet Enterprise 3.2.3)',
       }.merge(default_facts) }
 
       let(:params) { {
-        :seven_zip_provider => '',
+        seven_zip_provider: '',
       } }
 
       it { should_not contain_package('7zip') }

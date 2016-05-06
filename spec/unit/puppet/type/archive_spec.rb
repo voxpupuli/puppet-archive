@@ -4,8 +4,8 @@ require 'puppet'
 describe Puppet::Type.type(:archive) do
   let(:resource) do
     Puppet::Type.type(:archive).new(
-      :path   => '/tmp/example.zip',
-      :source => 'http://home.lan/example.zip'
+      path: '/tmp/example.zip',
+      source: 'http://home.lan/example.zip'
     )
   end
 
@@ -26,7 +26,7 @@ describe Puppet::Type.type(:archive) do
     end.to raise_error(Puppet::Error, /archive path must be absolute: /)
   end
 
-  describe 'on posix', :if => Puppet.features.posix? do
+  describe 'on posix', if: Puppet.features.posix? do
     it 'verify resoource[:source] is valid source' do
       expect do
         resource[:source] = 'http://home.lan/example.zip'
@@ -44,7 +44,7 @@ describe Puppet::Type.type(:archive) do
     end
   end
 
-  describe 'on windows', :if => Puppet.features.microsoft_windows? do
+  describe 'on windows', if: Puppet.features.microsoft_windows? do
     it 'verify resoource[:source] is valid source' do
       expect do
         resource[:source] = 'D:/example.zip'
@@ -89,15 +89,15 @@ describe Puppet::Type.type(:archive) do
 
   describe 'autorequire parent path' do
     before :each do
-      @file_tmp = Puppet::Type.type(:file).new(:name => '/tmp')
+      @file_tmp = Puppet::Type.type(:file).new(name: '/tmp')
       @catalog = Puppet::Resource::Catalog.new
       @catalog.add_resource @file_tmp
     end
 
     it 'should require archive parent' do
       example_archive = described_class.new(
-        :path   => '/tmp/example.zip',
-        :source => 'http://home.lan/example.zip'
+        path: '/tmp/example.zip',
+        source: 'http://home.lan/example.zip'
       )
       @catalog.add_resource example_archive
 
