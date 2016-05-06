@@ -1,7 +1,7 @@
 require 'spec_helper'
 require 'facter/archive_windir'
 
-describe 'archive_windir fact specs', :type => :fact do
+describe 'archive_windir fact specs', type: :fact do
   before { Facter.clear }
   after { Facter.clear }
 

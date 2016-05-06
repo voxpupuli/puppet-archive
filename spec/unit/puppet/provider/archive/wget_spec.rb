@@ -26,8 +26,8 @@ RSpec.describe wget_provider do
     context 'no extra properties specified' do
       let(:resource_properties) do
         {
-          :name => name,
-          :source => 'http://home.lan/example.zip'
+          name: name,
+          source: 'http://home.lan/example.zip'
         }
       end
 
@@ -40,9 +40,9 @@ RSpec.describe wget_provider do
     context 'username specified' do
       let(:resource_properties) do
         {
-          :name => name,
-          :source => 'http://home.lan/example.zip',
-          :username => 'foo',
+          name: name,
+          source: 'http://home.lan/example.zip',
+          username: 'foo',
         }
       end
 
@@ -55,9 +55,9 @@ RSpec.describe wget_provider do
     context 'password specified' do
       let(:resource_properties) do
         {
-          :name => name,
-          :source => 'http://home.lan/example.zip',
-          :password => 'foo',
+          name: name,
+          source: 'http://home.lan/example.zip',
+          password: 'foo',
         }
       end
 
@@ -70,9 +70,9 @@ RSpec.describe wget_provider do
     context 'cookie specified' do
       let(:resource_properties) do
         {
-          :name => name,
-          :source => 'http://home.lan/example.zip',
-          :cookie => 'foo',
+          name: name,
+          source: 'http://home.lan/example.zip',
+          cookie: 'foo',
         }
       end
 
@@ -85,9 +85,9 @@ RSpec.describe wget_provider do
     context 'proxy specified' do
       let(:resource_properties) do
         {
-          :name => name,
-          :source => 'http://home.lan/example.zip',
-          :proxy_server => 'https://home.lan:8080',
+          name: name,
+          source: 'http://home.lan/example.zip',
+          proxy_server: 'https://home.lan:8080',
         }
       end
 

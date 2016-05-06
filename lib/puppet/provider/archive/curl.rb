@@ -1,6 +1,6 @@
-Puppet::Type.type(:archive).provide(:curl, :parent => :ruby) do
-  commands :curl => 'curl'
-  defaultfor :feature => :posix
+Puppet::Type.type(:archive).provide(:curl, parent: :ruby) do
+  commands curl: 'curl'
+  defaultfor feature: :posix
 
   def download(filepath)
     params = [
