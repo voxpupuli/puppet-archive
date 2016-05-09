@@ -1,5 +1,6 @@
 require 'digest'
 require 'puppet/util/execution'
+require 'shellwords'
 
 module PuppetX
   module Bodeco
