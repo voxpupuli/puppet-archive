@@ -12,6 +12,7 @@
 3. [Setup](#setup)
 4. [Usage](#usage)
    * [Example](#usage-example)
+   * [Puppet URL](#puppet-url)
    * [File permission](#file-permission)
    * [Network files](#network-files)
    * [Extract customization](#extract-customization)
@@ -128,6 +129,29 @@ archive { '/tmp/test100k.db':
   source   => 'ftp://ftp.otenet.gr/test100k.db',
   username => 'speedtest',
   password => 'speedtest',
+}
+```
+
+### Puppet URL
+
+Currently there isn't support for using ```puppet:\\``` style url in the source parameter.  It is still possible, but it would be done in two steps:
+
+```puppet
+$docs_filename = 'help.tar.gz'
+$docs_gz_path  = "/tmp/${docs_filename}"
+$homedir = '/home/myuser/'
+
+file {$docs_gz_path:
+  ensure => file,
+  source => "puppet:///modules/profile/${docs_filename}",
+}
+
+archive { $docs_gz_path:
+  path          => $docs_gz_path,
+  extract       => true,
+  extract_path  => $homedir,
+  creates       => "${homedir}/help" #directory inside tgz
+  require       => [ File[$homedir], File[$docs_gz_path] ],
 }
 ```
 
