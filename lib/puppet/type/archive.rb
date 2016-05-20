@@ -165,7 +165,7 @@ Puppet::Type.newtype(:archive) do
       self[:extract_path],
       '/root/.aws/config',
       '/root/.aws/credentials',
-    ]
+    ].compact
   end
 
   autorequire(:exec) do
