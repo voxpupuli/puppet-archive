@@ -9,7 +9,7 @@ describe :assemble_nexus_url do
 
   nexus_url = 'http://nexus.local'
 
-  it 'should build url correctly' do
+  it 'builds url correctly' do
     expected_url = 'http://nexus.local/service/local/artifact/maven/content?g=com.test&a=test&v=1.0.0&r=binary-staging&p=ear'
 
     parameters = {
@@ -23,7 +23,7 @@ describe :assemble_nexus_url do
     expect(scope.function_assemble_nexus_url([nexus_url, parameters])).to eq expected_url
   end
 
-  it 'should build url with version containing "+" sign correctly' do
+  it 'builds url with version containing "+" sign correctly' do
     expected_url = 'http://nexus.local/service/local/artifact/maven/content?g=com.test&a=test&v=1.0.0%2B11&r=binary-staging&p=ear'
 
     parameters = {

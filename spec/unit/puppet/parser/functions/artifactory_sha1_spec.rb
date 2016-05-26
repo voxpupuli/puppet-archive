@@ -8,7 +8,7 @@ describe :artifactory_sha1 do
   let(:scope) { PuppetlabsSpec::PuppetInternals.scope }
   example_json = File.read(fixtures('checksum', 'artifactory.json'))
 
-  it 'should parse sha1' do
+  it 'parses sha1' do
     url = 'https://repo.jfrog.org/artifactory/api/storage/distributions/images/Artifactory_120x75.png'
     uri = URI(url)
     PuppetX::Bodeco::Util.stubs(:content).with(uri).returns(example_json)

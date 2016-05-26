@@ -8,7 +8,7 @@ describe :go_md5 do
   let(:scope) { PuppetlabsSpec::PuppetInternals.scope }
   example_md5 = File.read(fixtures('checksum', 'gocd.md5'))
 
-  it 'should retreive file md5' do
+  it 'retreives file md5' do
     url = 'https://gocd.lan/path/file.md5'
     uri = URI(url)
     PuppetX::Bodeco::Util.stubs(:content).with(uri, username: 'user', password: 'pass').returns(example_md5)
