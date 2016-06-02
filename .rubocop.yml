@@ -8,7 +8,6 @@ AllCops:
     - .vendor/**/*
     - pkg/**/*
     - spec/fixtures/**/*
-    - files/**/*
 
 # Configuration parameters: AllowURI, URISchemes.
 Metrics/LineLength:
@@ -43,8 +42,12 @@ Style/TrailingCommaInArguments:
   Enabled: false
 Style/TrailingCommaInLiteral:
   Enabled: false
+
 Style/ClosingParenthesisIndentation:
-  Enabled: false
+  Enabled: true
+
+Style/BlockDelimiters:
+  Enabled: true
 
 Lint/AmbiguousRegexpLiteral:
   Enabled: true
