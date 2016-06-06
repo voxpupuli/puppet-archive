@@ -134,24 +134,27 @@ archive { '/tmp/test100k.db':
 
 ### Puppet URL
 
-Currently there isn't support for using ```puppet:\\``` style url in the source parameter.  It is still possible, but it would be done in two steps:
+Below is an example of how to deploy a tar.gz to a local directory when it is served via the ```puppet:///``` style url which is not currently supported.
 
 ```puppet
 $docs_filename = 'help.tar.gz'
 $docs_gz_path  = "/tmp/${docs_filename}"
 $homedir = '/home/myuser/'
 
+# First, deploy the archive to the local filesystem
 file {$docs_gz_path:
   ensure => file,
   source => "puppet:///modules/profile/${docs_filename}",
 }
 
+# Then expand the archive where you need it to go
 archive { $docs_gz_path:
   path          => $docs_gz_path,
+  #cleanup       => true, # Do not use this argument with this workaround for idempotency reasons
   extract       => true,
   extract_path  => $homedir,
   creates       => "${homedir}/help" #directory inside tgz
-  require       => [ File[$homedir], File[$docs_gz_path] ],
+  require       => [ File[$docs_gz_path] ],
 }
 ```
 
