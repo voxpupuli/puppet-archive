@@ -6,12 +6,14 @@ describe 'archive::nexus' do
   context 'nexus archive with defaults' do
     let(:title) { '/tmp/hawtio.war' }
 
-    let(:params) { {
-      url: 'https://oss.sonatype.org',
-      gav: 'io.hawt:hawtio-web:1.4.36',
-      repository: 'releases',
-      packaging: 'war'
-    } }
+    let(:params) do
+      {
+        url: 'https://oss.sonatype.org',
+        gav: 'io.hawt:hawtio-web:1.4.36',
+        repository: 'releases',
+        packaging: 'war'
+      }
+    end
 
     it do
       should contain_archive('/tmp/hawtio.war').with(
@@ -31,18 +33,20 @@ describe 'archive::nexus' do
   context 'nexus archive with overwritten parameters' do
     let(:title) { '/tmp/artifact.war' }
 
-    let(:params) { {
-      url: 'https://oss.sonatype.org',
-      gav: 'io.hawt:hawtio-web:1.4.36',
-      repository: 'releases',
-      owner: 'tom',
-      group: 'worker',
-      user: 'tom',
-      extract: true,
-      extract_path: '/opt',
-      creates: '/opt/artifact/WEB-INF',
-      cleanup: true
-    } }
+    let(:params) do
+      {
+        url: 'https://oss.sonatype.org',
+        gav: 'io.hawt:hawtio-web:1.4.36',
+        repository: 'releases',
+        owner: 'tom',
+        group: 'worker',
+        user: 'tom',
+        extract: true,
+        extract_path: '/opt',
+        creates: '/opt/artifact/WEB-INF',
+        cleanup: true
+      }
+    end
 
     it do
       should contain_archive('/tmp/artifact.war').with(

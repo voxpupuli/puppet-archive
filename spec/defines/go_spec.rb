@@ -11,14 +11,16 @@ describe 'archive::go' do
 
   context 'go archive with defaults' do
     let(:title) { '/opt/app/example.zip' }
-    let(:params) { {
-      server: 'home.lan',
-      port: '8081',
-      url_path: 'go/example.zip',
-      md5_url_path: 'go/example.zip/checksum',
-      username: 'username',
-      password: 'password'
-    } }
+    let(:params) do
+      {
+        server: 'home.lan',
+        port: '8081',
+        url_path: 'go/example.zip',
+        md5_url_path: 'go/example.zip/checksum',
+        username: 'username',
+        password: 'password'
+      }
+    end
 
     it do
       should contain_archive('/opt/app/example.zip').with(
@@ -41,18 +43,20 @@ describe 'archive::go' do
 
   context 'go archive with path' do
     let(:title) { 'example.zip' }
-    let(:params) { {
-      archive_path: '/opt/app',
-      server: 'home.lan',
-      port: '8081',
-      url_path: 'go/example.zip',
-      md5_url_path: 'go/example.zip/checksum',
-      username: 'username',
-      password: 'password',
-      owner: 'app',
-      group: 'app',
-      mode: '0400'
-    } }
+    let(:params) do
+      {
+        archive_path: '/opt/app',
+        server: 'home.lan',
+        port: '8081',
+        url_path: 'go/example.zip',
+        md5_url_path: 'go/example.zip/checksum',
+        username: 'username',
+        password: 'password',
+        owner: 'app',
+        group: 'app',
+        mode: '0400'
+      }
+    end
 
     it do
       should contain_archive('/opt/app/example.zip').with(

@@ -17,12 +17,14 @@ describe 'archive::staging' do
   context 'RHEL Puppet opensource with params' do
     let(:facts) { { osfamily: 'RedHat', puppetversion: '3.7.3' } }
 
-    let(:params) { {
-      path: '/tmp/staging',
-      owner: 'puppet',
-      group: 'puppet',
-      mode: '0755'
-    } }
+    let(:params) do
+      {
+        path: '/tmp/staging',
+        owner: 'puppet',
+        group: 'puppet',
+        mode: '0755'
+      }
+    end
 
     it { should contain_class 'archive' }
     it do
@@ -35,11 +37,13 @@ describe 'archive::staging' do
   end
 
   context 'Windows Puppet Enterprise' do
-    let(:facts) { {
-      osfamily: 'Windows',
-      puppetversion: '3.4.3 (Puppet Enterprise 3.2.3)',
-      archive_windir: 'C:/Windows/Temp/staging'
-    } }
+    let(:facts) do
+      {
+        osfamily: 'Windows',
+        puppetversion: '3.4.3 (Puppet Enterprise 3.2.3)',
+        archive_windir: 'C:/Windows/Temp/staging'
+      }
+    end
 
     it { should contain_class 'archive' }
     it do

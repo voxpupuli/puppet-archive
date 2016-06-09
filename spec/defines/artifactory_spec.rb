@@ -11,9 +11,11 @@ describe 'archive::artifactory' do
 
   context 'artifactory archive with defaults' do
     let(:title) { '/opt/app/example.zip' }
-    let(:params) { {
-      url: 'http://home.lan:8081/artifactory/path/example.zip'
-    } }
+    let(:params) do
+      {
+        url: 'http://home.lan:8081/artifactory/path/example.zip'
+      }
+    end
 
     it do
       should contain_archive('/opt/app/example.zip').with(
@@ -36,13 +38,15 @@ describe 'archive::artifactory' do
 
   context 'artifactory archive with path' do
     let(:title) { 'example.zip' }
-    let(:params) { {
-      archive_path: '/opt/app',
-      url: 'http://home.lan:8081/artifactory/path/example.zip',
-      owner: 'app',
-      group: 'app',
-      mode: '0400'
-    } }
+    let(:params) do
+      {
+        archive_path: '/opt/app',
+        url: 'http://home.lan:8081/artifactory/path/example.zip',
+        owner: 'app',
+        group: 'app',
+        mode: '0400'
+      }
+    end
 
     it do
       should contain_archive('/opt/app/example.zip').with(
