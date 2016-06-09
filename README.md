@@ -12,6 +12,7 @@
 3. [Setup](#setup)
 4. [Usage](#usage)
    * [Example](#usage-example)
+   * [Puppet URL](#puppet-url)
    * [File permission](#file-permission)
    * [Network files](#network-files)
    * [Extract customization](#extract-customization)
@@ -128,6 +129,32 @@ archive { '/tmp/test100k.db':
   source   => 'ftp://ftp.otenet.gr/test100k.db',
   username => 'speedtest',
   password => 'speedtest',
+}
+```
+
+### Puppet URL
+
+Below is an example of how to deploy a tar.gz to a local directory when it is served via the ```puppet:///``` style url which is not currently supported.
+
+```puppet
+$docs_filename = 'help.tar.gz'
+$docs_gz_path  = "/tmp/${docs_filename}"
+$homedir = '/home/myuser/'
+
+# First, deploy the archive to the local filesystem
+file {$docs_gz_path:
+  ensure => file,
+  source => "puppet:///modules/profile/${docs_filename}",
+}
+
+# Then expand the archive where you need it to go
+archive { $docs_gz_path:
+  path          => $docs_gz_path,
+  #cleanup       => true, # Do not use this argument with this workaround for idempotency reasons
+  extract       => true,
+  extract_path  => $homedir,
+  creates       => "${homedir}/help" #directory inside tgz
+  require       => [ File[$docs_gz_path] ],
 }
 ```
 
