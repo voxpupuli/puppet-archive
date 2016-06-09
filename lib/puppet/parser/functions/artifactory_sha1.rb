@@ -16,7 +16,7 @@ module Puppet::Parser::Functions
     content = JSON.parse(response)
 
     sha1 = content['checksums'] && content['checksums']['sha1']
-    raise("Could not parse sha1 from url: #{args[0]}\nresponse: #{response.body}") unless sha1 =~ /\b[0-9a-f]{5,40}\b/
+    raise("Could not parse sha1 from url: #{args[0]}\nresponse: #{response.body}") unless sha1 =~ %r{\b[0-9a-f]{5,40}\b}
     sha1
   end
 end

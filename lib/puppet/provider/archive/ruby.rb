@@ -75,7 +75,7 @@ Puppet::Type.type(:archive).provide(:ruby) do
         username: resource[:username],
         password: resource[:password],
         cookie: resource[:cookie]
-      )[/\b[\da-f]{32,128}\b/i] if resource[:checksum_url]
+      )[%r{\b[\da-f]{32,128}\b}i] if resource[:checksum_url]
     end
   end
 
@@ -121,12 +121,12 @@ Puppet::Type.type(:archive).provide(:ruby) do
     tempfile.close!
 
     case resource[:source]
-    when /^(http|ftp)/
+    when %r{^(http|ftp)}
       download(temppath)
-    when /^file/
+    when %r{^file}
       uri = URI(resource[:source])
       FileUtils.copy(Puppet::Util.uri_to_path(uri), temppath)
-    when /^s3/
+    when %r{^s3}
       s3_download(temppath)
     else
       raise(Puppet::Error, "Source file: #{resource[:source]} does not exists.") unless File.exist?(resource[:source])

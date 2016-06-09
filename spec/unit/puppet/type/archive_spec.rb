@@ -23,7 +23,7 @@ describe Puppet::Type.type(:archive) do
   it 'verify resource[:path] is absolute filepath' do
     expect do
       resource[:path] = 'relative/file'
-    end.to raise_error(Puppet::Error, /archive path must be absolute: /)
+    end.to raise_error(Puppet::Error, %r{archive path must be absolute: })
   end
 
   describe 'on posix', if: Puppet.features.posix? do
@@ -40,7 +40,7 @@ describe Puppet::Type.type(:archive) do
         resource[:source] = 'afp://home.lan/example.zip'
         resource[:source] = '\tmp'
         resource[:source] = 'D:/example.zip'
-      end.to raise_error(Puppet::Error, /invalid source url: /)
+      end.to raise_error(Puppet::Error, %r{invalid source url: })
     end
   end
 
@@ -53,7 +53,7 @@ describe Puppet::Type.type(:archive) do
       expect do
         resource[:source] = '/tmp/example.zip'
         resource[:source] = '\Z:'
-      end.to raise_error(Puppet::Error, /invalid source url: /)
+      end.to raise_error(Puppet::Error, %r{invalid source url: })
     end
   end
 
@@ -68,11 +68,11 @@ describe Puppet::Type.type(:archive) do
 
     expect do
       resource[:checksum] = 'too_short'
-    end.to raise_error(Puppet::Error, /Invalid value/)
+    end.to raise_error(Puppet::Error, %r{Invalid value})
 
     expect do
       resource[:checksum] = '557e'
-    end.to raise_error(Puppet::Error, /Invalid value/)
+    end.to raise_error(Puppet::Error, %r{Invalid value})
   end
 
   it 'verify resource[:checksum_type] is valid' do
@@ -84,7 +84,7 @@ describe Puppet::Type.type(:archive) do
 
     expect do
       resource[:checksum_type] = :crc32
-    end.to raise_error(Puppet::Error, /Invalid value/)
+    end.to raise_error(Puppet::Error, %r{Invalid value})
   end
 
   describe 'autorequire parent path' do

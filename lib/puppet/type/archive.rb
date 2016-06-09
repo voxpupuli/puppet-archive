@@ -115,7 +115,7 @@ Puppet::Type.newtype(:archive) do
 
   newparam(:checksum) do
     desc 'archive file checksum (match checksum_type).'
-    newvalues(/\b[0-9a-f]{5,128}\b/)
+    newvalues(%r{\b[0-9a-f]{5,128}\b})
   end
 
   newparam(:checksum_url) do

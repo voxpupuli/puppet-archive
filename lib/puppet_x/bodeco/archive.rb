@@ -38,7 +38,7 @@ module PuppetX
         custom_command = opts.fetch(:custom_command, nil)
         options = opts.fetch(:options)
         Dir.chdir(path) do
-          cmd = if custom_command && custom_command =~ /%s/
+          cmd = if custom_command && custom_command =~ %r{%s}
                   custom_command % @file_path
                 elsif custom_command
                   "#{custom_command} #{options} #{@file_path}"
@@ -72,10 +72,10 @@ module PuppetX
           "#{win_7zip} #{opt} #{@file_path}"
         else
           case @file
-          when /\.tar$/
+          when %r{\.tar$}
             opt = parse_flags('xf', options, 'tar')
             "tar #{opt} #{@file_path}"
-          when /(\.tgz|\.tar\.gz)$/
+          when %r{(\.tgz|\.tar\.gz)$}
             if Facter.value(:osfamily) == 'Solaris'
               gunzip_opt = parse_flags('-dc', options, 'gunzip')
               tar_opt = parse_flags('xf', options, 'tar')
@@ -84,7 +84,7 @@ module PuppetX
               opt = parse_flags('xzf', options, 'tar')
               "tar #{opt} #{@file_path}"
             end
-          when /(\.tbz|\.tar\.bz2)$/
+          when %r{(\.tbz|\.tar\.bz2)$}
             if Facter.value(:osfamily) == 'Solaris'
               bunzip_opt = parse_flags('-dc', options, 'bunzip')
               tar_opt = parse_flags('xf', options, 'tar')
@@ -93,14 +93,14 @@ module PuppetX
               opt = parse_flags('xjf', options, 'tar')
               "tar #{opt} #{@file_path}"
             end
-          when /(\.txz|\.tar\.xz)$/
+          when %r{(\.txz|\.tar\.xz)$}
             unxz_opt = parse_flags('-dc', options, 'unxz')
             tar_opt = parse_flags('xf', options, 'tar')
             "unxz #{unxz_opt} #{@file_path} | tar #{tar_opt} -"
-          when /\.gz$/
+          when %r{\.gz$}
             opt = parse_flags('-d', options, 'gunzip')
             "gunzip #{opt} #{@file_path}"
-          when /(\.zip|\.war|\.jar)$/
+          when %r{(\.zip|\.war|\.jar)$}
             opt = parse_flags('-o', options, 'zip')
             "unzip #{opt} #{@file_path}"
           else
