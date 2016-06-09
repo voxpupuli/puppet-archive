@@ -33,7 +33,8 @@
         "4",
         "5",
         "6",
-        "7"
+        "7",
+        "8"
       ]
     },
     {
@@ -53,7 +54,9 @@
       "operatingsystem": "Ubuntu",
       "operatingsystemrelease": [
         "10.04",
-        "12.04"
+        "12.04",
+        "14.04",
+        "16.04"
       ]
     },
     {
@@ -87,30 +90,23 @@
   ],
   "requirements": [
     {
-      "name": "pe",
-      "version_requirement": "3.x"
-    },
-    {
       "name": "puppet",
-      "version_requirement": ">=2.7.0"
+      "version_requirement": ">=3.0.0 < 5.0.0"
     }
   ],
   "name": "puppet-archive",
   "version": "0.5.2-rc0",
-  "source": "https://github.com/puppet-community/puppet-archive",
-  "author": "puppetcommunity",
+  "source": "https://github.com/voxpupuli/puppet-archive",
+  "author": "voxpupuli",
   "license": "Apache-2.0",
   "summary": "Compressed archive file download and extraction with native types/providers for Windows and Unix",
   "description": "The archive module provides native puppet resources for managing compressed file download and extraction with optional checksum verification and cleanup.",
-  "project_page": "https://github.com/puppet-community/puppet-archive",
+  "project_page": "https://github.com/voxpupuli/puppet-archive",
+  "issues_url": "https://github.com/voxpupuli/puppet-archive/issues",
   "dependencies": [
     {
       "name": "puppetlabs/stdlib",
-      "version_requirement": ">= 2.2.1"
-    },
-    {
-      "name": "puppetlabs/pe_gem",
-      "version_requirement": ">= 0.0.1"
+      "version_requirement": ">= 3.0.0 < 5.0.0"
     }
   ]
 }

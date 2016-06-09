@@ -9,7 +9,6 @@
 # * seven_zip_name: 7zip package name.
 # * seven_zip_provider: 7zip package provider (accepts windows/chocolatey).
 # * seven_zip_source: alternative package source.
-# * gem_provider: ruby gem provider (deprecated since we no longer install ruby gems).
 # * aws_cli_install: install aws cli command (default: false).
 #
 # Examples
@@ -25,7 +24,6 @@ class archive (
   $seven_zip_name     = $archive::params::seven_zip_name,
   $seven_zip_provider = $archive::params::seven_zip_provider,
   $seven_zip_source   = undef,
-  $gem_provider       = undef,
   $aws_cli_install    = false,
 ) inherits archive::params {
 
