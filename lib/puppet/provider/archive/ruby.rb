@@ -160,7 +160,7 @@ Puppet::Type.type(:archive).provide(:ruby) do
 
   def optional_switch(value, option)
     if value
-      option.collect { |flags| flags % value }
+      option.map { |flags| flags % value }
     else
       []
     end
