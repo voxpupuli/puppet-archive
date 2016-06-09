@@ -17,7 +17,7 @@ describe :assemble_nexus_url do
       'a' => 'test',
       'v' => '1.0.0',
       'r' => 'binary-staging',
-      'p' => 'ear',
+      'p' => 'ear'
     }
 
     expect(scope.function_assemble_nexus_url([nexus_url, parameters])).to eq expected_url
@@ -31,7 +31,7 @@ describe :assemble_nexus_url do
       'a' => 'test',
       'v' => '1.0.0+11',
       'r' => 'binary-staging',
-      'p' => 'ear',
+      'p' => 'ear'
     }
 
     expect(scope.function_assemble_nexus_url([nexus_url, parameters])).to eq expected_url

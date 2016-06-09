@@ -6,7 +6,7 @@ Puppet::Type.type(:archive).provide(:wget, parent: :ruby) do
       resource[:source],
       '-O',
       filepath,
-      '--max-redirect=5',
+      '--max-redirect=5'
     ]
 
     params += optional_switch(resource[:username], ['--user=%s'])

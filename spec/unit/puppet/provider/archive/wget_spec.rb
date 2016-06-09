@@ -42,7 +42,7 @@ RSpec.describe wget_provider do
         {
           name: name,
           source: 'http://home.lan/example.zip',
-          username: 'foo',
+          username: 'foo'
         }
       end
 
@@ -57,7 +57,7 @@ RSpec.describe wget_provider do
         {
           name: name,
           source: 'http://home.lan/example.zip',
-          password: 'foo',
+          password: 'foo'
         }
       end
 
@@ -72,7 +72,7 @@ RSpec.describe wget_provider do
         {
           name: name,
           source: 'http://home.lan/example.zip',
-          cookie: 'foo',
+          cookie: 'foo'
         }
       end
 
@@ -87,7 +87,7 @@ RSpec.describe wget_provider do
         {
           name: name,
           source: 'http://home.lan/example.zip',
-          proxy_server: 'https://home.lan:8080',
+          proxy_server: 'https://home.lan:8080'
         }
       end
 
