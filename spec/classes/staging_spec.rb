@@ -9,7 +9,7 @@ describe 'archive::staging' do
       should contain_file('/opt/staging').with(
         owner: '0',
         group: '0',
-        mode: '0640',
+        mode: '0640'
       )
     end
   end
@@ -29,7 +29,7 @@ describe 'archive::staging' do
       should contain_file('/tmp/staging').with(
         owner: 'puppet',
         group: 'puppet',
-        mode: '0755',
+        mode: '0755'
       )
     end
   end
@@ -46,7 +46,7 @@ describe 'archive::staging' do
       should contain_file('C:/Windows/Temp/staging').with(
         owner: 'S-1-5-32-544',
         group: 'S-1-5-18',
-        mode: '0640',
+        mode: '0640'
       )
     end
   end

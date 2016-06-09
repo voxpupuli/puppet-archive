@@ -23,7 +23,7 @@ describe 'archive::nexus' do
     it do
       should contain_file('/tmp/hawtio.war').that_requires('Archive[/tmp/hawtio.war]').with(
         owner: '0',
-        group: '0',
+        group: '0'
       )
     end
   end

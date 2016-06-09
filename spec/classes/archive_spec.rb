@@ -41,7 +41,7 @@ describe 'archive' do
       it do
         should contain_package('7zip').with(
           name: '7zip',
-          provider: 'chocolatey',
+          provider: 'chocolatey'
         )
       end
       it { should_not contain_archive('awscli-bundle.zip') }
@@ -62,7 +62,7 @@ describe 'archive' do
         should contain_package('7zip').with(
           name: '7-Zip 9.20 (x64 edition)',
           source: 'C:/Windows/Temp/7z920-x64.msi',
-          provider: 'windows',
+          provider: 'windows'
         )
       end
     end

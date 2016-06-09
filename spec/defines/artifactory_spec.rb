@@ -20,7 +20,7 @@ describe 'archive::artifactory' do
         path: '/opt/app/example.zip',
         source: 'http://home.lan:8081/artifactory/path/example.zip',
         checksum: '0d4f4b4b039c10917cfc49f6f6be71e4',
-        checksum_type: 'sha1',
+        checksum_type: 'sha1'
       )
     end
 
@@ -29,7 +29,7 @@ describe 'archive::artifactory' do
         owner: '0',
         group: '0',
         mode: '0640',
-        require: 'Archive[/opt/app/example.zip]',
+        require: 'Archive[/opt/app/example.zip]'
       )
     end
   end
@@ -49,7 +49,7 @@ describe 'archive::artifactory' do
         path: '/opt/app/example.zip',
         source: 'http://home.lan:8081/artifactory/path/example.zip',
         checksum: '0d4f4b4b039c10917cfc49f6f6be71e4',
-        checksum_type: 'sha1',
+        checksum_type: 'sha1'
       )
     end
 
@@ -58,7 +58,7 @@ describe 'archive::artifactory' do
         owner: 'app',
         group: 'app',
         mode: '0400',
-        require: 'Archive[/opt/app/example.zip]',
+        require: 'Archive[/opt/app/example.zip]'
       )
     end
   end
