@@ -17,7 +17,7 @@ describe 'archive::go' do
       url_path: 'go/example.zip',
       md5_url_path: 'go/example.zip/checksum',
       username: 'username',
-      password: 'password',
+      password: 'password'
     } }
 
     it do
@@ -51,7 +51,7 @@ describe 'archive::go' do
       password: 'password',
       owner: 'app',
       group: 'app',
-      mode: '0400',
+      mode: '0400'
     } }
 
     it do

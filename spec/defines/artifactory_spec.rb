@@ -12,7 +12,7 @@ describe 'archive::artifactory' do
   context 'artifactory archive with defaults' do
     let(:title) { '/opt/app/example.zip' }
     let(:params) { {
-      url: 'http://home.lan:8081/artifactory/path/example.zip',
+      url: 'http://home.lan:8081/artifactory/path/example.zip'
     } }
 
     it do
@@ -41,7 +41,7 @@ describe 'archive::artifactory' do
       url: 'http://home.lan:8081/artifactory/path/example.zip',
       owner: 'app',
       group: 'app',
-      mode: '0400',
+      mode: '0400'
     } }
 
     it do

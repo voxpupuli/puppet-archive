@@ -32,7 +32,7 @@ module PuppetX
           custom_command: nil,
           options: '',
           uid: nil,
-          gid: nil,
+          gid: nil
         }.merge(opts)
 
         custom_command = opts.fetch(:custom_command, nil)

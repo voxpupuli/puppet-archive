@@ -164,7 +164,7 @@ Puppet::Type.newtype(:archive) do
       Pathname.new(self[:path]).parent.to_s,
       self[:extract_path],
       '/root/.aws/config',
-      '/root/.aws/credentials',
+      '/root/.aws/credentials'
     ].compact
   end
 

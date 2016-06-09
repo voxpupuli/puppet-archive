@@ -21,7 +21,7 @@ describe 'archive::staging' do
       path: '/tmp/staging',
       owner: 'puppet',
       group: 'puppet',
-      mode: '0755',
+      mode: '0755'
     } }
 
     it { should contain_class 'archive' }

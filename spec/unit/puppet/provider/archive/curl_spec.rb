@@ -15,7 +15,7 @@ RSpec.describe curl_provider do
         String,
         '-fsSL',
         '--max-redirs',
-        5,
+        5
       ]
     end
 
@@ -42,7 +42,7 @@ RSpec.describe curl_provider do
         {
           name: name,
           source: 'http://home.lan/example.zip',
-          username: 'foo',
+          username: 'foo'
         }
       end
 
@@ -58,7 +58,7 @@ RSpec.describe curl_provider do
           name: name,
           source: 'http://home.lan/example.zip',
           username: 'foo',
-          password: 'bar',
+          password: 'bar'
         }
       end
 
@@ -73,7 +73,7 @@ RSpec.describe curl_provider do
         {
           name: name,
           source: 'http://home.lan/example.zip',
-          cookie: 'foo=bar',
+          cookie: 'foo=bar'
         }
       end
 

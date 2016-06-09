@@ -10,7 +10,7 @@ describe 'archive::nexus' do
       url: 'https://oss.sonatype.org',
       gav: 'io.hawt:hawtio-web:1.4.36',
       repository: 'releases',
-      packaging: 'war',
+      packaging: 'war'
     } }
 
     it do
