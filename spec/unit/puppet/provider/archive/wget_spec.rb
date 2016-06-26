@@ -96,5 +96,40 @@ RSpec.describe wget_provider do
         provider.download(name)
       end
     end
+
+    describe '#checksum' do
+      subject { provider.checksum }
+      let(:url) { nil }
+      let(:resource_properties) do
+        {
+          name: name,
+          source: 'http://home.lan/example.zip'
+        }
+      end
+
+      before(:each) do
+        resource[:checksum_url] = url if url
+      end
+
+      context 'with a url' do
+        let(:wget_params) do
+          [
+            'wget',
+            '-qO-',
+            'http://example.com/checksum',
+            '--max-redirect=5'
+          ]
+        end
+
+        let(:url) { 'http://example.com/checksum' }
+        context 'responds with hash' do
+          let(:remote_hash) { 'a0c38e1aeb175201b0dacd65e2f37e187657050a' }
+          it do
+            expect(Puppet::Util::Execution).to receive(:execute).with(wget_params.join(' ')).and_return("a0c38e1aeb175201b0dacd65e2f37e187657050a README.md\n")
+            expect(provider.checksum).to eq('a0c38e1aeb175201b0dacd65e2f37e187657050a')
+          end
+        end
+      end
+    end
   end
 end
