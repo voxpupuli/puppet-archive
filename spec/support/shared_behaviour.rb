@@ -21,8 +21,8 @@ RSpec.shared_examples 'an archive provider' do |provider_class|
       let(:remote_hash) { nil }
       before(:each) do
         resource[:checksum_url] = url if url
-        allow(PuppetX::Bodeco::Util).to receive(:content)
-          .with(url, any_args).and_return(remote_hash)
+        allow(PuppetX::Bodeco::Util).to receive(:content) .\
+          with(url, any_args).and_return(remote_hash)
       end
       context 'unset' do
         it { is_expected.to be_nil }
