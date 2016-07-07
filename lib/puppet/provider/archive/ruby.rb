@@ -65,7 +65,7 @@ Puppet::Type.type(:archive).provide(:ruby) do
   end
 
   def checksum
-    resource[:checksum] || remote_checksum
+    resource[:checksum] || (remote_checksum if resource[:checksum_url])
   end
 
   def remote_checksum
@@ -75,7 +75,7 @@ Puppet::Type.type(:archive).provide(:ruby) do
         username: resource[:username],
         password: resource[:password],
         cookie: resource[:cookie]
-      )[%r{\b[\da-f]{32,128}\b}i] if resource[:checksum_url]
+      )[%r{\b[\da-f]{32,128}\b}i]
     end
   end
 
