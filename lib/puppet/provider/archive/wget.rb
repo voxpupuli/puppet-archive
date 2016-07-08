@@ -1,11 +1,13 @@
 Puppet::Type.type(:archive).provide(:wget, parent: :ruby) do
   commands wget: 'wget'
+  has_feature :insecure_https
 
   def wget_params(params)
     params += optional_switch(resource[:username], ['--user=%s'])
     params += optional_switch(resource[:password], ['--password=%s'])
     params += optional_switch(resource[:cookie], ['--header="Cookie: %s"'])
     params += optional_switch(resource[:proxy_server], ["--#{resource[:proxy_type]}_proxy=#{resource[:proxy_server]}"])
+    params += ['--no-check-certificate'] if resource[:allow_insecure]
 
     params
   end

@@ -68,6 +68,21 @@ RSpec.describe curl_provider do
       end
     end
 
+    context 'allow_insecure true' do
+      let(:resource_properties) do
+        {
+          name: name,
+          source: 'http://home.lan/example.zip',
+          allow_insecure: true
+        }
+      end
+
+      it 'calls curl with default options and --insecure' do
+        expect(provider).to receive(:curl).with(default_options << '--insecure')
+        provider.download(name)
+      end
+    end
+
     context 'cookie specified' do
       let(:resource_properties) do
         {
