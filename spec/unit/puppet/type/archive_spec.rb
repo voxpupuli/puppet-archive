@@ -18,6 +18,7 @@ describe Puppet::Type.type(:archive) do
     expect(resource[:checksum_type]).to eq :none
     expect(resource[:checksum_verify]).to eq :true
     expect(resource[:extract_flags]).to eq :undef
+    expect(resource[:allow_insecure]).to eq false
   end
 
   it 'verify resource[:path] is absolute filepath' do
@@ -85,6 +86,18 @@ describe Puppet::Type.type(:archive) do
     expect do
       resource[:checksum_type] = :crc32
     end.to raise_error(Puppet::Error, %r{Invalid value})
+  end
+
+  it 'verify resource[:allow_insecure] is valid' do
+    expect do
+      [:true, :false, :yes, :no].each do |type|
+        resource[:allow_insecure] = type
+      end
+    end.not_to raise_error
+
+    expect do
+      resource[:allow_insecure] = :foobar
+    end.to raise_error(Puppet::Error, %r{expected a boolean value})
   end
 
   describe 'autorequire parent path' do

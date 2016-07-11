@@ -97,6 +97,20 @@ RSpec.describe wget_provider do
       end
     end
 
+    context 'allow_insecure true' do
+      let(:resource_properties) do
+        {
+          name: name,
+          source: 'http://home.lan/example.zip',
+          allow_insecure: true
+        }
+      end
+
+      it 'calls wget with default options and --no-check-certificate' do
+        expect(execution).to receive(:execute).with([default_options, '--no-check-certificate'].join(' '))
+        provider.download(name)
+      end
+    end
     describe '#checksum' do
       subject { provider.checksum }
       let(:url) { nil }

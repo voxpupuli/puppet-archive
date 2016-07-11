@@ -1,12 +1,14 @@
 Puppet::Type.type(:archive).provide(:curl, parent: :ruby) do
   commands curl: 'curl'
   defaultfor feature: :posix
+  has_feature :insecure_https
 
   def curl_params(params)
     account = [resource[:username], resource[:password]].compact.join(':') if resource[:username]
     params += optional_switch(account, ['--user', '%s'])
     params += optional_switch(resource[:cookie], ['--cookie', '%s'])
     params += optional_switch(resource[:proxy_server], ['--proxy', '%s'])
+    params += ['--insecure'] if resource[:allow_insecure]
 
     params
   end

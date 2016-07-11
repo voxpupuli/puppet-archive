@@ -290,6 +290,7 @@ NOTE: Alternative s3 provider support can be implemented by overriding the [s3_d
 * `source`: archive file source, supports http|https|ftp|file|s3 uri.
 * `username`: username to download source file.
 * `password`: password to download source file.
+* `allow_insecure`: Ignore HTTPS certificate errors (true|false). Supported on `curl` and `wget` providers. (default: false)
 * `cookie`: archive file download cookie.
 * `checksum_type`: archive file checksum type (none|md5|sha1|sha2|sh256|sha384|sha512). (default: none)
 * `checksum`: archive file checksum (match checksum_type)
