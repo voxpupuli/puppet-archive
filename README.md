@@ -4,6 +4,7 @@
 [![Puppet Forge downloads](https://img.shields.io/puppetforge/dt/puppet/archive.svg)](https://forge.puppetlabs.com/puppet/archive)
 [![Puppet Forge score](https://img.shields.io/puppetforge/f/puppet/archive.svg)](https://forge.puppetlabs.com/puppet/archive)
 [![Build Status](https://travis-ci.org/voxpupuli/puppet-archive.png)](https://travis-ci.org/voxpupuli/puppet-archive)
+[![Camptocamp compatible](https://img.shields.io/badge/camptocamp-compatible-orange.svg)](https://forge.puppet.com/camptocamp/archive)
 
 #### Table of Contents
 
@@ -37,6 +38,8 @@ cleanup. The benefits over existing modules such as
 * Automatic dependency to parent directory.
 * Support Windows file extraction via 7zip.
 * Able to cleanup archive files after extraction.
+
+This module is compatible with [camptocamp/archive](https://forge.puppet.com/camptocamp/archive). For this it provides compatibility shims.
 
 ## Setup
 
@@ -279,6 +282,7 @@ NOTE: Alternative s3 provider support can be implemented by overriding the [s3_d
 * `archive::artifactory`: archive wrapper for [JFrog Artifactory](http://www.jfrog.com/open-source/#os-arti) files with checksum.
 * `archive::go`: archive wrapper for [GO Continuous Delivery](http://www.go.cd/) files with checksum.
 * `archive::nexus`: archive wrapper for [Sonatype Nexus](http://www.sonatype.org/nexus/) files with checksum.
+* `archive::download`: archive wrapper and compatibility shim for [camptocamp/archive](https://forge.puppet.com/camptocamp/archive). This is considered private API, as it has to change with camptocamp/archive. For this reason it will remain undocumented, and removed when no longer needed. We suggest not using it directly. Instead please consider migrating to archive itself where possible.
 
 ### Resources
 
