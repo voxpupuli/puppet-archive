@@ -1,3 +1,10 @@
+##2016/07/13 - Releasing 1.0.0
+
+* GH-176 Add Compatiblity layer for camptocamp/archive
+* GH-174 Add allow_insecure parameter
+* Numerous Rubocop and other modulesync changes
+* Drop support for ruby 1.8
+
 ##2016/03/18 - Releasing 0.5.1
 
 * GH-146 Set aws_cli_install default to false
