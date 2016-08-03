@@ -218,7 +218,7 @@ archive { '/nfs/repo/software.zip':
 
 ### Extract Customization
 
-The `extract_flag` or `extract_command` parameters can be used to override the
+The `extract_flags` or `extract_command` parameters can be used to override the
 default extraction command/flag (defaults are specified in
 [achive.rb](lib/puppet_x/bodeco/archive.rb)).
 
@@ -237,7 +237,7 @@ archive { '/var/lib/kafka/kafka_2.10-0.8.2.1.tgz':
 archive { '/var/lib/example.zip':
   extract      => true,
   extract_path => '/opt',
-  extract_flag => '-of',
+  extract_flags => '-of',
   cleanup      => true,
   subscribe    => ...,
 }
@@ -303,7 +303,7 @@ NOTE: Alternative s3 provider support can be implemented by overriding the [s3_d
 * `extract`: whether archive will be extracted after download (true|false). (default: false)
 * `extract_path`: target folder path to extract archive.
 * `extract_command`: custom extraction command ('tar xvf example.tar.gz'), also support sprintf format ('tar xvf %s') which will be processed with the filename: sprintf('tar xvf %s', filename)
-* `extract_flags`: custom extraction options, this replaces the default flags. A string such as 'xvf' for a tar file would replace the default xf flag. A hash is useful when custom flags are needed for different platforms. {'tar' => 'xzf', '7z' => 'x -aot'}.
+* `extract_flagss`: custom extraction options, this replaces the default flags. A string such as 'xvf' for a tar file would replace the default xf flag. A hash is useful when custom flags are needed for different platforms. {'tar' => 'xzf', '7z' => 'x -aot'}.
 * `user`: extract command user (using this option will configure the archive file permission to 0644 so the user can read the file).
 * `group`: extract command group (using this option will configure the archive file permission to 0644 so the user can read the file).
 * `cleanup`: whether archive file will be removed after extraction (true|false). (default: true)
