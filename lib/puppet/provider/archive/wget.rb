@@ -1,6 +1,5 @@
 Puppet::Type.type(:archive).provide(:wget, parent: :ruby) do
   commands wget: 'wget'
-  has_feature :insecure_https
 
   def wget_params(params)
     params += optional_switch(resource[:username], ['--user=%s'])

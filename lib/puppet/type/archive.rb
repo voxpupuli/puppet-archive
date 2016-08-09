@@ -5,7 +5,6 @@ require 'puppet/parameter/boolean'
 
 Puppet::Type.newtype(:archive) do
   @doc = 'Manage archive file download, extraction, and cleanup.'
-  feature :insecure_https, 'The ability to ignore HTTPS certificate errors.'
 
   ensurable do
     desc 'whether archive file should be present/absent (default: present)'
@@ -225,12 +224,6 @@ Puppet::Type.newtype(:archive) do
   newparam(:allow_insecure, boolean: true, parent: Puppet::Parameter::Boolean) do
     desc 'ignore HTTPS certificate errors'
     defaultto :false
-
-    validate do |val|
-      if munge(val)
-        raise ArgumentError, "Archive provider '#{provider.class.name}' does not support 'allow_insecure'" if provider && !provider.class.insecure_https?
-      end
-    end
   end
 
   autorequire(:file) do

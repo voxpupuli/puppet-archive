@@ -74,7 +74,10 @@ Puppet::Type.type(:archive).provide(:ruby) do
         resource[:checksum_url],
         username: resource[:username],
         password: resource[:password],
-        cookie: resource[:cookie]
+        cookie: resource[:cookie],
+        proxy_server: resource[:proxy_server],
+        proxy_type: resource[:proxy_type],
+        insecure: resource[:allow_insecure]
       )[%r{\b[\da-f]{32,128}\b}i]
     end
   end
@@ -144,7 +147,16 @@ Puppet::Type.type(:archive).provide(:ruby) do
   end
 
   def download(filepath)
-    PuppetX::Bodeco::Util.download(resource[:source], filepath, username: resource[:username], password: resource[:password], cookie: resource[:cookie], proxy_server: resource[:proxy_server], proxy_type: resource[:proxy_type])
+    PuppetX::Bodeco::Util.download(
+      resource[:source],
+      filepath,
+      username: resource[:username],
+      password: resource[:password],
+      cookie: resource[:cookie],
+      proxy_server: resource[:proxy_server],
+      proxy_type: resource[:proxy_type],
+      insecure: resource[:allow_insecure]
+    )
   end
 
   def s3_download(path)
