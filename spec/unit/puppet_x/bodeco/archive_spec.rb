@@ -47,6 +47,31 @@ describe PuppetX::Bodeco::Archive do
     expect(zip.send(:command, '-a')).to eq 'unzip -a /tmp/fun\ folder/test.zip'
   end
 
+  system_v = %w(Solaris AIX)
+  system_v.each do |os|
+    it "#command on #{os}" do
+      Facter.stubs(:value).with(:osfamily).returns os
+
+      tar = described_class.new('test.tar.gz')
+      expect(tar.send(:command, :undef)).to eq 'gunzip -dc test.tar.gz | tar xf -'
+      expect(tar.send(:command, 'gunzip' => '-dc', 'tar' => 'xvf')).to eq 'gunzip -dc test.tar.gz | tar xvf -'
+      tar = described_class.new('test.tar.bz2')
+      expect(tar.send(:command, :undef)).to eq 'bunzip2 -dc test.tar.bz2 | tar xf -'
+      expect(tar.send(:command, 'bunzip' => '-dc', 'tar' => 'xvf')).to eq 'bunzip2 -dc test.tar.bz2 | tar xvf -'
+      tar = described_class.new('test.tar.xz')
+      expect(tar.send(:command, :undef)).to eq 'unxz -dc test.tar.xz | tar xf -'
+      gunzip = described_class.new('test.gz')
+      expect(gunzip.send(:command, :undef)).to eq 'gunzip -d test.gz'
+      zip = described_class.new('test.zip')
+      expect(zip.send(:command, :undef)).to eq 'unzip -o test.zip'
+      expect(zip.send(:command, '-a')).to eq 'unzip -a test.zip'
+
+      zip = described_class.new('/tmp/fun folder/test.zip')
+      expect(zip.send(:command, :undef)).to eq 'unzip -o /tmp/fun\ folder/test.zip'
+      expect(zip.send(:command, '-a')).to eq 'unzip -a /tmp/fun\ folder/test.zip'
+    end
+  end
+
   it '#command on Windows' do
     Facter.stubs(:value).with(:osfamily).returns 'windows'
 
