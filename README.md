@@ -218,7 +218,7 @@ archive { '/nfs/repo/software.zip':
 
 ### Extract Customization
 
-The `extract_flag` or `extract_command` parameters can be used to override the
+The `extract_flags` or `extract_command` parameters can be used to override the
 default extraction command/flag (defaults are specified in
 [achive.rb](lib/puppet_x/bodeco/archive.rb)).
 
@@ -237,7 +237,7 @@ archive { '/var/lib/kafka/kafka_2.10-0.8.2.1.tgz':
 archive { '/var/lib/example.zip':
   extract      => true,
   extract_path => '/opt',
-  extract_flag => '-of',
+  extract_flags => '-of',
   cleanup      => true,
   subscribe    => ...,
 }
