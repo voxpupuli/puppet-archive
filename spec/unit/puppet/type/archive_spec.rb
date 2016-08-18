@@ -94,10 +94,6 @@ describe Puppet::Type.type(:archive) do
         resource[:allow_insecure] = type
       end
     end.not_to raise_error
-
-    expect do
-      resource[:allow_insecure] = :foobar
-    end.to raise_error(Puppet::Error, %r{expected a boolean value})
   end
 
   describe 'autorequire parent path' do

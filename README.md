@@ -235,11 +235,11 @@ archive { '/var/lib/kafka/kafka_2.10-0.8.2.1.tgz':
 
 # zip freshen existing files (zip -of %s instead of zip -o %s):
 archive { '/var/lib/example.zip':
-  extract      => true,
-  extract_path => '/opt',
+  extract       => true,
+  extract_path  => '/opt',
   extract_flags => '-of',
-  cleanup      => true,
-  subscribe    => ...,
+  cleanup       => true,
+  subscribe     => ...,
 }
 ```
 
@@ -294,7 +294,7 @@ NOTE: Alternative s3 provider support can be implemented by overriding the [s3_d
 * `source`: archive file source, supports http|https|ftp|file|s3 uri.
 * `username`: username to download source file.
 * `password`: password to download source file.
-* `allow_insecure`: Ignore HTTPS certificate errors (true|false). Supported on `curl` and `wget` providers. (default: false)
+* `allow_insecure`: Ignore HTTPS certificate errors (true|false). (default: false)
 * `cookie`: archive file download cookie.
 * `checksum_type`: archive file checksum type (none|md5|sha1|sha2|sh256|sha384|sha512). (default: none)
 * `checksum`: archive file checksum (match checksum_type)
