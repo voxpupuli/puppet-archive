@@ -15,6 +15,8 @@ describe 'archive' do
       it { should_not contain_file('/opt/awscli-bundle') }
       it { should_not contain_archive('awscli-bundle.zip') }
       it { should_not contain_exec('install_aws_cli') }
+      it { should compile.with_all_deps }
+      it { should contain_class('archive::params') }
     end
 
     context 'with aws_cli' do
