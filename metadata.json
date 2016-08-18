@@ -94,9 +94,9 @@
     }
   ],
   "name": "puppet-archive",
-  "version": "1.0.1-rc0",
+  "version": "1.1.0",
   "source": "https://github.com/voxpupuli/puppet-archive",
-  "author": "voxpupuli",
+  "author": "Vox Pupuli",
   "license": "Apache-2.0",
   "summary": "Compressed archive file download and extraction with native types/providers for Windows and Unix",
   "description": "The archive module provides native puppet resources for managing compressed file download and extraction with optional checksum verification and cleanup.",
