@@ -1,4 +1,4 @@
-## 2016/08/18 - Releasing 1.1.0
+## 2016/08/18 - Releasing 1.1.1
 
 * Modulesync with latest Vox Pupuli defaults
 * Fix cacert path
