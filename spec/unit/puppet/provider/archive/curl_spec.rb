@@ -1,3 +1,4 @@
+# rubocop:disable RSpec/MessageExpectation, RSpec/MultipleExpectations
 curl_provider = Puppet::Type.type(:archive).provider(:curl)
 
 RSpec.describe curl_provider do

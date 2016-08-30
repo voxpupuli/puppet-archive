@@ -1,3 +1,4 @@
+# rubocop:disable RSpec/MessageExpectation, RSpec/MultipleExpectations
 wget_provider = Puppet::Type.type(:archive).provider(:wget)
 
 RSpec.describe wget_provider do
