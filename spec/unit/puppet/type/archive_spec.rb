@@ -109,7 +109,7 @@ describe Puppet::Type.type(:archive) do
       catalog.add_resource example_archive
 
       req = example_archive.autorequire
-      expect(req.size).to eql 1
+      expect(req.size).to be 1
       expect(req[0].target).to eql example_archive
       expect(req[0].source).to eql file_tmp
     end
