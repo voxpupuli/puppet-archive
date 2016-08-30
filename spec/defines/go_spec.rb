@@ -1,13 +1,13 @@
 require 'spec_helper'
 
 describe 'archive::go' do
-  let!(:go_md5) do
+  let(:facts) { { osfamily: 'RedHat', puppetversion: '3.7.3' } }
+
+  before do
     MockFunction.new('go_md5') do |f|
       f.stub.returns('0d4f4b4b039c10917cfc49f6f6be71e4')
     end
   end
-
-  let(:facts) { { osfamily: 'RedHat', puppetversion: '3.7.3' } }
 
   context 'go archive with defaults' do
     let(:title) { '/opt/app/example.zip' }

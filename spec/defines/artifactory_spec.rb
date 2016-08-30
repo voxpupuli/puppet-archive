@@ -1,13 +1,13 @@
 require 'spec_helper'
 
 describe 'archive::artifactory' do
-  let!(:artifactory_sha1) do
+  let(:facts) { { osfamily: 'RedHat', puppetversion: '3.7.3' } }
+
+  before do
     MockFunction.new('artifactory_sha1') do |f|
       f.stub.returns('0d4f4b4b039c10917cfc49f6f6be71e4')
     end
   end
-
-  let(:facts) { { osfamily: 'RedHat', puppetversion: '3.7.3' } }
 
   context 'artifactory archive with defaults' do
     let(:title) { '/opt/app/example.zip' }
