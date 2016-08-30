@@ -33,7 +33,7 @@ RSpec.describe ruby_provider do
       subject { provider.checksum }
       let(:url) { nil }
       let(:remote_hash) { nil }
-      before(:each) do
+      before do
         resource[:checksum_url] = url if url
         allow(PuppetX::Bodeco::Util).to receive(:content) .\
           with(url, any_args).and_return(remote_hash)

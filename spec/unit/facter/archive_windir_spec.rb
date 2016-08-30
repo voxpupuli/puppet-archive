@@ -6,7 +6,7 @@ describe 'archive_windir fact specs', type: :fact do
   after { Facter.clear }
 
   context 'RedHat' do
-    before :each do
+    before do
       Facter.fact(:osfamily).stubs(:value).returns 'RedHat'
     end
     it 'is nil on RedHat' do
@@ -15,7 +15,7 @@ describe 'archive_windir fact specs', type: :fact do
   end
 
   context 'Windows' do
-    before :each do
+    before do
       Facter.fact(:osfamily).stubs(:value).returns 'windows'
     end
     it 'defaults to C:\\staging on windows' do

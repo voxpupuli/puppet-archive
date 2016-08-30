@@ -123,7 +123,7 @@ RSpec.describe curl_provider do
         }
       end
 
-      before(:each) do
+      before do
         resource[:checksum_url] = url if url
       end
 
