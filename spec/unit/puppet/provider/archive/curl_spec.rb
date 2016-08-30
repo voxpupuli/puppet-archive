@@ -1,3 +1,4 @@
+# rubocop:disable RSpec/MessageExpectation, RSpec/MultipleExpectations
 curl_provider = Puppet::Type.type(:archive).provider(:curl)
 
 RSpec.describe curl_provider do
@@ -123,7 +124,7 @@ RSpec.describe curl_provider do
         }
       end
 
-      before(:each) do
+      before do
         resource[:checksum_url] = url if url
       end
 

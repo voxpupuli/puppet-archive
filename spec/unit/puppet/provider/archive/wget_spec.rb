@@ -1,3 +1,4 @@
+# rubocop:disable RSpec/MessageExpectation, RSpec/MultipleExpectations
 wget_provider = Puppet::Type.type(:archive).provider(:wget)
 
 RSpec.describe wget_provider do
@@ -121,7 +122,7 @@ RSpec.describe wget_provider do
         }
       end
 
-      before(:each) do
+      before do
         resource[:checksum_url] = url if url
       end
 
