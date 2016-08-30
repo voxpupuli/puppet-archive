@@ -107,4 +107,46 @@ describe 'archive::nexus' do
       )
     end
   end
+  context 'nexus archive with allow_insecure => true' do
+    let(:title) { '/tmp/artifact.war' }
+
+    let(:params) do
+      {
+        url: 'https://oss.sonatype.org',
+        gav: 'io.hawt:hawtio-web:1.4.36',
+        repository: 'releases',
+        packaging: 'war',
+        allow_insecure: true
+      }
+    end
+    it { is_expected.to contain_archive('/tmp/artifact.war').with_allow_insecure(true) }
+  end
+  context 'nexus archive with allow_insecure => false' do
+    let(:title) { '/tmp/artifact.war' }
+
+    let(:params) do
+      {
+        url: 'https://oss.sonatype.org',
+        gav: 'io.hawt:hawtio-web:1.4.36',
+        repository: 'releases',
+        packaging: 'war',
+        allow_insecure: false
+      }
+    end
+    it { is_expected.to contain_archive('/tmp/artifact.war').with_allow_insecure(false) }
+  end
+  context 'nexus archive with allow_insecure => \'foobar\'' do
+    let(:title) { '/tmp/artifact.war' }
+
+    let(:params) do
+      {
+        url: 'https://oss.sonatype.org',
+        gav: 'io.hawt:hawtio-web:1.4.36',
+        repository: 'releases',
+        packaging: 'war',
+        allow_insecure: 'foobar'
+      }
+    end
+    it { is_expected.to compile.and_raise_error(%r{"foobar" is not a boolean}) }
+  end
 end
