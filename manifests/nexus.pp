@@ -42,6 +42,7 @@ define archive::nexus (
   $cleanup         = undef,
   $proxy_server    = undef,
   $proxy_type      = undef,
+  $allow_insecure  = undef,
 ) {
 
   include ::archive::params
@@ -67,6 +68,10 @@ define archive::nexus (
   $artifact_url = assemble_nexus_url($url, delete_undef_values($query_params))
   $checksum_url = regsubst($artifact_url, "p=${packaging}", "p=${packaging}.${checksum_type}")
 
+  if $allow_insecure != undef {
+    validate_bool($allow_insecure)
+  }
+
   archive { $name:
     ensure          => $ensure,
     source          => $artifact_url,
@@ -85,6 +90,7 @@ define archive::nexus (
     cleanup         => $cleanup,
     proxy_server    => $proxy_server,
     proxy_type      => $proxy_type,
+    allow_insecure  => $allow_insecure,
   }
 
   $file_owner = pick($owner, $archive::params::owner)
