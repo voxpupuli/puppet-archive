@@ -184,7 +184,6 @@ Puppet::Type.newtype(:archive) do
     desc 'archive file checksum type (none|md5|sha1|sha2|sh256|sha384|sha512)
     (this parameter is camptocamp/archive compatibility).'
     newvalues(:none, :md5, :sha1, :sha2, :sha256, :sha384, :sha512)
-    defaultto(:none)
     munge do |val|
       resource[:checksum_type] = val
     end

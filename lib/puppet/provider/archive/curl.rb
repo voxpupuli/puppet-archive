@@ -28,17 +28,15 @@ Puppet::Type.type(:archive).provide(:curl, parent: :ruby) do
   end
 
   def remote_checksum
-    @remote_checksum ||= begin
-      params = curl_params(
-        [
-          resource[:checksum_url],
-          '-fsSL',
-          '--max-redirs',
-          5
-        ]
-      )
+    params = curl_params(
+      [
+        resource[:checksum_url],
+        '-fsSL',
+        '--max-redirs',
+        5
+      ]
+    )
 
-      curl(params)[%r{\b[\da-f]{32,128}\b}i]
-    end
+    curl(params)[%r{\b[\da-f]{32,128}\b}i]
   end
 end
