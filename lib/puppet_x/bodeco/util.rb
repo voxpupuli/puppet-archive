@@ -24,7 +24,7 @@ module PuppetX
         @username = options[:username]
         @password = options[:password]
         @cookie = options[:cookie]
-        @insecure = options[:allow_insecure]
+        @insecure = options[:insecure]
         proxy_server = options[:proxy_server]
         proxy_type = options[:proxy_type]
 
@@ -42,8 +42,13 @@ module PuppetX
       end
 
       def follow_redirect(uri, option = { limit: FOLLOW_LIMIT }, &block)
-        Net::HTTP.start(uri.host, uri.port, use_ssl: (uri.scheme == 'https')) do |http|
-          http.verify_mode = OpenSSL::SSL::VERIFY_NONE if @insecure
+        http_opts = if uri.scheme == 'https'
+                      { use_ssl: true,
+                        verify_mode: (@insecure ? OpenSSL::SSL::VERIFY_NONE : OpenSSL::SSL::VERIFY_PEER) }
+                    else
+                      { use_ssl: false }
+                    end
+        Net::HTTP.start(uri.host, uri.port, http_opts) do |http|
           http.request(generate_request(uri)) do |response|
             case response
             when Net::HTTPSuccess
