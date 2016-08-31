@@ -17,6 +17,7 @@ describe Puppet::Type.type(:archive) do
     expect(resource[:extract]).to eq :false
     expect(resource[:cleanup]).to eq :true
     expect(resource[:checksum_type]).to eq :none
+    expect(resource[:digest_type]).to eq nil
     expect(resource[:checksum_verify]).to eq :true
     expect(resource[:extract_flags]).to eq :undef
     expect(resource[:allow_insecure]).to eq false

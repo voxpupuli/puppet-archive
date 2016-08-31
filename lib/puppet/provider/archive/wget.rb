@@ -28,17 +28,15 @@ Puppet::Type.type(:archive).provide(:wget, parent: :ruby) do
   end
 
   def remote_checksum
-    @remote_checksum ||= begin
-      params = wget_params(
-        [
-          '-qO-',
-          Shellwords.shellescape(resource[:checksum_url]),
-          '--max-redirect=5'
-        ]
-      )
+    params = wget_params(
+      [
+        '-qO-',
+        Shellwords.shellescape(resource[:checksum_url]),
+        '--max-redirect=5'
+      ]
+    )
 
-      command = "wget #{params.join(' ')}"
-      Puppet::Util::Execution.execute(command)[%r{\b[\da-f]{32,128}\b}i]
-    end
+    command = "wget #{params.join(' ')}"
+    Puppet::Util::Execution.execute(command)[%r{\b[\da-f]{32,128}\b}i]
   end
 end
