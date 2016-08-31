@@ -131,6 +131,8 @@ Puppet::Type.type(:archive).provide(:ruby) do
       FileUtils.copy(Puppet::Util.uri_to_path(uri), temppath)
     when %r{^s3}
       s3_download(temppath)
+    when nil
+      raise(Puppet::Error, 'Unable to fetch archive, the source parameter is nil.')
     else
       raise(Puppet::Error, "Source file: #{resource[:source]} does not exists.") unless File.exist?(resource[:source])
       FileUtils.copy(resource[:source], temppath)
