@@ -1,3 +1,12 @@
+## 2016/08/31 - Releasing 1.1.2
+
+* [GH-213](https://github.com/voxpupuli/puppet-archive/issues/213) Fix *allow_insecure* for ruby provider
+* [GH-205](https://github.com/voxpupuli/puppet-archive/issues/205) Raise exception on bad source parameters
+* [GH-204](https://github.com/voxpupuli/puppet-archive/issues/204) Resolve camptocamp archive regression
+* Expose *allow_insecure* in nexus defined type
+* Make *archive_windir* fact confinement work on ruby 1.8 systems.  Note this does **not** mean the *type* will work on unsupported ruby 1.8 systems.
+
+
 ## 2016/08/18 - Releasing 1.1.1
 
 * Modulesync with latest Vox Pupuli defaults
