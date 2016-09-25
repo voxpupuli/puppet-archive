@@ -7,9 +7,9 @@ Puppet::Type.newtype(:archive) do
   @doc = 'Manage archive file download, extraction, and cleanup.'
 
   ensurable do
-    desc 'whether archive file should be present/absent (default: present)'
+    desc 'whether archive file should be present/latest/absent (default: present)'
 
-    newvalue(:present) do
+    newvalues(:present, :latest) do
       provider.create
     end
 
@@ -251,6 +251,9 @@ Puppet::Type.newtype(:archive) do
       self[:proxy_type] ||= URI(self[:proxy_server]).scheme.to_sym
     else
       self[:proxy_type] = :none
+    end
+    if self[:ensure] == 'latest' && self[:source] !~ /^s3/
+      raise ArgumentError, "feature ensure => latest not implemented for source => #{self[:source]}"
     end
   end
 end

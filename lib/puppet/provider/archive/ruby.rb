@@ -31,7 +31,11 @@ Puppet::Type.type(:archive).provide(:ruby) do
   end
 
   def create
-    transfer_download(archive_filepath) unless checksum?
+    if resource[:ensure] == 'latest' and resource[:source] =~ /^s3/
+      transfer_download(archive_filepath) unless s3_checksum?
+    else
+      transfer_download(archive_filepath) unless checksum?
+    end
     extract
     cleanup
   end
@@ -92,6 +96,12 @@ Puppet::Type.type(:archive).provide(:ruby) do
     else
       archive_exist
     end
+  end
+
+  # Private: See if remote archive checksum matches.
+  # returns boolean
+  def s3_checksum?(remote_path)
+    # TODO
   end
 
   def cleanup
