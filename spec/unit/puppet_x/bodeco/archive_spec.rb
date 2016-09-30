@@ -1,6 +1,6 @@
 # rubocop:disable RSpec/MultipleExpectations
 require 'spec_helper'
-require 'puppet_x/bodeco/archive'
+require File.dirname(__FILE__) + '/../../../../lib/puppet_x/bodeco/archive.rb'
 
 describe PuppetX::Bodeco::Archive do
   let(:zipfile) do
