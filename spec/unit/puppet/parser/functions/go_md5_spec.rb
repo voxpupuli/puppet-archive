@@ -6,7 +6,7 @@ describe :go_md5 do
   end
 
   let(:scope) { PuppetlabsSpec::PuppetInternals.scope }
-  example_md5 = File.read(fixtures('checksum', 'gocd.md5')) # rubocop:disable Style/VariableNumber
+  example_md5 = File.read(fixtures('checksum', 'gocd.md5'))
 
   it 'retreives file md5' do
     url = 'https://gocd.lan/path/file.md5'
