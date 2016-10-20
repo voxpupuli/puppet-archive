@@ -4,6 +4,11 @@ require 'rspec/mocks'
 require 'rspec-puppet-facts'
 include RspecPuppetFacts
 
+unless RUBY_VERSION =~ %r{^1.9}
+  require 'coveralls'
+  Coveralls.wear!
+end
+
 #
 # Require all support files
 #
