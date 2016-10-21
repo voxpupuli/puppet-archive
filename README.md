@@ -4,6 +4,7 @@
 [![Puppet Forge downloads](https://img.shields.io/puppetforge/dt/puppet/archive.svg)](https://forge.puppetlabs.com/puppet/archive)
 [![Puppet Forge score](https://img.shields.io/puppetforge/f/puppet/archive.svg)](https://forge.puppetlabs.com/puppet/archive)
 [![Build Status](https://travis-ci.org/voxpupuli/puppet-archive.png)](https://travis-ci.org/voxpupuli/puppet-archive)
+[![Coverage Status](https://img.shields.io/coveralls/voxpupuli/puppet-archive.svg)](https://coveralls.io/github/voxpupuli/puppet-archive)
 [![Camptocamp compatible](https://img.shields.io/badge/camptocamp-compatible-orange.svg)](https://forge.puppet.com/camptocamp/archive)
 
 #### Table of Contents
