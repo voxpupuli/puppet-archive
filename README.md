@@ -40,7 +40,8 @@ cleanup. The benefits over existing modules such as
 * Support Windows file extraction via 7zip.
 * Able to cleanup archive files after extraction.
 
-This module is compatible with [camptocamp/archive](https://forge.puppet.com/camptocamp/archive). For this it provides compatibility shims.
+This module is compatible with [camptocamp/archive](https://forge.puppet.com/camptocamp/archive).
+For this it provides compatibility shims.
 
 ## Setup
 
@@ -113,7 +114,8 @@ archive { '/tmp/test100k.db':
 
 ### Puppet URL
 
-Below is an example of how to deploy a tar.gz to a local directory when it is served via the ```puppet:///``` style url which is not currently supported.
+Below is an example of how to deploy a tar.gz to a local directory when it is
+served via the ```puppet:///``` style url which is not currently supported.
 
 ```puppet
 $docs_filename = 'help.tar.gz'
@@ -269,21 +271,31 @@ archive { '/tmp/gravatar.png':
 }
 ```
 
-NOTE: Alternative s3 provider support can be implemented by overriding the [s3_download method](lib/puppet/provider/archive/ruby.rb):
+NOTE: Alternative s3 provider support can be implemented by overriding the
+[s3_download method](lib/puppet/provider/archive/ruby.rb):
 
 ## Reference
 
 ### Classes
 
 * `archive`: install 7zip package (Windows only) and aws cli for s3 support.
-* `archive::staging`: install package dependencies and creates staging directory for backwards compatibility. Use the archive class instead if you do not need the staging directory.
+* `archive::staging`: install package dependencies and creates staging directory
+  for backwards compatibility. Use the archive class instead if you do not need
+  the staging directory.
 
 ### Define Resources
 
-* `archive::artifactory`: archive wrapper for [JFrog Artifactory](http://www.jfrog.com/open-source/#os-arti) files with checksum.
-* `archive::go`: archive wrapper for [GO Continuous Delivery](http://www.go.cd/) files with checksum.
-* `archive::nexus`: archive wrapper for [Sonatype Nexus](http://www.sonatype.org/nexus/) files with checksum.
-* `archive::download`: archive wrapper and compatibility shim for [camptocamp/archive](https://forge.puppet.com/camptocamp/archive). This is considered private API, as it has to change with camptocamp/archive. For this reason it will remain undocumented, and removed when no longer needed. We suggest not using it directly. Instead please consider migrating to archive itself where possible.
+* `archive::artifactory`: archive wrapper for [JFrog Artifactory](http://www.jfrog.com/open-source/#os-arti)
+  files with checksum.
+* `archive::go`: archive wrapper for [GO Continuous Delivery](http://www.go.cd/)
+  files with checksum.
+* `archive::nexus`: archive wrapper for [Sonatype Nexus](http://www.sonatype.org/nexus/)
+  files with checksum.
+* `archive::download`: archive wrapper and compatibility shim for [camptocamp/archive](https://forge.puppet.com/camptocamp/archive).
+  This is considered private API, as it has to change with camptocamp/archive.
+  For this reason it will remain undocumented, and removed when no longer needed
+  . We suggest not using it directly. Instead please consider migrating to
+  archive itself where possible.
 
 ### Resources
 
@@ -297,29 +309,43 @@ NOTE: Alternative s3 provider support can be implemented by overriding the [s3_d
 * `password`: password to download source file.
 * `allow_insecure`: Ignore HTTPS certificate errors (true|false). (default: false)
 * `cookie`: archive file download cookie.
-* `checksum_type`: archive file checksum type (none|md5|sha1|sha2|sh256|sha384|sha512). (default: none)
+* `checksum_type`: archive file checksum type (none|md5|sha1|sha2|sh256|sha384|
+  sha512). (default: none)
 * `checksum`: archive file checksum (match checksum_type)
 * `checksum_url`: archive file checksum source (instead of specify checksum)
 * `checksum_verify`: whether checksum will be verified (true|false). (default: true)
-* `extract`: whether archive will be extracted after download (true|false). (default: false)
+* `extract`: whether archive will be extracted after download (true|false).
+  (default: false)
 * `extract_path`: target folder path to extract archive.
-* `extract_command`: custom extraction command ('tar xvf example.tar.gz'), also support sprintf format ('tar xvf %s') which will be processed with the filename: sprintf('tar xvf %s', filename)
-* `extract_flags`: custom extraction options, this replaces the default flags. A string such as 'xvf' for a tar file would replace the default xf flag. A hash is useful when custom flags are needed for different platforms. {'tar' => 'xzf', '7z' => 'x -aot'}.
-* `user`: extract command user (using this option will configure the archive file permission to 0644 so the user can read the file).
-* `group`: extract command group (using this option will configure the archive file permission to 0644 so the user can read the file).
-* `cleanup`: whether archive file will be removed after extraction (true|false). (default: true)
+* `extract_command`: custom extraction command ('tar xvf example.tar.gz'), also
+  support sprintf format ('tar xvf %s') which will be processed with the
+  filename: sprintf('tar xvf %s', filename)
+* `extract_flags`: custom extraction options, this replaces the default flags.
+  A string such as 'xvf' for a tar file would replace the default xf flag. A
+  hash is useful when custom flags are needed for different platforms. {'tar'
+  => 'xzf', '7z' => 'x -aot'}.
+* `user`: extract command user (using this option will configure the archive
+  file permission to 0644 so the user can read the file).
+* `group`: extract command group (using this option will configure the archive
+  file permission to 0644 so the user can read the file).
+* `cleanup`: whether archive file will be removed after extraction (true|false).
+  (default: true)
 * `creates`: if file/directory exists, will not download/extract archive.
-* `proxy_server`: specify a proxy server, with port number if needed. ie: https://example.com:8080.
+* `proxy_server`: specify a proxy server, with port number if needed. ie:
+  `https://example.com:8080`.
 * `proxy_type`: proxy server type (none|http|https|ftp)
 
 #### Archive::Artifactory
 
-* `path`: fully qualified filepath for the download the file or use archive_path and only supply filename. (namevar).
+* `path`: fully qualified filepath for the download the file or use
+  archive_path and only supply filename. (namevar).
 * `ensure`: ensure the file is present/absent.
-* `url`: artifactory download url filepath. NOTE: replaces server, port, url_path parameters.
+* `url`: artifactory download url filepath. NOTE: replaces server, port,
+  url_path parameters.
 * `server`: artifactory server name (deprecated).
 * `port`: artifactory server port (deprecated).
-* `url_path`: artifactory file path http`:`://{server}`:{port}/artifactory/{url_path} (deprecated).
+* `url_path`: artifactory file path
+  `http:://{server}:{port}/artifactory/{url_path}` (deprecated).
 * `owner`: file owner (see archive params for defaults).
 * `group`: file group (see archive params for defaults).
 * `mode`: file mode (see archive params for defaults).
@@ -328,7 +354,8 @@ NOTE: Alternative s3 provider support can be implemented by overriding the [s3_d
 * `creates`: the file created when the archive is extracted (true/false).
 * `cleanup`: remove archive file after file extraction (true/false).
 
-#### Archive::Artifactory Example:
+#### Archive::Artifactory Example
+
 ```puppet
 $dirname = 'gradle-1.0-milestone-4-20110723151213+0300'
 $filename = "${dirname}-bin.zip"
@@ -350,7 +377,8 @@ file { '/opt/gradle':
 
 #### Archive::Nexus
 
-#### Archive::Nexus Example:
+#### Archive::Nexus Example
+
 ```puppet
 archive::nexus { '/tmp/jtstand-ui-0.98.jar':
   url        => 'https://oss.sonatype.org',
