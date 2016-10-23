@@ -6,6 +6,7 @@
 [![Puppet Forge - downloads](https://img.shields.io/puppetforge/dt/puppet/archive.svg)](https://forge.puppetlabs.com/puppet/archive)
 [![Puppet Forge - endorsement](https://img.shields.io/puppetforge/e/puppet/archive.svg)](https://forge.puppetlabs.com/puppet/archive)
 [![Puppet Forge - scores](https://img.shields.io/puppetforge/f/puppet/archive.svg)](https://forge.puppetlabs.com/puppet/archive)
+[![Camptocamp compatible](https://img.shields.io/badge/camptocamp-compatible-orange.svg)](https://forge.puppet.com/camptocamp/archive)
 
 #### Table of Contents
 
