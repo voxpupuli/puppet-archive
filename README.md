@@ -1,11 +1,11 @@
 # Puppet Archive
 
-[![Puppet Forge](http://img.shields.io/puppetforge/v/puppet/archive.svg)](https://forge.puppetlabs.com/puppet/archive)
-[![Puppet Forge downloads](https://img.shields.io/puppetforge/dt/puppet/archive.svg)](https://forge.puppetlabs.com/puppet/archive)
-[![Puppet Forge score](https://img.shields.io/puppetforge/f/puppet/archive.svg)](https://forge.puppetlabs.com/puppet/archive)
-[![Build Status](https://travis-ci.org/voxpupuli/puppet-archive.png)](https://travis-ci.org/voxpupuli/puppet-archive)
-[![Coverage Status](https://img.shields.io/coveralls/voxpupuli/puppet-archive.svg)](https://coveralls.io/github/voxpupuli/puppet-archive)
-[![Camptocamp compatible](https://img.shields.io/badge/camptocamp-compatible-orange.svg)](https://forge.puppet.com/camptocamp/archive)
+[![Build Status](https://travis-ci.org/voxpupuli/puppet-archive.png?branch=master)](https://travis-ci.org/voxpupuli/puppet-archive)
+[![Code Coverage](https://coveralls.io/repos/github/voxpupuli/puppet-archive/badge.svg?branch=master)](https://coveralls.io/github/voxpupuli/puppet-archive)
+[![Puppet Forge](https://img.shields.io/puppetforge/v/puppet/archive.svg)](https://forge.puppetlabs.com/puppet/archive)
+[![Puppet Forge - downloads](https://img.shields.io/puppetforge/dt/puppet/archive.svg)](https://forge.puppetlabs.com/puppet/archive)
+[![Puppet Forge - endorsement](https://img.shields.io/puppetforge/e/puppet/archive.svg)](https://forge.puppetlabs.com/puppet/archive)
+[![Puppet Forge - scores](https://img.shields.io/puppetforge/f/puppet/archive.svg)](https://forge.puppetlabs.com/puppet/archive)
 
 #### Table of Contents
 
