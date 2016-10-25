@@ -1,5 +1,6 @@
 # Puppet Archive
 
+[![License](https://img.shields.io/github/license/voxpupuli/puppet-archive.svg)](https://github.com/voxpupuli/puppet-archive/blob/master/LICENSE)
 [![Build Status](https://travis-ci.org/voxpupuli/puppet-archive.png?branch=master)](https://travis-ci.org/voxpupuli/puppet-archive)
 [![Code Coverage](https://coveralls.io/repos/github/voxpupuli/puppet-archive/badge.svg?branch=master)](https://coveralls.io/github/voxpupuli/puppet-archive)
 [![Puppet Forge](https://img.shields.io/puppetforge/v/puppet/archive.svg)](https://forge.puppetlabs.com/puppet/archive)
