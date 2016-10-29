@@ -16,14 +16,14 @@ describe 'archive::nexus' do
     end
 
     it do
-      should contain_archive('/tmp/hawtio.war').with(
+      is_expected.to contain_archive('/tmp/hawtio.war').with(
         source: 'https://oss.sonatype.org/service/local/artifact/maven/content?g=io.hawt&a=hawtio-web&v=1.4.36&r=releases&p=war',
         checksum_url: 'https://oss.sonatype.org/service/local/artifact/maven/content?g=io.hawt&a=hawtio-web&v=1.4.36&r=releases&p=war.md5'
       )
     end
 
     it do
-      should contain_file('/tmp/hawtio.war').that_requires('Archive[/tmp/hawtio.war]').with(
+      is_expected.to contain_file('/tmp/hawtio.war').that_requires('Archive[/tmp/hawtio.war]').with(
         owner: '0',
         group: '0'
       )
@@ -49,7 +49,7 @@ describe 'archive::nexus' do
     end
 
     it do
-      should contain_archive('/tmp/artifact.war').with(
+      is_expected.to contain_archive('/tmp/artifact.war').with(
         'user' => 'tom',
         'group' => 'worker',
         'extract' => true,
@@ -60,7 +60,7 @@ describe 'archive::nexus' do
     end
 
     it do
-      should contain_file('/tmp/artifact.war').that_requires('Archive[/tmp/artifact.war]').with(
+      is_expected.to contain_file('/tmp/artifact.war').that_requires('Archive[/tmp/artifact.war]').with(
         'owner' => 'tom',
         'group' => 'worker'
       )
@@ -89,7 +89,7 @@ describe 'archive::nexus' do
     end
 
     it do
-      should contain_archive('/tmp/artifact.war').with(
+      is_expected.to contain_archive('/tmp/artifact.war').with(
         'user' => 'tom',
         'group' => 'worker',
         'extract' => true,
@@ -101,7 +101,7 @@ describe 'archive::nexus' do
     end
 
     it do
-      should contain_file('/tmp/artifact.war').that_requires('Archive[/tmp/artifact.war]').with(
+      is_expected.to contain_file('/tmp/artifact.war').that_requires('Archive[/tmp/artifact.war]').with(
         'owner' => 'tom',
         'group' => 'worker'
       )

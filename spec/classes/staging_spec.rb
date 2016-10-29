@@ -4,9 +4,9 @@ describe 'archive::staging' do
   context 'RHEL Puppet opensource' do
     let(:facts) { { osfamily: 'RedHat', puppetversion: '3.7.3' } }
 
-    it { should contain_class 'archive' }
+    it { is_expected.to contain_class 'archive' }
     it do
-      should contain_file('/opt/staging').with(
+      is_expected.to contain_file('/opt/staging').with(
         owner: '0',
         group: '0',
         mode: '0640'
@@ -26,9 +26,9 @@ describe 'archive::staging' do
       }
     end
 
-    it { should contain_class 'archive' }
+    it { is_expected.to contain_class 'archive' }
     it do
-      should contain_file('/tmp/staging').with(
+      is_expected.to contain_file('/tmp/staging').with(
         owner: 'puppet',
         group: 'puppet',
         mode: '0755'
@@ -45,9 +45,9 @@ describe 'archive::staging' do
       }
     end
 
-    it { should contain_class 'archive' }
+    it { is_expected.to contain_class 'archive' }
     it do
-      should contain_file('C:/Windows/Temp/staging').with(
+      is_expected.to contain_file('C:/Windows/Temp/staging').with(
         owner: 'S-1-5-32-544',
         group: 'S-1-5-18',
         mode: '0640'
