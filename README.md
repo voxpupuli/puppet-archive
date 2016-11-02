@@ -319,6 +319,7 @@ NOTE: Alternative s3 provider support can be implemented by overriding the
   (default: false)
 * `extract_path`: target folder path to extract archive.
 * `extract_command`: custom extraction command ('tar xvf example.tar.gz'), also
+* `temp_dir`: specify an alternative temporary directory to use for file downloads, if unset the OS default is used
   support sprintf format ('tar xvf %s') which will be processed with the
   filename: sprintf('tar xvf %s', filename)
 * `extract_flags`: custom extraction options, this replaces the default flags.
