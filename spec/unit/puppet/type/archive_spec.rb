@@ -21,12 +21,19 @@ describe Puppet::Type.type(:archive) do
     expect(resource[:checksum_verify]).to eq :true
     expect(resource[:extract_flags]).to eq :undef
     expect(resource[:allow_insecure]).to eq false
+    expect(resource[:temp_dir]).to eq nil
   end
 
   it 'verify resource[:path] is absolute filepath' do
     expect do
       resource[:path] = 'relative/file'
     end.to raise_error(Puppet::Error, %r{archive path must be absolute: })
+  end
+
+  it 'verify resource[:temp_dir] is absolute filetemp_dir' do
+    expect do
+      resource[:temp_dir] = 'relative/file'
+    end.to raise_error(Puppet::Error, %r{Invalid temp_dir})
   end
 
   describe 'on posix', if: Puppet.features.posix? do

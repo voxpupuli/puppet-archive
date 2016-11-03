@@ -93,6 +93,15 @@ Puppet::Type.newtype(:archive) do
     desc "custom extraction command ('tar xvf example.tar.gz'), also support sprintf format ('tar xvf %s') which will be processed with the filename: sprintf('tar xvf %s', filename)"
   end
 
+  newparam(:temp_dir) do
+    desc 'Specify an alternative temporary directory to use for copying files, if unset then the operating system default will be used.'
+    validate do |value|
+      unless Puppet::Util.absolute_path?(value)
+        raise ArgumentError, "Invalid temp_dir #{value}"
+      end
+    end
+  end
+
   newparam(:extract_flags) do
     desc "custom extraction options, this replaces the default flags. A string such as 'xvf' for a tar file would replace the default xf flag. A hash is useful when custom flags are needed for different platforms. {'tar' => 'xzf', '7z' => 'x -aot'}."
     defaultto(:undef)
