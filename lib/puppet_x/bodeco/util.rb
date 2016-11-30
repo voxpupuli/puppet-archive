@@ -120,8 +120,7 @@ module PuppetX
     end
 
     class FILE
-      def initialize(_url, _options)
-      end
+      def initialize(_url, _options) end
 
       def download(uri, file_path)
         FileUtils.copy(uri.path, file_path)
