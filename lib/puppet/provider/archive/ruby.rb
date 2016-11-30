@@ -12,22 +12,68 @@ end
 require 'securerandom'
 require 'tempfile'
 
+# This provider implements a simple state-machine. The following attempts to #
+# document it. In general, `def adjective?` implements a [state], while `def
+# verb` implements an {action}.
+# Some states are more complex, as they might depend on other states, or trigger
+# actions. Since this implements an ad-hoc state-machine, many actions or states
+# have to guard themselves against being called out of order.
+#
+# [exists?]
+#   |
+#   v
+# [extracted?] -> no -> [checksum?]
+#    |
+#    v
+#   yes
+#    |
+#    v
+# [path.exists?] -> no -> {cleanup}
+#    |                    |    |
+#    v                    v    v
+# [checksum?]            yes. [extracted?] && [cleanup?]
+#                              |
+#                              v
+#                            {destroy}
+#
+# Now, with [exists?] defined, we can define [ensure]
+# But that's just part of the standard puppet provider state-machine:
+#
+# [ensure] -> absent -> [exists?] -> no.
+#   |                     |
+#   v                     v
+#  present               yes
+#   |                     |
+#   v                     v
+# [exists?]            {destroy}
+#   |
+#   v
+# {create}
+#
+# Here's how we would extend archive for an `ensure => latest`:
+#
+#  [exists?] -> no -> {create}
+#    |
+#    v
+#   yes
+#    |
+#    v
+#  [ttl?] -> expired -> {destroy} -> {create}
+#    |
+#    v
+#  valid.
+#
+
 Puppet::Type.type(:archive).provide(:ruby) do
   optional_commands aws: 'aws'
   defaultfor feature: :microsoft_windows
   attr_reader :archive_checksum
 
   def exists?
-    if extracted?
-      if File.exist? archive_filepath
-        checksum?
-      else
-        cleanup
-        true
-      end
-    else
-      checksum?
-    end
+    return checksum? unless extracted?
+    return checksum? if File.exist? archive_filepath
+    cleanup
+    true
   end
 
   def create
@@ -83,15 +129,13 @@ Puppet::Type.type(:archive).provide(:ruby) do
   # Private: See if local archive checksum matches.
   # returns boolean
   def checksum?(store_checksum = true)
-    archive_exist = File.exist? archive_filepath
-    if archive_exist && resource[:checksum_type] != :none
-      archive = PuppetX::Bodeco::Archive.new(archive_filepath)
-      archive_checksum = archive.checksum(resource[:checksum_type])
-      @archive_checksum = archive_checksum if store_checksum
-      checksum == archive_checksum
-    else
-      archive_exist
-    end
+    return false unless File.exist? archive_filepath
+    return true  if resource[:checksum_type] == :none
+
+    archive = PuppetX::Bodeco::Archive.new(archive_filepath)
+    archive_checksum = archive.checksum(resource[:checksum_type])
+    @archive_checksum = archive_checksum if store_checksum
+    checksum == archive_checksum
   end
 
   def cleanup
@@ -117,14 +161,10 @@ Puppet::Type.type(:archive).provide(:ruby) do
   end
 
   def transfer_download(archive_filepath)
-    if resource[:temp_dir]
-      unless File.directory?(resource[:temp_dir])
-        raise Puppet::Error, "Temporary directory #{resource[:temp_dir]} doesn't exist"
-      end
-      tempfile = Tempfile.new(tempfile_name, resource[:temp_dir])
-    else
-      tempfile = Tempfile.new(tempfile_name)
+    if resource[:temp_dir] && !File.directory?(resource[:temp_dir])
+      raise Puppet::Error, "Temporary directory #{resource[:temp_dir]} doesn't exist"
     end
+    tempfile = Tempfile.new(tempfile_name, resource[:temp_dir])
 
     temppath = tempfile.path
     tempfile.close!
