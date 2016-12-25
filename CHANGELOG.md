@@ -1,3 +1,13 @@
+# Changelog
+
+## 2016-12-25 Release 1.2.0
+
+* Modulesync with latest Vox Pupuli defaults
+* Fix wrong license in repo
+* Fix several rubocop issues
+* Fix several markdown issues in README.md
+* Add temp_dir option to override OS temp dir location
+
 ## 2016-08-31 Release 1.1.2
 
   * [GH-213](https://github.com/voxpupuli/puppet-archive/issues/213) Fix *allow_insecure* for ruby provider
