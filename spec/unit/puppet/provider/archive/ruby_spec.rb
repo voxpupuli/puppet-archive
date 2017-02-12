@@ -1,7 +1,6 @@
 # rubocop:disable RSpec/MessageSpies
 
-require 'rspec'
-require 'puppet'
+require 'spec_helper'
 
 ruby_provider = Puppet::Type.type(:archive).provider(:ruby)
 
