@@ -1,3 +1,6 @@
+require 'json'
+require 'puppet_x/bodeco/util'
+
 module Puppet::Parser::Functions
   # Public: artifactory file sha1 checksum
   #
@@ -7,9 +10,6 @@ module Puppet::Parser::Functions
   # Returns sha1 from artifactory file info
   newfunction(:artifactory_sha1, type: :rvalue) do |args|
     raise(ArgumentError, "Invalid artifactory file info url #{args}") unless args.size == 1
-
-    require 'json'
-    require 'puppet_x/bodeco/util.rb'
 
     uri = URI(args[0])
     response = PuppetX::Bodeco::Util.content(uri)
