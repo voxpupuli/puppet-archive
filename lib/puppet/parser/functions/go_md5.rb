@@ -12,7 +12,7 @@ module Puppet::Parser::Functions
   newfunction(:go_md5, type: :rvalue) do |args|
     raise(ArgumentError, "Invalid go md5 info url #{args}") unless args.size == 4
 
-    require 'puppet_x/bodeco/util.rb'
+    require File.dirname(__FILE__) + '/../../../puppet_x/bodeco/util.rb'
 
     username, password, file, url = args
 

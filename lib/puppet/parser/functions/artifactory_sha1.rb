@@ -9,7 +9,7 @@ module Puppet::Parser::Functions
     raise(ArgumentError, "Invalid artifactory file info url #{args}") unless args.size == 1
 
     require 'json'
-    require 'puppet_x/bodeco/util.rb'
+    require File.dirname(__FILE__) + '/../../../puppet_x/bodeco/util.rb'
 
     uri = URI(args[0])
     response = PuppetX::Bodeco::Util.content(uri)
