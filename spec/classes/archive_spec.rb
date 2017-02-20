@@ -4,9 +4,9 @@ describe 'archive' do
   context 'RHEL' do
     let(:facts) do
       {
-        osfamily: 'RedHat',
+        os: { family: 'RedHat' },
         operatingsystem: 'RedHat',
-        puppetversion: '3.7.3'
+        puppetversion: '4.4.0'
       }
     end
 
@@ -35,7 +35,7 @@ describe 'archive' do
   describe 'Windows' do
     let(:default_facts) do
       {
-        osfamily: 'Windows',
+        os: { family: 'Windows' },
         operatingsystem: 'Windows',
         archive_windir: 'C:/staging'
       }
@@ -44,7 +44,7 @@ describe 'archive' do
     context 'default 7zip chcolatey package' do
       let(:facts) do
         {
-          puppetversion: '3.7.3'
+          puppetversion: '4.4.0'
         }.merge(default_facts)
       end
 

@@ -30,23 +30,22 @@
 #  }
 #
 define archive::download (
-  $url,
-  $ensure           = present,
-  $checksum         = true,
-  $digest_url       = undef,
-  $digest_string    = undef,
-  $digest_type      = 'md5',   # bad default!
-  $timeout          = 120,     # ignored
-  $src_target       = '/usr/src',
-  $allow_insecure   = false,   # ignored
-  $follow_redirects = false,   # ignored (default)
-  $verbose          = true,    # ignored
-  $path             = $::path, # ignored
-  $proxy_server     = undef,
-  $user             = undef,
+  String                        $url,
+  Enum['present', 'absent']     $ensure  = present,
+  Boolean                       $checksum         = true,
+  Optional[String]              $digest_url       = undef,
+  Optional[String]              $digest_string    = undef,
+  Optional[Enum['none', 'md5', 'sha1', 'sha2','sh256', 'sha384', 'sha512']] $digest_type      = 'md5',   # bad default!
+  Integer                       $timeout          = 120,     # ignored
+  Stdlib::Compat::Absolute_path $src_target       = '/usr/src',
+  Boolean                       $allow_insecure   = false,   # ignored
+  Boolean                       $follow_redirects = false,   # ignored (default)
+  Boolean                       $verbose          = true,    # ignored
+  String                        $path             = $::path, # ignored
+  Optional[String]              $proxy_server     = undef,
+  Optional[String]              $user             = undef,
 ) {
-
-  $target = is_absolute_path($title) ? {
+  $target = ($title =~ Stdlib::Compat::Absolute_path) ? {
     false   => "${src_target}/${title}",
     default => $title,
   }
