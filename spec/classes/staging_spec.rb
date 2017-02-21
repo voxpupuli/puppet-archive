@@ -2,7 +2,7 @@ require 'spec_helper'
 
 describe 'archive::staging' do
   context 'RHEL Puppet opensource' do
-    let(:facts) { { osfamily: 'RedHat', puppetversion: '3.7.3' } }
+    let(:facts) { { os: { family: 'RedHat' }, puppetversion: '4.4.0' } }
 
     it { is_expected.to contain_class 'archive' }
     it do
@@ -15,7 +15,7 @@ describe 'archive::staging' do
   end
 
   context 'RHEL Puppet opensource with params' do
-    let(:facts) { { osfamily: 'RedHat', puppetversion: '3.7.3' } }
+    let(:facts) { { os: { family: 'RedHat' }, puppetversion: '4.4.0' } }
 
     let(:params) do
       {
@@ -39,7 +39,7 @@ describe 'archive::staging' do
   context 'Windows Puppet Enterprise' do
     let(:facts) do
       {
-        osfamily: 'Windows',
+        os: { family: 'Windows' },
         puppetversion: '3.4.3 (Puppet Enterprise 3.2.3)',
         archive_windir: 'C:/Windows/Temp/staging'
       }

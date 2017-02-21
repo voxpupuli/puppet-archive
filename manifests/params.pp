@@ -4,7 +4,7 @@
 # archive settings such as default user and file mode.
 #
 class archive::params {
-  case $::osfamily {
+  case $facts['os']['family'] {
     'Windows': {
       $path               = $::archive_windir
       $owner              = 'S-1-5-32-544' # Adminstrators

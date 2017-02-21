@@ -1,21 +1,21 @@
 # download from go
 define archive::go (
-  $server,
-  $port,
-  $url_path,
-  $md5_url_path,
-  $username,
-  $password,
-  $path         = $name,
-  $owner        = undef,
-  $group        = undef,
-  $mode         = undef,
-  $archive_path = undef,
-  $ensure       = present,
-  $extract      = undef,
-  $extract_path = undef,
-  $creates      = undef,
-  $cleanup      = undef,
+  String                    $server,
+  Integer                   $port,
+  String                    $url_path,
+  String                    $md5_url_path,
+  String                    $username,
+  String                    $password,
+  Enum['present', 'absent'] $ensure       = present,
+  String                    $path         = $name,
+  Optional[String]          $owner        = undef,
+  Optional[String]          $group        = undef,
+  Optional[String]          $mode         = undef,
+  Optional[Boolean]         $extract      = undef,
+  Optional[String]          $extract_path = undef,
+  Optional[String]          $creates      = undef,
+  Optional[Boolean]         $cleanup      = undef,
+  Optional[Stdlib::Compat::Absolute_path] $archive_path = undef,
 ) {
 
   include ::archive::params
@@ -26,7 +26,9 @@ define archive::go (
     $file_path = $path
   }
 
-  validate_absolute_path($file_path)
+  if $file_path !~ Stdlib::Compat::Absolute_path {
+    fail("archive::go[${name}]: \$name or \$archive_path must be an absolute path!") # lint:ignore:trailing_comma
+  }
 
   $go_url = "http://${server}:${port}"
   $file_url = "${go_url}/${url_path}"

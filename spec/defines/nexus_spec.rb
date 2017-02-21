@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 describe 'archive::nexus' do
-  let(:facts) { { osfamily: 'RedHat', puppetversion: '3.7.3' } }
+  let(:facts) { { os: { family: 'RedHat' }, puppetversion: '4.4.0' } }
 
   context 'nexus archive with defaults' do
     let(:title) { '/tmp/hawtio.war' }
@@ -147,6 +147,6 @@ describe 'archive::nexus' do
         allow_insecure: 'foobar'
       }
     end
-    it { is_expected.to compile.and_raise_error(%r{"foobar" is not a boolean}) }
+    it { is_expected.to compile.and_raise_error(%r{parameter 'allow_insecure' expects a Boolean value, got String}) }
   end
 end

@@ -11,7 +11,7 @@
 # * url: artifactory download url filepath. NOTE: replaces server, port, url_path parameters.
 # * server: artifactory server name (deprecated).
 # * port: artifactory server port (deprecated).
-# * url_path: artifactory file path http:://{server}:{port}/artifactory/{url_path} (deprecated).
+# * url_path: artifactory file path http://{server}:{port}/artifactory/{url_path} (deprecated).
 # * owner: file owner (see archive params for defaults).
 # * group: file group (see archive params for defaults).
 # * mode: file mode (see archive params for defaults).
@@ -43,20 +43,20 @@
 # }
 #
 define archive::artifactory (
-  $path         = $name,
-  $ensure       = present,
-  $url          = undef,
-  $server       = undef,
-  $port         = undef,
-  $url_path     = undef,
-  $owner        = undef,
-  $group        = undef,
-  $mode         = undef,
-  $archive_path = undef,
-  $extract      = undef,
-  $extract_path = undef,
-  $creates      = undef,
-  $cleanup      = undef,
+  String                                  $path         = $name,
+  Enum['present', 'absent']               $ensure       = present,
+  Optional[Pattern[/^https?:\/\//]]       $url          = undef,
+  Optional[String]                        $server       = undef,
+  Optional[Integer]                       $port         = undef,
+  Optional[String]                        $url_path     = undef,
+  Optional[String]                        $owner        = undef,
+  Optional[String]                        $group        = undef,
+  Optional[String]                        $mode         = undef,
+  Optional[Boolean]                       $extract      = undef,
+  Optional[String]                        $extract_path = undef,
+  Optional[String]                        $creates      = undef,
+  Optional[Boolean]                       $cleanup      = undef,
+  Optional[Stdlib::Compat::Absolute_path] $archive_path = undef,
 ) {
 
   include ::archive::params
@@ -67,7 +67,9 @@ define archive::artifactory (
     $file_path = $path
   }
 
-  validate_absolute_path($file_path)
+  if $file_path !~ Stdlib::Compat::Absolute_path {
+    fail("archive::artifactory[${name}]: \$name or \$archive_path must be an absolute path!") # lint:ignore:trailing_comma
+  }
 
   if $url {
     $file_url = $url

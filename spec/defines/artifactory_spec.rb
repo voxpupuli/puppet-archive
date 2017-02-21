@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 describe 'archive::artifactory' do
-  let(:facts) { { osfamily: 'RedHat', puppetversion: '3.7.3' } }
+  let(:facts) { { os: { family: 'RedHat' }, puppetversion: '4.4.0' } }
 
   before do
     MockFunction.new('artifactory_sha1') do |f|

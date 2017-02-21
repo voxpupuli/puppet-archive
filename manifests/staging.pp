@@ -4,10 +4,10 @@
 # backwards compatibility class for staging module.
 #
 class archive::staging (
-  $path  = $archive::params::path,
-  $owner = $archive::params::owner,
-  $group = $archive::params::group,
-  $mode  = $archive::params::mode,
+  String $path  = $archive::params::path,
+  String $owner = $archive::params::owner,
+  String $group = $archive::params::group,
+  String $mode  = $archive::params::mode,
 ) inherits archive::params {
   include '::archive'
 
