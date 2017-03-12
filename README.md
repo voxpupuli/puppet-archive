@@ -21,6 +21,7 @@
    * [Network files](#network-files)
    * [Extract customization](#extract-customization)
    * [S3 Bucket](#s3-bucket)
+   * [Migrating from puppet-staging](#migrating-from-puppet-staging)
 5. [Reference](#reference)
 6. [Development](#development)
 
@@ -275,6 +276,63 @@ archive { '/tmp/gravatar.png':
 
 NOTE: Alternative s3 provider support can be implemented by overriding the
 [s3_download method](lib/puppet/provider/archive/ruby.rb):
+
+### Migrating from puppet-staging
+
+It is recommended to use puppet-archive instead of puppet-staging.
+Users wishing to migrate may find the following examples useful.
+
+#### Simple example without extraction
+
+##### puppet-staging
+
+```puppet
+class { 'staging':
+  path  => '/tmp/staging',
+}
+
+staging::file { 'master.zip':
+  source => 'https://github.com/voxpupuli/puppet-archive/archive/master.zip',
+}
+```
+
+##### puppet-archive
+
+```puppet
+archive { '/tmp/staging/master.zip':
+  source => 'https://github.com/voxpupuli/puppet-archive/archive/master.zip',
+}
+```
+
+#### Example with zip file extraction
+
+##### puppet-staging
+
+```puppet
+class { 'staging':
+  path  => '/tmp/staging',
+}
+
+staging::file { 'master.zip':
+  source  => 'https://github.com/voxpupuli/puppet-archive/archive/master.zip',
+} ->
+staging::extract { 'master.zip':
+  target  => '/tmp/staging/master.zip',
+  creates => '/tmp/staging/puppet-archive-master',
+}
+```
+
+##### puppet-archive
+
+```puppet
+archive { '/tmp/staging/master.zip':
+  source       => 'https://github.com/voxpupuli/puppet-archive/archive/master.zip',
+  extract      => true,
+  extract_path => '/tmp/staging',
+  creates      => '/tmp/staging/puppet-archive-master',
+  cleanup      => false,
+}
+```
 
 ## Reference
 
