@@ -263,7 +263,11 @@ class { '::archive':
 
 # See AWS cli guide for credential and configuration settings:
 # http://docs.aws.amazon.com/cli/latest/userguide/cli-chap-getting-started.html
-file { '/root/.aws/credential':
+file { '/root/.aws/credentials':
+  ensure => file,
+  ...
+}
+file { '/root/.aws/config':
   ensure => file,
   ...
 }
