@@ -97,7 +97,7 @@ RSpec.describe wget_provider do
       end
 
       it 'calls wget with default options and header containing cookie' do
-        expect(execution).to receive(:execute).with([default_options, '--https_proxy=https://home.lan:8080'].join(' '))
+        expect(execution).to receive(:execute).with([default_options, '-e use_proxy=yes', '-e https_proxy=https://home.lan:8080'].join(' '))
         provider.download(name)
       end
     end
