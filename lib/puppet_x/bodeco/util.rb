@@ -12,8 +12,53 @@ module PuppetX
         @connection = PuppetX::Bodeco.const_get(uri.scheme.upcase).new("#{uri.scheme}://#{uri.host}:#{uri.port}", options)
         @connection.content(uri)
       end
-    end
 
+      #
+      # This allows you to use a puppet syntax for a file and return it's content.
+      #
+      # @example
+      #  get_puppet_file 'puppet:///modules/my_module_name/my_file.dat
+      #
+      # @param [String] url this is the puppet url of the file to be fetched
+      # @param [String] filepath this is path of the file to create
+      #
+      # @raise [ArgumentError] when the file doesn't exist
+      #
+      def self.download_puppet(url, filepath)
+        # Somehow there is no consistent way to determine what terminus to use. So we switch to a
+        # trial and error method. First we start withe the default. And if it doesn't work, we try the
+        # other ones
+        status = load_file_with_any_terminus(url)
+        raise ArgumentError, "Could not retrieve information from environment #{Puppet['environment']} source(s) #{url}'" unless status
+        File.open(filepath, 'w') { |file| file.write(status.content) }
+      end
+
+      # @private
+      # rubocop:disable HandleExceptions
+      def self.load_file_with_any_terminus(url)
+        termini_to_try = [:file_server, :rest]
+        termini_to_try.each do |terminus|
+          with_terminus(terminus) do
+            begin
+              content = Puppet::FileServing::Content.indirection.find(url)
+            rescue SocketError, Timeout::Error, Errno::ECONNREFUSED, Errno::EHOSTDOWN, Errno::EHOSTUNREACH, Errno::ETIMEDOUT
+              # rescue any network error
+            end
+            return content if content
+          end
+        end
+        nil
+      end
+      # rubocop:enable HandleExceptions
+
+      def self.with_terminus(terminus)
+        old_terminus = Puppet[:default_file_terminus]
+        Puppet[:default_file_terminus] = terminus
+        value = yield
+        Puppet[:default_file_terminus] = old_terminus
+        value
+      end
+    end
     class HTTP
       require 'net/http'
 

@@ -170,6 +170,8 @@ Puppet::Type.type(:archive).provide(:ruby) do
     tempfile.close!
 
     case resource[:source]
+    when %r{^(puppet)}
+      download_puppet(temppath)
     when %r{^(http|ftp)}
       download(temppath)
     when %r{^file}
@@ -204,6 +206,13 @@ Puppet::Type.type(:archive).provide(:ruby) do
       proxy_server: resource[:proxy_server],
       proxy_type: resource[:proxy_type],
       insecure: resource[:allow_insecure]
+    )
+  end
+
+  def download_puppet(filepath)
+    PuppetX::Bodeco::Util.download_puppet(
+      resource[:source],
+      filepath
     )
   end
 
