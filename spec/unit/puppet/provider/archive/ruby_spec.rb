@@ -6,12 +6,11 @@ RSpec.describe ruby_provider do
   it_behaves_like 'an archive provider', ruby_provider
 
   describe 'ruby provider' do
-    let(:name)   { '/tmp/example.zip' }
-    let(:source) { 's3://home.lan/example.zip' }
+    let(:name) { '/tmp/example.zip' }
     let(:resource_properties) do
       {
         name: name,
-        source: source
+        source: 's3://home.lan/example.zip'
       }
     end
     let(:resource) { Puppet::Type::Archive.new(resource_properties) }
@@ -33,68 +32,6 @@ RSpec.describe ruby_provider do
 
       it '#extract nothing' do
         expect(provider.extract).to be_nil
-      end
-    end
-
-    describe '#transfer_download' do
-      context 'using puppet url' do
-        let(:source) { 'puppet:///modules/my_module/example.zip' }
-
-        it 'downloads the file using puppet' do
-          expect(provider).to receive(:puppet_download)
-          allow(provider).to receive(:move_file_in_place)
-          provider.transfer_download(name)
-        end
-      end
-
-      context 'using http or ftp url' do
-        let(:source) { 'http://www.example.com/example.zip' }
-
-        it 'downloads the file using http or ftp' do
-          expect(provider).to receive(:download)
-          allow(provider).to receive(:move_file_in_place)
-          provider.transfer_download(name)
-        end
-      end
-
-      context 'using file url' do
-        let(:source) { 'file:/example.zip' }
-
-        it 'copies the file using FileUtils' do
-          expect(FileUtils).to receive(:copy)
-          allow(provider).to receive(:move_file_in_place)
-          provider.transfer_download(name)
-        end
-      end
-
-      context 'using s3 url' do
-        let(:source) { 's3://home.lan/example.zip' }
-
-        it 'copies the file using S3 copy' do
-          expect(provider).to receive(:s3_download)
-          allow(provider).to receive(:move_file_in_place)
-          provider.transfer_download(name)
-        end
-      end
-
-      context 'using local file syntax' do
-        context 'file exists' do
-          let(:source) { __FILE__ }
-
-          it 'copies the file using FileUtils' do
-            expect(FileUtils).to receive(:copy)
-            allow(provider).to receive(:move_file_in_place)
-            provider.transfer_download(name)
-          end
-        end
-
-        context "file doesn't exist" do
-          let(:source) { '/no_existing_file' }
-
-          it 'Raises an error' do
-            expect { provider.transfer_download(name) }.to raise_error(Puppet::Error, %r{does not exists.})
-          end
-        end
       end
     end
 
