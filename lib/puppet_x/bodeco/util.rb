@@ -17,14 +17,14 @@ module PuppetX
       # This allows you to use a puppet syntax for a file and return it's content.
       #
       # @example
-      #  get_puppet_file 'puppet:///modules/my_module_name/my_file.dat
+      #  puppet_download 'puppet:///modules/my_module_name/my_file.dat
       #
       # @param [String] url this is the puppet url of the file to be fetched
       # @param [String] filepath this is path of the file to create
       #
       # @raise [ArgumentError] when the file doesn't exist
       #
-      def self.download_puppet(url, filepath)
+      def self.puppet_download(url, filepath)
         # Somehow there is no consistent way to determine what terminus to use. So we switch to a
         # trial and error method. First we start withe the default. And if it doesn't work, we try the
         # other ones

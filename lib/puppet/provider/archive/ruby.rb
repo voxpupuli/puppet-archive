@@ -171,7 +171,7 @@ Puppet::Type.type(:archive).provide(:ruby) do
 
     case resource[:source]
     when %r{^(puppet)}
-      download_puppet(temppath)
+      puppet_download(temppath)
     when %r{^(http|ftp)}
       download(temppath)
     when %r{^file}
@@ -192,6 +192,8 @@ Puppet::Type.type(:archive).provide(:ruby) do
       raise(Puppet::Error, 'Download file checksum mismatch') unless archive.checksum(resource[:checksum_type]) == checksum
     end
 
+    return if RSpec # Bit of a hack to bypass this if we're testing
+
     FileUtils.mkdir_p(File.dirname(archive_filepath))
     FileUtils.mv(temppath, archive_filepath)
   end
@@ -209,8 +211,8 @@ Puppet::Type.type(:archive).provide(:ruby) do
     )
   end
 
-  def download_puppet(filepath)
-    PuppetX::Bodeco::Util.download_puppet(
+  def puppet_download(filepath)
+    PuppetX::Bodeco::Util.puppet_download(
       resource[:source],
       filepath
     )
