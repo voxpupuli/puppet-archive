@@ -42,6 +42,7 @@ RSpec.describe ruby_provider do
 
         it 'downloads the file using puppet' do
           expect(provider).to receive(:puppet_download)
+          allow(provider).to receive(:move_file_in_place)
           provider.transfer_download(name)
         end
       end
@@ -51,6 +52,7 @@ RSpec.describe ruby_provider do
 
         it 'downloads the file using http or ftp' do
           expect(provider).to receive(:download)
+          allow(provider).to receive(:move_file_in_place)
           provider.transfer_download(name)
         end
       end
@@ -60,6 +62,7 @@ RSpec.describe ruby_provider do
 
         it 'copies the file using FileUtils' do
           expect(FileUtils).to receive(:copy)
+          allow(provider).to receive(:move_file_in_place)
           provider.transfer_download(name)
         end
       end
@@ -69,6 +72,7 @@ RSpec.describe ruby_provider do
 
         it 'copies the file using S3 copy' do
           expect(provider).to receive(:s3_download)
+          allow(provider).to receive(:move_file_in_place)
           provider.transfer_download(name)
         end
       end
@@ -79,6 +83,7 @@ RSpec.describe ruby_provider do
 
           it 'copies the file using FileUtils' do
             expect(FileUtils).to receive(:copy)
+            allow(provider).to receive(:move_file_in_place)
             provider.transfer_download(name)
           end
         end

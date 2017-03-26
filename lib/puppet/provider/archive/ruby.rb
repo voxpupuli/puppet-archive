@@ -192,10 +192,13 @@ Puppet::Type.type(:archive).provide(:ruby) do
       raise(Puppet::Error, 'Download file checksum mismatch') unless archive.checksum(resource[:checksum_type]) == checksum
     end
 
-    return if RSpec # Bit of a hack to bypass this if we're testing
+    move_file_in_place(temppath, archive_filepath)
+  end
 
-    FileUtils.mkdir_p(File.dirname(archive_filepath))
-    FileUtils.mv(temppath, archive_filepath)
+  def move_file_in_place(from, to)
+    # Ensure to directory exists.
+    FileUtils.mkdir_p(File.dirname(to))
+    FileUtils.mv(from, to)
   end
 
   def download(filepath)
