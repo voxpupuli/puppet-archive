@@ -1,6 +1,3 @@
-# rubocop:disable RSpec/MultipleExpectations
-# rubocop:disable RSpec/MessageSpies
-
 require 'spec_helper'
 
 curl_provider = Puppet::Type.type(:archive).provider(:curl)
@@ -26,6 +23,7 @@ RSpec.describe curl_provider do
 
     before do
       allow(FileUtils).to receive(:mv)
+      allow(provider).to receive(:curl)
     end
 
     context 'no extra properties specified' do
@@ -37,8 +35,8 @@ RSpec.describe curl_provider do
       end
 
       it 'calls curl with input, output and --max-redirects=5' do
-        expect(provider).to receive(:curl).with(default_options)
         provider.download(name)
+        expect(provider).to have_received(:curl).with(default_options)
       end
     end
 
@@ -52,8 +50,8 @@ RSpec.describe curl_provider do
       end
 
       it 'calls curl with default options and username' do
-        expect(provider).to receive(:curl).with(default_options << '--user' << 'foo')
         provider.download(name)
+        expect(provider).to have_received(:curl).with(default_options << '--user' << 'foo')
       end
     end
 
@@ -68,8 +66,8 @@ RSpec.describe curl_provider do
       end
 
       it 'calls curl with default options and password' do
-        expect(provider).to receive(:curl).with(default_options << '--user' << 'foo:bar')
         provider.download(name)
+        expect(provider).to have_received(:curl).with(default_options << '--user' << 'foo:bar')
       end
     end
 
@@ -83,8 +81,8 @@ RSpec.describe curl_provider do
       end
 
       it 'calls curl with default options and --insecure' do
-        expect(provider).to receive(:curl).with(default_options << '--insecure')
         provider.download(name)
+        expect(provider).to have_received(:curl).with(default_options << '--insecure')
       end
     end
 
@@ -98,8 +96,8 @@ RSpec.describe curl_provider do
       end
 
       it 'calls curl with default options cookie' do
-        expect(provider).to receive(:curl).with(default_options << '--cookie' << 'foo=bar')
         provider.download(name)
+        expect(provider).to have_received(:curl).with(default_options << '--cookie' << 'foo=bar')
       end
     end
 
@@ -113,8 +111,8 @@ RSpec.describe curl_provider do
       end
 
       it 'calls curl with proxy' do
-        expect(provider).to receive(:curl).with(default_options << '--proxy' << 'https://home.lan:8080')
         provider.download(name)
+        expect(provider).to have_received(:curl).with(default_options << '--proxy' << 'https://home.lan:8080')
       end
     end
 
@@ -145,8 +143,9 @@ RSpec.describe curl_provider do
         let(:url) { 'http://example.com/checksum' }
         context 'responds with hash' do
           let(:remote_hash) { 'a0c38e1aeb175201b0dacd65e2f37e187657050a' }
-          it do
-            expect(provider).to receive(:curl).with(curl_params).and_return("a0c38e1aeb175201b0dacd65e2f37e187657050a README.md\n")
+
+          it 'parses checksum value' do
+            allow(provider).to receive(:curl).with(curl_params).and_return("a0c38e1aeb175201b0dacd65e2f37e187657050a README.md\n")
             expect(provider.checksum).to eq('a0c38e1aeb175201b0dacd65e2f37e187657050a')
           end
         end

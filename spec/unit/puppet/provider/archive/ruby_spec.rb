@@ -1,5 +1,3 @@
-# rubocop:disable RSpec/MessageSpies
-
 require 'spec_helper'
 
 ruby_provider = Puppet::Type.type(:archive).provider(:ruby)
@@ -22,10 +20,14 @@ RSpec.describe ruby_provider do
       ['s3', 'cp', 's3://home.lan/example.zip', String]
     end
 
+    before do
+      allow(provider).to receive(:aws)
+    end
+
     context 'default resource property' do
       it '#s3_download' do
-        expect(provider).to receive(:aws).with(s3_download_options)
         provider.s3_download(name)
+        expect(provider).to have_received(:aws).with(s3_download_options)
       end
 
       it '#extract nothing' do

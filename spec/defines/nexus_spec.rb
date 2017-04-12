@@ -147,6 +147,6 @@ describe 'archive::nexus' do
         allow_insecure: 'foobar'
       }
     end
-    it { is_expected.to compile.and_raise_error(%r{parameter 'allow_insecure' expects a Boolean value, got String}) }
+    it { is_expected.to compile.and_raise_error(%r{parameter 'allow_insecure' expects a value of type Undef or Boolean, got String}) }
   end
 end
