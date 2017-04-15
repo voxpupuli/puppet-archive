@@ -6,6 +6,7 @@ describe :artifactory_sha1 do
   end
 
   let(:scope) { PuppetlabsSpec::PuppetInternals.scope }
+
   example_json = File.read(fixtures('checksum', 'artifactory.json'))
 
   it 'parses sha1' do

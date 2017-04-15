@@ -124,7 +124,7 @@ Puppet::Type.newtype(:archive) do
   newparam(:source) do
     desc 'archive file source, supports http|https|ftp|file|s3 uri.'
     validate do |value|
-      unless value =~ URI.regexp(%w(http https ftp file s3)) || Puppet::Util.absolute_path?(value)
+      unless value =~ URI.regexp(%w[http https ftp file s3]) || Puppet::Util.absolute_path?(value)
         raise ArgumentError, "invalid source url: #{value}"
       end
     end
@@ -134,7 +134,7 @@ Puppet::Type.newtype(:archive) do
     desc 'archive file source, supports http|https|ftp|file uri.
     (for camptocamp/archive compatibility)'
     validate do |value|
-      unless value =~ URI.regexp(%w(http https file ftp))
+      unless value =~ URI.regexp(%w[http https file ftp])
         raise ArgumentError, "invalid source url: #{value}"
       end
     end
