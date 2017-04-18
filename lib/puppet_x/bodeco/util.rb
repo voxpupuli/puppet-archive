@@ -2,7 +2,7 @@ module PuppetX
   module Bodeco
     module Util
       def self.download(url, filepath, options = {})
-        uri = URI(url)
+        uri = Puppet::Util.path_to_uri(url) unless url.is_a?(URI)
         @connection = PuppetX::Bodeco.const_get(uri.scheme.upcase).new("#{uri.scheme}://#{uri.host}:#{uri.port}", options)
         @connection.download(uri, filepath)
       end
@@ -123,7 +123,7 @@ module PuppetX
       def initialize(_url, _options) end
 
       def download(uri, file_path)
-        FileUtils.copy(uri.path, file_path)
+        FileUtils.copy(Puppet::Util.uri_to_path(uri), file_path)
       end
     end
   end
