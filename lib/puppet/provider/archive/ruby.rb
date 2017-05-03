@@ -176,7 +176,7 @@ Puppet::Type.type(:archive).provide(:ruby) do
       uri = URI(resource[:source])
       FileUtils.copy(Puppet::Util.uri_to_path(uri), temppath)
     when %r{^s3}
-      s3_download(temppath)
+      s3_download(temppath, resource[:awscli_arguments])
     when nil
       raise(Puppet::Error, 'Unable to fetch archive, the source parameter is nil.')
     else
@@ -207,13 +207,18 @@ Puppet::Type.type(:archive).provide(:ruby) do
     )
   end
 
-  def s3_download(path)
+  def s3_download(path, awscli_arguments = :false)
     params = [
       's3',
       'cp',
       resource[:source],
       path
     ]
+    if awscli_arguments != :false
+      awscli_arguments.each do |argument|
+        params.push(argument)
+      end
+    end
 
     aws(params)
   end
