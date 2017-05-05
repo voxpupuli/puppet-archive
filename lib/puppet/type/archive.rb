@@ -234,6 +234,25 @@ Puppet::Type.newtype(:archive) do
     defaultto :false
   end
 
+  newparam(:download_options) do
+    desc 'provider download options (affects curl, wget, and only s3 downloads for ruby provider)'
+
+    validate do |val|
+      unless val.is_a?(::String) || val.is_a?(::Array)
+        raise ArgumentError, "download_options should be String or Array: #{val}"
+      end
+    end
+
+    munge do |val|
+      case val
+      when ::String
+        [val]
+      else
+        val
+      end
+    end
+  end
+
   autorequire(:file) do
     [
       Pathname.new(self[:path]).parent.to_s,

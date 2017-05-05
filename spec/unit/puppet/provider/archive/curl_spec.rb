@@ -151,5 +151,20 @@ RSpec.describe curl_provider do
         end
       end
     end
+
+    describe 'custom options' do
+      let(:resource_properties) do
+        {
+          name: name,
+          source: 'http://home.lan/example.zip',
+          download_options: ['--tlsv1']
+        }
+      end
+
+      it 'calls curl with custom tls options' do
+        provider.download(name)
+        expect(provider).to have_received(:curl).with(default_options << '--tlsv1')
+      end
+    end
   end
 end

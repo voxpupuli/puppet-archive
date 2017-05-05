@@ -281,6 +281,40 @@ archive { '/tmp/gravatar.png':
 NOTE: Alternative s3 provider support can be implemented by overriding the
 [s3_download method](lib/puppet/provider/archive/ruby.rb):
 
+### Download customizations
+
+In some cases you may need custom flags for curl/wget/s3 which can be
+supplied via `download_options`. Since this parameter is provider specific,
+beware of the order of defaults:
+
+* s3:// files accepts aws cli options
+  ```puppet
+  archive { '/tmp/gravatar.png':
+    ensure           => present,
+    source           => 's3://bodecoio/gravatar.png',
+    download_options => ['--region', 'eu-central-1'],
+  }
+  ```
+* puppet `provider` override:
+  ```puppet
+  archive { '/tmp/jta-1.1.jar':
+    ensure           => present,
+    source           => 'http://central.maven.org/maven2/javax/transaction/jta/1.1/jta-1.1.jar',
+    provider         => 'wget',
+    download_options => '--continue',
+  }
+  ```
+* Linux default provider is `curl`, and Windows default is `ruby` (no effect).
+
+This option can also be applied globally to address issues for specific OS:
+```puppet
+if $::facts['osfamily'] != 'RedHat' {
+  Archive {
+    download_options => '--tlsv1',
+  }
+}
+```
+
 ### Migrating from puppet-staging
 
 It is recommended to use puppet-archive instead of puppet-staging.
