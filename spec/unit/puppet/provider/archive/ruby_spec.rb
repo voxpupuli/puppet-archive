@@ -69,5 +69,30 @@ RSpec.describe ruby_provider do
         end
       end
     end
+
+    describe '#s3_with_bucket' do
+      let(:resource_properties) do
+        {
+          name: name,
+          source: 's3://home.lan/example.zip',
+          awscli_arguments: ['--region', 'eu-central-1']
+        }
+      end
+
+      let(:s3_download_options_with_bucket) do
+        ['s3', 'cp', 's3://home.lan/example.zip', String, '--region', 'eu-central-1']
+      end
+
+      before do
+        allow(provider).to receive(:aws)
+      end
+
+      context 'default resource property' do
+        it '#s3_download' do
+          provider.s3_download(name, ['--region', 'eu-central-1'])
+          expect(provider).to have_received(:aws).with(s3_download_options_with_bucket)
+        end
+      end
+    end
   end
 end

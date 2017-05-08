@@ -234,6 +234,11 @@ Puppet::Type.newtype(:archive) do
     defaultto :false
   end
 
+  newparam(:awscli_arguments) do
+    desc 'Add specific arguments to the aws cli tool'
+    defaultto(:false)
+  end
+
   autorequire(:file) do
     [
       Pathname.new(self[:path]).parent.to_s,

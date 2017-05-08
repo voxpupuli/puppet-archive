@@ -281,6 +281,17 @@ archive { '/tmp/gravatar.png':
 NOTE: Alternative s3 provider support can be implemented by overriding the
 [s3_download method](lib/puppet/provider/archive/ruby.rb):
 
+If you need to specify custom options to the aws CLI command (eg. the region in
+which your S3 Bucket lives) use the awscli_arguments parameter, which is an
+array of all the options you want, including the needed parameters:
+```puppet
+archive { '/tmp/gravatar.png':
+  ensure           => present,
+  source           => 's3://bodecoio/gravatar.png',
+  awscli_arguments => ['--region', 'eu-central-1']
+}
+```
+
 ### Migrating from puppet-staging
 
 It is recommended to use puppet-archive instead of puppet-staging.
