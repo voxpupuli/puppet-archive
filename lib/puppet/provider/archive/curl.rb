@@ -20,6 +20,7 @@ Puppet::Type.type(:archive).provide(:curl, parent: :ruby) do
         '-o',
         filepath,
         '-fsSL',
+        '--tlsv1',
         '--max-redirs',
         5
       ]
