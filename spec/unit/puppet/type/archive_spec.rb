@@ -20,6 +20,7 @@ describe Puppet::Type.type(:archive) do
     it { expect(resource[:checksum_verify]).to eq :true }
     it { expect(resource[:extract_flags]).to eq :undef }
     it { expect(resource[:allow_insecure]).to eq false }
+    it { expect(resource[:download_options]).to eq nil }
     it { expect(resource[:temp_dir]).to eq nil }
   end
 
@@ -118,6 +119,14 @@ describe Puppet::Type.type(:archive) do
     expect do
       [:true, :false, :yes, :no].each do |type|
         resource[:allow_insecure] = type
+      end
+    end.not_to raise_error
+  end
+
+  it 'verify resource[:download_options] is valid' do
+    expect do
+      ['--tlsv1', ['--region', 'eu-central-1']].each do |type|
+        resource[:download_options] = type
       end
     end.not_to raise_error
   end

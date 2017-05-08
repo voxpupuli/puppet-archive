@@ -69,5 +69,22 @@ RSpec.describe ruby_provider do
         end
       end
     end
+
+    describe 'download options' do
+      let(:resource_properties) do
+        {
+          name: name,
+          source: 's3://home.lan/example.zip',
+          download_options: ['--region', 'eu-central-1']
+        }
+      end
+
+      context 'default resource property' do
+        it '#s3_download' do
+          provider.s3_download(name)
+          expect(provider).to have_received(:aws).with(s3_download_options << '--region' << 'eu-central-1')
+        end
+      end
+    end
   end
 end
