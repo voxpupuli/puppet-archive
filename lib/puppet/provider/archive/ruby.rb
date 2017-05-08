@@ -11,6 +11,7 @@ end
 
 require 'securerandom'
 require 'tempfile'
+require 'json'
 
 # This provider implements a simple state-machine. The following attempts to #
 # document it. In general, `def adjective?` implements a [state], while `def
@@ -217,6 +218,24 @@ Puppet::Type.type(:archive).provide(:ruby) do
     params += resource[:download_options] if resource[:download_options]
 
     aws(params)
+  end
+
+  def s3_checksum(path)
+    pathparts = path.split('/', 4)
+    bucket = pathparts[2]
+    path = pathparts[3]
+    params = [
+      's3api',
+      'head-object',
+      '--bucket',
+      bucket,
+      '--key',
+      path
+    ]
+    params += resource[:download_options] if resource[:download_options]
+
+    fileinfo = JSON.parse(aws(params))
+    fileinfo['ETag'].tr('"', '')
   end
 
   def optional_switch(value, option)
