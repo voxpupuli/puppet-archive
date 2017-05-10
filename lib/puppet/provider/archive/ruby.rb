@@ -240,13 +240,8 @@ Puppet::Type.type(:archive).provide(:ruby) do
 
 	  # Get the information from the local disk when the file changed last
       localmodifytime = File.mtime(archive_filepath)
-	  puts s3modifytime.to_i
-	  puts localmodifytime.to_i
 	   if s3modifytime.to_i > localmodifytime.to_i
-         puts "updating"
          transfer_download(archive_filepath)
-	   else
-	     puts "not updating"
 	   end
 	else
       create
