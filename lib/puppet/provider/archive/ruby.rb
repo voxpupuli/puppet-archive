@@ -236,14 +236,14 @@ Puppet::Type.type(:archive).provide(:ruby) do
       ]
       params += resource[:download_options] if resource[:download_options]
       fileinfo = JSON.parse(aws(params))
-	  s3modifytime = Time.parse(fileinfo['LastModified'])
+      s3modifytime = Time.parse(fileinfo['LastModified'])
 
-	  # Get the information from the local disk when the file changed last
+      # Get the information from the local disk when the file changed last
       localmodifytime = File.mtime(archive_filepath)
-	   if s3modifytime.to_i > localmodifytime.to_i
-         transfer_download(archive_filepath)
-	   end
-	else
+      if s3modifytime.to_i > localmodifytime.to_i
+        transfer_download(archive_filepath)
+      end
+    else
       create
     end
   end
