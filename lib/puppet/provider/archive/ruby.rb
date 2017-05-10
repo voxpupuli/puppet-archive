@@ -262,7 +262,6 @@ Puppet::Type.type(:archive).provide(:ruby) do
     else
       create
     end
-
   end
 
   def optional_switch(value, option)
