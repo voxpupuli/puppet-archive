@@ -17,6 +17,10 @@ Puppet::Type.newtype(:archive) do
       provider.destroy
     end
 
+	newvalue(:latest) do
+	  provider.check_latest
+	end
+
     defaultto(:present)
 
     # The following changes allows us to notify if the resource is being replaced
