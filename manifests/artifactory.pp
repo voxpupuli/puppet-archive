@@ -72,24 +72,43 @@ define archive::artifactory (
   }
 
   if $url {
-    $file_url = $url
-    $sha1_url = regsubst($url, '/artifactory/', '/artifactory/api/storage/')
+    $maven2_data = archive::parse_artifactory_url($url)
+    if $maven2_data and $maven2_data['folder_iteg_rev'] == 'SNAPSHOT'{
+      # URL represents a SNAPSHOT version. eg 'http://artifactory.example.com/artifactory/repo/com/example/artifact/0.0.1-SNAPSHOT/artifact-0.0.1-SNAPSHOT.zip'
+      # Only Artifactory Pro lets you download this directly but the corresponding fileinfo endpoint (where the sha1 checksum is published) doesn't exist.
+      # This means we can't use the artifactory_sha1 function
+
+      $latest_url_data = archive::artifactory_latest_url($url, $maven2_data)
+
+      $file_url = $latest_url_data['url']
+      $sha1     = $latest_url_data['sha1']
+    } else {
+      $file_url = $url
+      $sha1_url = regsubst($url, '/artifactory/', '/artifactory/api/storage/')
+      $sha1     = undef
+    }
   } elsif $server and $port and $url_path {
     warning('archive::artifactory attribute: server, port, url_path are deprecated')
     $art_url = "http://${server}:${port}/artifactory"
     $file_url = "${art_url}/${url_path}"
     $sha1_url = "${art_url}/api/storage/${url_path}"
+    $sha1     = undef
   } else {
     fail('Please provide fully qualified url path for artifactory file.')
   }
 
+  if $sha1 {
+    $_sha1 = $sha1
+  } else {
+    $_sha1 = artifactory_sha1($sha1_url)
+  }
   archive { $file_path:
     ensure        => $ensure,
     path          => $file_path,
     extract       => $extract,
     extract_path  => $extract_path,
     source        => $file_url,
-    checksum      => artifactory_sha1($sha1_url),
+    checksum      => $_sha1,
     checksum_type => 'sha1',
     creates       => $creates,
     cleanup       => $cleanup,
