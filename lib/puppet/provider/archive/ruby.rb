@@ -207,6 +207,18 @@ Puppet::Type.type(:archive).provide(:ruby) do
     )
   end
 
+  def header
+    PuppetX::Bodeco::Util.header(
+      resource[:source],
+      username: resource[:username],
+      password: resource[:password],
+      cookie: resource[:cookie],
+      proxy_server: resource[:proxy_server],
+      proxy_type: resource[:proxy_type],
+      insecure: resource[:allow_insecure]
+    )
+  end
+
   def s3_download(path)
     params = [
       's3',
@@ -222,17 +234,19 @@ Puppet::Type.type(:archive).provide(:ruby) do
   def check_latest
     # Check if the file exists, just download it if not
     if File.exist?(archive_filepath)
-      localmodifytime = File.mtime(archive_filepath).to_i
+      local_mtime = File.mtime(archive_filepath).to_i
       case resource[:source]
-	  when %r{^(http|ftp)}
-        download(temppath)
+      when %r{^(http)}
+        response = header
+        raise(Puppet::Error, 'HTTP server does not support Last-Modified header, ensure => latest not supported with this HTTP server') if response['Last-Modified'].nil?
+        source_mtime = Time.parse(response['Last-Modified']).to_i
+        download(archive_filepath) if source_mtime > local_mtime
+      # when %r{^ftp}
       when %r{^file}
         uri = URI(resource[:source])
         path = Puppet::Util.uri_to_path(uri)
-	    sourcemodifytime = File.mtime(path)
-	    if sourcemodifytime.to_i > localmodifytime
-          FileUtils.copy(path, temppath)
-        end
+        source_mtime = File.mtime(path)
+        FileUtils.copy(path, temppath) if source_mtime.to_i > local_mtime
       when %r{^s3}
         # Get the information from S3 when the file has been changed last
         pathparts = resource[:source].split('/', 4)
@@ -248,13 +262,11 @@ Puppet::Type.type(:archive).provide(:ruby) do
         ]
         params += resource[:download_options] if resource[:download_options]
         fileinfo = JSON.parse(aws(params))
-        s3modifytime = Time.parse(fileinfo['LastModified']).to_i
-  
+        source_mtime = Time.parse(fileinfo['LastModified']).to_i
+
         # Get the information from the local disk when the file changed last
-        if s3modifytime > localmodifytime
-          transfer_download(archive_filepath)
-        end
-   	  when nil
+        transfer_download(archive_filepath) if source_mtime > local_mtime
+      when nil
         raise(Puppet::Error, 'Unable to fetch archive, the source parameter is nil.')
       else
         FileUtils.copy(resource[:source], temppath) unless File.exist?(resource[:source])

@@ -46,6 +46,14 @@ Puppet::Type.newtype(:archive) do
         end
       elsif newvalue == :absent
         "remove archive: #{provider.archive_filepath} "
+      elsif currentvalue == :present && newvalue == :latest
+        timenow = Time.now.to_i
+        timefile = File.mtime(provider.archive_filepath).to_i
+        if (timenow - timefile) < 60
+          "Downloaded new version from #{resource[:source]}"
+        else
+          super
+        end
       else
         super
       end

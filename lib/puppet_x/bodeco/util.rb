@@ -12,6 +12,12 @@ module PuppetX
         @connection = PuppetX::Bodeco.const_get(uri.scheme.upcase).new("#{uri.scheme}://#{uri.host}:#{uri.port}", options)
         @connection.content(uri)
       end
+
+      def self.header(url, options = {})
+        uri = URI(url)
+        @connection = PuppetX::Bodeco.const_get(uri.scheme.upcase).new("#{uri.scheme}://#{uri.host}:#{uri.port}", options)
+        @connection.header(uri)
+      end
     end
 
     class HTTP
@@ -33,15 +39,16 @@ module PuppetX
         ENV['SSL_CERT_FILE'] = File.expand_path(File.join(__FILE__, '..', 'cacert.pem')) if Facter.value(:osfamily) == 'windows' && !ENV.key?('SSL_CERT_FILE')
       end
 
-      def generate_request(uri)
+      def generate_request(uri, head = false)
         header = @cookie && { 'Cookie' => @cookie }
 
-        request = Net::HTTP::Get.new(uri.request_uri, header)
+        request = Net::HTTP::Get.new(uri.request_uri, header) if head == false
+        request = Net::HTTP::Head.new(uri.request_uri, header) if head == true
         request.basic_auth(@username, @password) if @username && @password
         request
       end
 
-      def follow_redirect(uri, option = { limit: FOLLOW_LIMIT }, &block)
+      def follow_redirect(uri, only_header = false, option = { limit: FOLLOW_LIMIT }, &block)
         http_opts = if uri.scheme == 'https'
                       { use_ssl: true,
                         verify_mode: (@insecure ? OpenSSL::SSL::VERIFY_NONE : OpenSSL::SSL::VERIFY_PEER) }
@@ -49,7 +56,7 @@ module PuppetX
                       { use_ssl: false }
                     end
         Net::HTTP.start(uri.host, uri.port, http_opts) do |http|
-          http.request(generate_request(uri)) do |response|
+          http.request(generate_request(uri, only_header)) do |response|
             case response
             when Net::HTTPSuccess
               yield response
@@ -59,7 +66,7 @@ module PuppetX
               location = safe_escape(response['location'])
               new_uri = URI(location)
               new_uri = URI(uri.to_s + location) if new_uri.relative?
-              follow_redirect(new_uri, limit: limit, &block)
+              follow_redirect(new_uri, only_header, limit: limit, head: option[:head], &block)
             else
               raise Puppet::Error, "HTTP Error Code #{response.code}\nURL: #{uri}\nContent:\n#{response.body}"
             end
@@ -68,7 +75,7 @@ module PuppetX
       end
 
       def download(uri, file_path, option = { limit: FOLLOW_LIMIT })
-        follow_redirect(uri, option) do |response|
+        follow_redirect(uri, false, option) do |response|
           File.open file_path, 'wb' do |io|
             response.read_body do |chunk|
               io.write chunk
@@ -78,8 +85,14 @@ module PuppetX
       end
 
       def content(uri, option = { limit: FOLLOW_LIMIT })
-        follow_redirect(uri, option) do |response|
+        follow_redirect(uri, false, option) do |response|
           return response.body
+        end
+      end
+
+      def header(uri, option = { limit: FOLLOW_LIMIT })
+        follow_redirect(uri, true, option) do |response|
+          return response
         end
       end
 
