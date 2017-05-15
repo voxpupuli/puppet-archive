@@ -241,7 +241,23 @@ Puppet::Type.type(:archive).provide(:ruby) do
         raise(Puppet::Error, 'HTTP server does not support Last-Modified header, ensure => latest not supported with this HTTP server') if response['Last-Modified'].nil?
         source_mtime = Time.parse(response['Last-Modified']).to_i
         download(archive_filepath) if source_mtime > local_mtime
-      # when %r{^ftp}
+      when %r{^ftp}
+        source_mtime = nil
+        dirpath = File.dirname(resource[:source]) + '/'
+        filename = File.basename(resource[:source])
+        params = curl_params(
+          [
+            dirpath,
+            '-sS'
+          ]
+        )
+        lines = curl(params).split("\n")
+
+        lines.each do |line|
+          lineparts = line.split(' ')
+          source_mtime = Time.parse("#{lineparts[5]} #{lineparts[6]} #{lineparts[7]}").to_i if lineparts.last == filename
+        end
+        download(archive_filepath) if !source_mtime.nil? && source_mtime > local_mtime
       when %r{^file}
         uri = URI(resource[:source])
         path = Puppet::Util.uri_to_path(uri)
@@ -268,8 +284,6 @@ Puppet::Type.type(:archive).provide(:ruby) do
         transfer_download(archive_filepath) if source_mtime > local_mtime
       when nil
         raise(Puppet::Error, 'Unable to fetch archive, the source parameter is nil.')
-      else
-        FileUtils.copy(resource[:source], temppath) unless File.exist?(resource[:source])
       end
     else
       create
