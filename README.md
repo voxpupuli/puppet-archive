@@ -314,6 +314,55 @@ if $::facts['osfamily'] != 'RedHat' {
   }
 }
 ```
+### ensure => latest
+
+You can make sure that the latest version of the archive is always installed by
+setting `ensure` to `latest`.
+This module makes sure the latest version is installed in the following ways:
+
+#### HTTP(S)
+Every Puppet run a HTTP HEAD call is made to the specified URL, thus only the
+HTTP headers are returned by the HTTP(S) server and not the entire file, which
+saves time and bandwidth.<br>
+In these headers, it is checked if the Last-Modified header is available, which
+specifies when the file was last changed on the server. This timestamp is then
+compared with the last modified timestamp of the file on local disk.<br>
+If the timestamp on the server is newer then on the local disk, the archive is
+downloaded again.<br>
+If the timestamp on the server is the same or older then on the local disk, the
+archive isn't downloaded again and everything remains as it is.<br>
+If the Last-Modified header can't be found in the HTTP headers, an error will
+be shown and the Puppet run fails.
+
+#### FTP
+Every Puppet run a directory listing is requested from the FTP server, of the
+directory specified in the URL. From this directory listing, the last modified
+date of the specified file will be extracted.<br>
+This extracted timestamp will be compared with the last modified timestamp of
+the file on disk.<br>
+If the last modified date on the FTP server is newer then the local file, the
+file is downloaded from the FTP server again.<br>
+If the last modified date on the FTP server is the same older as the local
+file, nothing will be downloaded and everything will remain the same.
+
+#### AWS S3
+Every Puppet run a call is made to the AWS S3 API. All the meta-data from the
+specified object will be requested. From this meta-data the LastModified field
+is extracted. This last modified timestamp will be compared to the last modified
+timestamp of the file on disk.<br>
+If the last modified timestamp in the S3 metadata is newer then the last
+modified timestamp on disk, the new file will be downloaded.<br>
+If the last modified timestamp in the S3 metadata is older or the same as the
+last modified timestamp on disk, nothing will be downloaded and everything will
+remain the same.
+
+#### Local file
+Every Puppet run the last modified timestamp of the specified file is compared
+with the target last modified timestamp.<br>
+If the last modified timestamp of the specified file is newer then the target
+modified timestamp, the file is copied to the target directory again.<br>
+If the last modified timestamp is older or the same, nothing will be copied and
+everything will remain the same.
 
 ### Migrating from puppet-staging
 
@@ -399,7 +448,7 @@ archive { '/tmp/staging/master.zip':
 
 #### Archive
 
-* `ensure`: whether archive file should be present/absent (default: present)
+* `ensure`: whether archive file should be present/absent/latest (default: present)
 * `path`: namevar, archive file fully qualified file path.
 * `filename`: archive file name (derived from path).
 * `source`: archive file source, supports http|https|ftp|file|s3 uri.
