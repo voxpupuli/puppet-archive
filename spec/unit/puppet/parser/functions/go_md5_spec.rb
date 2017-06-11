@@ -1,7 +1,7 @@
 require 'spec_helper'
 
-describe :go_md5 do
-  before :all do
+describe :go_md5 do # rubocop:disable RSpec/DescribeSymbol
+  before :all do # rubocop:disable RSpec/BeforeAfterAll
     Puppet::Parser::Functions.autoloader.loadall
   end
 
