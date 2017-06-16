@@ -47,11 +47,11 @@ describe Puppet::Type.type(:archive) do
       end.not_to raise_error
     end
 
-    %w(
+    %w[
       afp://home.lan/example.zip
       \tmp
       D:/example.zip
-    ).each do |s|
+    ].each do |s|
       it 'rejects invalid resource[:source]' do
         expect do
           resource[:source] = s
@@ -67,10 +67,10 @@ describe Puppet::Type.type(:archive) do
       end.not_to raise_error
     end
 
-    %w(
+    %w[
       /tmp/example.zip
       \Z:
-    ).each do |s|
+    ].each do |s|
       it 'rejects invalid windows resource[:source]' do
         expect do
           resource[:source] = s
@@ -79,10 +79,10 @@ describe Puppet::Type.type(:archive) do
     end
   end
 
-  %w(
+  %w[
     557e2ebb67b35d1fddff18090b6bc26b
     557e2ebb67b35d1fddff18090b6bc26557e2ebb67b35d1fddff18090b6bc26bb
-  ).each do |cs|
+  ].each do |cs|
     it 'accepts valid resource[:checksum]' do
       expect do
         resource[:checksum] = cs
@@ -90,10 +90,10 @@ describe Puppet::Type.type(:archive) do
     end
   end
 
-  %w(
+  %w[
     z57e2ebb67b35d1fddff18090b6bc26b
     557e
-  ).each do |cs|
+  ].each do |cs|
     it 'rejects bad checksum' do
       expect do
         resource[:checksum] = cs

@@ -118,6 +118,7 @@ RSpec.describe curl_provider do
 
     describe '#checksum' do
       subject { provider.checksum }
+
       let(:url) { nil }
       let(:resource_properties) do
         {
@@ -141,6 +142,7 @@ RSpec.describe curl_provider do
         end
 
         let(:url) { 'http://example.com/checksum' }
+
         context 'responds with hash' do
           let(:remote_hash) { 'a0c38e1aeb175201b0dacd65e2f37e187657050a' }
 

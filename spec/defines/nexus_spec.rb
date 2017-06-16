@@ -119,6 +119,7 @@ describe 'archive::nexus' do
         allow_insecure: true
       }
     end
+
     it { is_expected.to contain_archive('/tmp/artifact.war').with_allow_insecure(true) }
   end
   context 'nexus archive with allow_insecure => false' do
@@ -133,6 +134,7 @@ describe 'archive::nexus' do
         allow_insecure: false
       }
     end
+
     it { is_expected.to contain_archive('/tmp/artifact.war').with_allow_insecure(false) }
   end
   context 'nexus archive with allow_insecure => \'foobar\'' do
@@ -147,6 +149,7 @@ describe 'archive::nexus' do
         allow_insecure: 'foobar'
       }
     end
+
     it { is_expected.to compile.and_raise_error(%r{parameter 'allow_insecure' expects a value of type Undef or Boolean, got String}) }
   end
 end
