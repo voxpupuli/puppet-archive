@@ -70,10 +70,15 @@ module PuppetX
         @password = options[:password]
         @cookie = options[:cookie]
         @insecure = options[:insecure]
-        proxy_server = options[:proxy_server]
-        proxy_type = options[:proxy_type]
 
-        ENV["#{proxy_type}_proxy"] = proxy_server
+        if options[:proxy_server]
+          uri = URI(options[:proxy_server])
+          unless uri.scheme
+            uri = URI("#{options[:proxy_type]}://#{options[:proxy_server]}")
+          end
+          @proxy_addr = uri.hostname
+          @proxy_port = uri.port
+        end
 
         ENV['SSL_CERT_FILE'] = File.expand_path(File.join(__FILE__, '..', 'cacert.pem')) if Facter.value(:osfamily) == 'windows' && !ENV.key?('SSL_CERT_FILE')
       end
@@ -93,7 +98,7 @@ module PuppetX
                     else
                       { use_ssl: false }
                     end
-        Net::HTTP.start(uri.host, uri.port, http_opts) do |http|
+        Net::HTTP.start(uri.host, uri.port, @proxy_addr, @proxy_port, http_opts) do |http|
           http.request(generate_request(uri)) do |response|
             case response
             when Net::HTTPSuccess
