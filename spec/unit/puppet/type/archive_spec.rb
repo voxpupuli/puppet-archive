@@ -4,8 +4,8 @@ require 'puppet'
 describe Puppet::Type.type(:archive) do
   let(:resource) do
     Puppet::Type.type(:archive).new(
-      path: '/tmp/example.zip',
-      source: 'http://home.lan/example.zip'
+      :path => '/tmp/example.zip',
+      :source => 'http://home.lan/example.zip'
     )
   end
 
@@ -36,7 +36,7 @@ describe Puppet::Type.type(:archive) do
     end.to raise_error(Puppet::Error, %r{Invalid temp_dir})
   end
 
-  describe 'on posix', if: Puppet.features.posix? do
+  describe 'on posix', :if => Puppet.features.posix? do
     it 'accepts valid resource[:source]' do
       expect do
         resource[:source] = 'http://home.lan/example.zip'
@@ -60,7 +60,7 @@ describe Puppet::Type.type(:archive) do
     end
   end
 
-  describe 'on windows', if: Puppet.features.microsoft_windows? do
+  describe 'on windows', :if => Puppet.features.microsoft_windows? do
     it 'accepts valid windows resource[:source]' do
       expect do
         resource[:source] = 'D:/example.zip'
@@ -132,11 +132,11 @@ describe Puppet::Type.type(:archive) do
   end
 
   describe 'archive autorequire' do
-    let(:file_resource) { Puppet::Type.type(:file).new(name: '/tmp') }
+    let(:file_resource) { Puppet::Type.type(:file).new(:name => '/tmp') }
     let(:archive_resource) do
       described_class.new(
-        path: '/tmp/example.zip',
-        source: 'http://home.lan/example.zip'
+        :path => '/tmp/example.zip',
+        :source => 'http://home.lan/example.zip'
       )
     end
 

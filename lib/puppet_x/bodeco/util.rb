@@ -91,12 +91,12 @@ module PuppetX
         request
       end
 
-      def follow_redirect(uri, option = { limit: FOLLOW_LIMIT }, &block)
+      def follow_redirect(uri, option = { :limit => FOLLOW_LIMIT }, &block)
         http_opts = if uri.scheme == 'https'
-                      { use_ssl: true,
-                        verify_mode: (@insecure ? OpenSSL::SSL::VERIFY_NONE : OpenSSL::SSL::VERIFY_PEER) }
+                      { :use_ssl => true,
+                        :verify_mode => (@insecure ? OpenSSL::SSL::VERIFY_NONE : OpenSSL::SSL::VERIFY_PEER) }
                     else
-                      { use_ssl: false }
+                      { :use_ssl => false }
                     end
         Net::HTTP.start(uri.host, uri.port, @proxy_addr, @proxy_port, http_opts) do |http|
           http.request(generate_request(uri)) do |response|
@@ -109,7 +109,7 @@ module PuppetX
               location = safe_escape(response['location'])
               new_uri = URI(location)
               new_uri = URI(uri.to_s + location) if new_uri.relative?
-              follow_redirect(new_uri, limit: limit, &block)
+              follow_redirect(new_uri, :limit => limit, &block)
             else
               raise Puppet::Error, "HTTP Error Code #{response.code}\nURL: #{uri}\nContent:\n#{response.body}"
             end
@@ -117,7 +117,7 @@ module PuppetX
         end
       end
 
-      def download(uri, file_path, option = { limit: FOLLOW_LIMIT })
+      def download(uri, file_path, option = { :limit => FOLLOW_LIMIT })
         follow_redirect(uri, option) do |response|
           File.open file_path, 'wb' do |io|
             response.read_body do |chunk|
@@ -127,7 +127,7 @@ module PuppetX
         end
       end
 
-      def content(uri, option = { limit: FOLLOW_LIMIT })
+      def content(uri, option = { :limit => FOLLOW_LIMIT })
         follow_redirect(uri, option) do |response|
           return response.body
         end

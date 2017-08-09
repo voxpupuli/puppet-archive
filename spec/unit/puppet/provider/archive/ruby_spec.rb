@@ -9,8 +9,8 @@ RSpec.describe ruby_provider do
     let(:name) { '/tmp/example.zip' }
     let(:resource_properties) do
       {
-        name: name,
-        source: 's3://home.lan/example.zip'
+        :name => name,
+        :source => 's3://home.lan/example.zip'
       }
     end
     let(:resource) { Puppet::Type::Archive.new(resource_properties) }
@@ -80,9 +80,9 @@ RSpec.describe ruby_provider do
     describe 'download options' do
       let(:resource_properties) do
         {
-          name: name,
-          source: 's3://home.lan/example.zip',
-          download_options: ['--region', 'eu-central-1']
+          :name => name,
+          :source => 's3://home.lan/example.zip',
+          :download_options => ['--region', 'eu-central-1']
         }
       end
 

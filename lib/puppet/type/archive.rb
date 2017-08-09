@@ -50,7 +50,7 @@ Puppet::Type.newtype(:archive) do
     end
   end
 
-  newparam(:path, namevar: true) do
+  newparam(:path, :namevar => true) do
     desc 'namevar, archive file fully qualified file path.'
     validate do |value|
       unless Puppet::Util.absolute_path? value
@@ -229,7 +229,7 @@ Puppet::Type.newtype(:archive) do
     desc 'proxy address to use when accessing source'
   end
 
-  newparam(:allow_insecure, boolean: true, parent: Puppet::Parameter::Boolean) do
+  newparam(:allow_insecure, :boolean => true, :parent => Puppet::Parameter::Boolean) do
     desc 'ignore HTTPS certificate errors'
     defaultto :false
   end
