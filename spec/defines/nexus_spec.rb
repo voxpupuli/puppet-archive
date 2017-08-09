@@ -1,31 +1,31 @@
 require 'spec_helper'
 
 describe 'archive::nexus' do
-  let(:facts) { { os: { family: 'RedHat' }, puppetversion: '4.4.0' } }
+  let(:facts) { { :os => { :family => 'RedHat' }, :puppetversion => '4.4.0' } }
 
   context 'nexus archive with defaults' do
     let(:title) { '/tmp/hawtio.war' }
 
     let(:params) do
       {
-        url: 'https://oss.sonatype.org',
-        gav: 'io.hawt:hawtio-web:1.4.36',
-        repository: 'releases',
-        packaging: 'war'
+        :url => 'https://oss.sonatype.org',
+        :gav => 'io.hawt:hawtio-web:1.4.36',
+        :repository => 'releases',
+        :packaging => 'war'
       }
     end
 
     it do
       is_expected.to contain_archive('/tmp/hawtio.war').with(
-        source: 'https://oss.sonatype.org/service/local/artifact/maven/content?g=io.hawt&a=hawtio-web&v=1.4.36&r=releases&p=war',
-        checksum_url: 'https://oss.sonatype.org/service/local/artifact/maven/content?g=io.hawt&a=hawtio-web&v=1.4.36&r=releases&p=war.md5'
+        :source => 'https://oss.sonatype.org/service/local/artifact/maven/content?g=io.hawt&a=hawtio-web&v=1.4.36&r=releases&p=war',
+        :checksum_url => 'https://oss.sonatype.org/service/local/artifact/maven/content?g=io.hawt&a=hawtio-web&v=1.4.36&r=releases&p=war.md5'
       )
     end
 
     it do
       is_expected.to contain_file('/tmp/hawtio.war').that_requires('Archive[/tmp/hawtio.war]').with(
-        owner: '0',
-        group: '0'
+        :owner => '0',
+        :group => '0'
       )
     end
   end
@@ -35,16 +35,16 @@ describe 'archive::nexus' do
 
     let(:params) do
       {
-        url: 'https://oss.sonatype.org',
-        gav: 'io.hawt:hawtio-web:1.4.36',
-        repository: 'releases',
-        owner: 'tom',
-        group: 'worker',
-        user: 'tom',
-        extract: true,
-        extract_path: '/opt',
-        creates: '/opt/artifact/WEB-INF',
-        cleanup: true
+        :url => 'https://oss.sonatype.org',
+        :gav => 'io.hawt:hawtio-web:1.4.36',
+        :repository => 'releases',
+        :owner => 'tom',
+        :group => 'worker',
+        :user => 'tom',
+        :extract => true,
+        :extract_path => '/opt',
+        :creates => '/opt/artifact/WEB-INF',
+        :cleanup => true
       }
     end
 
@@ -74,17 +74,17 @@ describe 'archive::nexus' do
 
     let :params do
       {
-        url: 'https://oss.sonatype.org',
-        gav: 'io.hawt:hawtio-web:1.4.36',
-        repository: 'releases',
-        owner: 'tom',
-        group: 'worker',
-        user: 'tom',
-        extract: true,
-        extract_path: '/opt',
-        creates: '/opt/artifact/WEB-INF',
-        cleanup: true,
-        checksum_verify: false
+        :url => 'https://oss.sonatype.org',
+        :gav => 'io.hawt:hawtio-web:1.4.36',
+        :repository => 'releases',
+        :owner => 'tom',
+        :group => 'worker',
+        :user => 'tom',
+        :extract => true,
+        :extract_path => '/opt',
+        :creates => '/opt/artifact/WEB-INF',
+        :cleanup => true,
+        :checksum_verify => false
       }
     end
 
@@ -112,11 +112,11 @@ describe 'archive::nexus' do
 
     let(:params) do
       {
-        url: 'https://oss.sonatype.org',
-        gav: 'io.hawt:hawtio-web:1.4.36',
-        repository: 'releases',
-        packaging: 'war',
-        allow_insecure: true
+        :url => 'https://oss.sonatype.org',
+        :gav => 'io.hawt:hawtio-web:1.4.36',
+        :repository => 'releases',
+        :packaging => 'war',
+        :allow_insecure => true
       }
     end
 
@@ -127,11 +127,11 @@ describe 'archive::nexus' do
 
     let(:params) do
       {
-        url: 'https://oss.sonatype.org',
-        gav: 'io.hawt:hawtio-web:1.4.36',
-        repository: 'releases',
-        packaging: 'war',
-        allow_insecure: false
+        :url => 'https://oss.sonatype.org',
+        :gav => 'io.hawt:hawtio-web:1.4.36',
+        :repository => 'releases',
+        :packaging => 'war',
+        :allow_insecure => false
       }
     end
 
@@ -142,11 +142,11 @@ describe 'archive::nexus' do
 
     let(:params) do
       {
-        url: 'https://oss.sonatype.org',
-        gav: 'io.hawt:hawtio-web:1.4.36',
-        repository: 'releases',
-        packaging: 'war',
-        allow_insecure: 'foobar'
+        :url => 'https://oss.sonatype.org',
+        :gav => 'io.hawt:hawtio-web:1.4.36',
+        :repository => 'releases',
+        :packaging => 'war',
+        :allow_insecure => 'foobar'
       }
     end
 

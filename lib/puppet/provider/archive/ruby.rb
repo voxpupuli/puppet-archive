@@ -65,8 +65,8 @@ require 'tempfile'
 #
 
 Puppet::Type.type(:archive).provide(:ruby) do
-  optional_commands aws: 'aws'
-  defaultfor feature: :microsoft_windows
+  optional_commands :aws => 'aws'
+  defaultfor :feature => :microsoft_windows
   attr_reader :archive_checksum
 
   def exists?
@@ -117,12 +117,12 @@ Puppet::Type.type(:archive).provide(:ruby) do
   def remote_checksum
     PuppetX::Bodeco::Util.content(
       resource[:checksum_url],
-      username: resource[:username],
-      password: resource[:password],
-      cookie: resource[:cookie],
-      proxy_server: resource[:proxy_server],
-      proxy_type: resource[:proxy_type],
-      insecure: resource[:allow_insecure]
+      :username => resource[:username],
+      :password => resource[:password],
+      :cookie => resource[:cookie],
+      :proxy_server => resource[:proxy_server],
+      :proxy_type => resource[:proxy_type],
+      :insecure => resource[:allow_insecure]
     )[%r{\b[\da-f]{32,128}\b}i]
   end
 
@@ -149,10 +149,10 @@ Puppet::Type.type(:archive).provide(:ruby) do
     raise(ArgumentError, 'missing archive extract_path') unless resource[:extract_path]
     PuppetX::Bodeco::Archive.new(archive_filepath).extract(
       resource[:extract_path],
-      custom_command: resource[:extract_command],
-      options: resource[:extract_flags],
-      uid: resource[:user],
-      gid: resource[:group]
+      :custom_command => resource[:extract_command],
+      :options => resource[:extract_flags],
+      :uid => resource[:user],
+      :gid => resource[:group]
     )
   end
 
@@ -205,12 +205,12 @@ Puppet::Type.type(:archive).provide(:ruby) do
     PuppetX::Bodeco::Util.download(
       resource[:source],
       filepath,
-      username: resource[:username],
-      password: resource[:password],
-      cookie: resource[:cookie],
-      proxy_server: resource[:proxy_server],
-      proxy_type: resource[:proxy_type],
-      insecure: resource[:allow_insecure]
+      :username => resource[:username],
+      :password => resource[:password],
+      :cookie => resource[:cookie],
+      :proxy_server => resource[:proxy_server],
+      :proxy_type => resource[:proxy_type],
+      :insecure => resource[:allow_insecure]
     )
   end
 

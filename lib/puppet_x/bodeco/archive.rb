@@ -29,10 +29,10 @@ module PuppetX
 
       def extract(path = root_dir, opts = {})
         opts = {
-          custom_command: nil,
-          options: '',
-          uid: nil,
-          gid: nil
+          :custom_command => nil,
+          :options => '',
+          :uid => nil,
+          :gid => nil
         }.merge(opts)
 
         custom_command = opts.fetch(:custom_command, nil)
@@ -48,7 +48,7 @@ module PuppetX
 
           Puppet.debug("Archive extracting #{@file} in #{path}: #{cmd}")
           File.chmod(0o644, @file) if opts[:uid] || opts[:gid]
-          Puppet::Util::Execution.execute(cmd, uid: opts[:uid], gid: opts[:gid], failonfail: true, squelch: false, combine: true)
+          Puppet::Util::Execution.execute(cmd, :uid => opts[:uid], :gid => opts[:gid], :failonfail => true, :squelch => false, :combine => true)
         end
       end
 

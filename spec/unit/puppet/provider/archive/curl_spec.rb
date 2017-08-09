@@ -29,8 +29,8 @@ RSpec.describe curl_provider do
     context 'no extra properties specified' do
       let(:resource_properties) do
         {
-          name: name,
-          source: 'http://home.lan/example.zip'
+          :name => name,
+          :source => 'http://home.lan/example.zip'
         }
       end
 
@@ -43,9 +43,9 @@ RSpec.describe curl_provider do
     context 'username specified' do
       let(:resource_properties) do
         {
-          name: name,
-          source: 'http://home.lan/example.zip',
-          username: 'foo'
+          :name => name,
+          :source => 'http://home.lan/example.zip',
+          :username => 'foo'
         }
       end
 
@@ -58,10 +58,10 @@ RSpec.describe curl_provider do
     context 'username and password specified' do
       let(:resource_properties) do
         {
-          name: name,
-          source: 'http://home.lan/example.zip',
-          username: 'foo',
-          password: 'bar'
+          :name => name,
+          :source => 'http://home.lan/example.zip',
+          :username => 'foo',
+          :password => 'bar'
         }
       end
 
@@ -74,9 +74,9 @@ RSpec.describe curl_provider do
     context 'allow_insecure true' do
       let(:resource_properties) do
         {
-          name: name,
-          source: 'http://home.lan/example.zip',
-          allow_insecure: true
+          :name => name,
+          :source => 'http://home.lan/example.zip',
+          :allow_insecure => true
         }
       end
 
@@ -89,9 +89,9 @@ RSpec.describe curl_provider do
     context 'cookie specified' do
       let(:resource_properties) do
         {
-          name: name,
-          source: 'http://home.lan/example.zip',
-          cookie: 'foo=bar'
+          :name => name,
+          :source => 'http://home.lan/example.zip',
+          :cookie => 'foo=bar'
         }
       end
 
@@ -104,9 +104,9 @@ RSpec.describe curl_provider do
     context 'using proxy' do
       let(:resource_properties) do
         {
-          name: name,
-          source: 'http://home.lan/example.zip',
-          proxy_server: 'https://home.lan:8080'
+          :name => name,
+          :source => 'http://home.lan/example.zip',
+          :proxy_server => 'https://home.lan:8080'
         }
       end
 
@@ -122,8 +122,8 @@ RSpec.describe curl_provider do
       let(:url) { nil }
       let(:resource_properties) do
         {
-          name: name,
-          source: 'http://home.lan/example.zip'
+          :name => name,
+          :source => 'http://home.lan/example.zip'
         }
       end
 
@@ -157,9 +157,9 @@ RSpec.describe curl_provider do
     describe 'custom options' do
       let(:resource_properties) do
         {
-          name: name,
-          source: 'http://home.lan/example.zip',
-          download_options: ['--tlsv1']
+          :name => name,
+          :source => 'http://home.lan/example.zip',
+          :download_options => ['--tlsv1']
         }
       end
 

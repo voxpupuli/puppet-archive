@@ -41,6 +41,7 @@ Lint/LiteralInInterpolation:
 
 Style/HashSyntax:
   Enabled: True
+  EnforcedStyle: 'hash_rockets'
 
 Style/RedundantReturn:
   Enabled: True
