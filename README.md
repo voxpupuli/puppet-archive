@@ -117,28 +117,16 @@ archive { '/tmp/test100k.db':
 
 ### Puppet URL
 
-Below is an example of how to deploy a tar.gz to a local directory when it is
-served via the ```puppet:///``` style url which is not currently supported.
+Since march 2017, the Archive type also supports puppet url's. Here is an example
+on how to use this:
 
 ```puppet
-$docs_filename = 'help.tar.gz'
-$docs_gz_path  = "/tmp/${docs_filename}"
-$homedir = '/home/myuser/'
 
-# First, deploy the archive to the local filesystem
-file {$docs_gz_path:
-  ensure => file,
-  source => "puppet:///modules/profile/${docs_filename}",
-}
-
-# Then expand the archive where you need it to go
-archive { $docs_gz_path:
-  path          => $docs_gz_path,
-  #cleanup       => true, # Do not use this argument with this workaround for idempotency reasons
+archive { '/home/myuser/help':
+  source        => "puppet:///modules/profile/help.tar.gz',
   extract       => true,
   extract_path  => $homedir,
   creates       => "${homedir}/help" #directory inside tgz
-  require       => [ File[$docs_gz_path] ],
 }
 ```
 

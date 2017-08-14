@@ -170,6 +170,8 @@ Puppet::Type.type(:archive).provide(:ruby) do
     tempfile.close!
 
     case resource[:source]
+    when %r{^(puppet)}
+      puppet_download(temppath)
     when %r{^(http|ftp)}
       download(temppath)
     when %r{^file}
@@ -190,8 +192,13 @@ Puppet::Type.type(:archive).provide(:ruby) do
       raise(Puppet::Error, 'Download file checksum mismatch') unless archive.checksum(resource[:checksum_type]) == checksum
     end
 
-    FileUtils.mkdir_p(File.dirname(archive_filepath))
-    FileUtils.mv(temppath, archive_filepath)
+    move_file_in_place(temppath, archive_filepath)
+  end
+
+  def move_file_in_place(from, to)
+    # Ensure to directory exists.
+    FileUtils.mkdir_p(File.dirname(to))
+    FileUtils.mv(from, to)
   end
 
   def download(filepath)
@@ -207,7 +214,7 @@ Puppet::Type.type(:archive).provide(:ruby) do
     )
   end
 
-  def header
+def header
     PuppetX::Bodeco::Util.header(
       resource[:source],
       username: resource[:username],
@@ -216,6 +223,13 @@ Puppet::Type.type(:archive).provide(:ruby) do
       proxy_server: resource[:proxy_server],
       proxy_type: resource[:proxy_type],
       insecure: resource[:allow_insecure]
+    )
+  end
+
+  def puppet_download(filepath)
+    PuppetX::Bodeco::Util.puppet_download(
+      resource[:source],
+      filepath
     )
   end
 
