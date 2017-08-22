@@ -1,5 +1,18 @@
 # Changelog
 
+## 2017-08-22 Release 1.3.1
+
+* Enable allow_insecure in archive::download
+* Add support for downloading puppet URL’s
+* Change how ruby proxy is invoked.
+* add custom download options
+* Pass proxy values using the wget -e option
+* GH-260 Fix rubocop RSpec/MessageSpies
+* Fixing a typo on credentials file and add the config too
+* Add puppet-staging migration examples
+* Bump puppet and stdlib minimum requirements
+* Use Puppet 4 validations
+
 ## 2017-02-11 Release 1.3.0
 
 Last release with Puppet3 support!
