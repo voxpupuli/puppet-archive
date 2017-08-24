@@ -1,6 +1,6 @@
 # Changelog
 
-## 2017-08-22 Release 1.3.1
+## 2017-08-22 Release 2.0.0
 
 * Enable allow_insecure in archive::download
 * Add support for downloading puppet URL’s
