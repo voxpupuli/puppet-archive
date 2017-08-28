@@ -117,13 +117,13 @@ archive { '/tmp/test100k.db':
 
 ### Puppet URL
 
-Since march 2017, the Archive type also supports puppet url's. Here is an example
-on how to use this:
+Since march 2017, the Archive type also supports puppet URLs. Here is an example
+of how to use this:
 
 ```puppet
 
 archive { '/home/myuser/help':
-  source        => "puppet:///modules/profile/help.tar.gz',
+  source        => 'puppet:///modules/profile/help.tar.gz',
   extract       => true,
   extract_path  => $homedir,
   creates       => "${homedir}/help" #directory inside tgz
