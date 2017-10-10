@@ -1,8 +1,24 @@
-# Change log
+# Changelog
 
 All notable changes to this project will be documented in this file.
 Each new release typically also includes the latest modulesync defaults.
-These should not impact the functionality of the module.
+These should not affect the functionality of the module.
+
+## [v2.1.0](https://github.com/voxpupuli/puppet-archive/tree/v2.1.0) (2017-10-11)
+[Full Changelog](https://github.com/voxpupuli/puppet-archive/compare/v2.0.0...v2.1.0)
+
+**Closed issues:**
+
+- unzip not installed and results in errors [\#291](https://github.com/voxpupuli/puppet-archive/issues/291)
+- Support puppet:/// urls or edit readme? [\#283](https://github.com/voxpupuli/puppet-archive/issues/283)
+- Using proxy\_server and/or proxy\_port has no effect on Windows [\#277](https://github.com/voxpupuli/puppet-archive/issues/277)
+- puppet source [\#151](https://github.com/voxpupuli/puppet-archive/issues/151)
+
+**Merged pull requests:**
+
+- Fix typos in puppet:/// URL example [\#298](https://github.com/voxpupuli/puppet-archive/pull/298) ([gabe-sky](https://github.com/gabe-sky))
+- Update cacert.pem [\#290](https://github.com/voxpupuli/puppet-archive/pull/290) ([nanliu](https://github.com/nanliu))
+- Support Nexus 3 urls for artifact downloads [\#285](https://github.com/voxpupuli/puppet-archive/pull/285) ([rvdh](https://github.com/rvdh))
 
 ## [v2.0.0](https://github.com/voxpupuli/puppet-archive/tree/v2.0.0) (2017-08-25)
 [Full Changelog](https://github.com/voxpupuli/puppet-archive/compare/v1.3.0...v2.0.0)
@@ -29,6 +45,7 @@ These should not impact the functionality of the module.
 
 **Merged pull requests:**
 
+- Release 2.0.0 [\#297](https://github.com/voxpupuli/puppet-archive/pull/297) ([alexjfisher](https://github.com/alexjfisher))
 - Change how ruby proxy is invoked. [\#280](https://github.com/voxpupuli/puppet-archive/pull/280) ([nanliu](https://github.com/nanliu))
 - Pass proxy values using the wget -e option [\#272](https://github.com/voxpupuli/puppet-archive/pull/272) ([nanliu](https://github.com/nanliu))
 - GH-260 Fix rubocop RSpec/MessageSpies [\#271](https://github.com/voxpupuli/puppet-archive/pull/271) ([nanliu](https://github.com/nanliu))
