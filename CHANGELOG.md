@@ -4,7 +4,21 @@ All notable changes to this project will be documented in this file.
 Each new release typically also includes the latest modulesync defaults.
 These should not affect the functionality of the module.
 
-## [v2.1.0](https://github.com/voxpupuli/puppet-archive/tree/v2.1.0) (2017-10-11)
+## [v2.2.0](https://github.com/voxpupuli/puppet-archive/tree/v2.2.0) (2017-11-21)
+
+[Full Changelog](https://github.com/voxpupuli/puppet-archive/compare/v2.1.0...v2.2.0)
+
+**Closed issues:**
+
+- Setting an invalid proxy\_server parameter should return a more helpful error message. [\#220](https://github.com/voxpupuli/puppet-archive/issues/220)
+
+**Merged pull requests:**
+
+- Log actual and expected checksums on mismatch [\#305](https://github.com/voxpupuli/puppet-archive/pull/305) ([jeffmccune](https://github.com/jeffmccune))
+- release 2.1.0 [\#301](https://github.com/voxpupuli/puppet-archive/pull/301) ([bastelfreak](https://github.com/bastelfreak))
+
+## [v2.1.0](https://github.com/voxpupuli/puppet-archive/tree/v2.1.0) (2017-10-10)
+
 [Full Changelog](https://github.com/voxpupuli/puppet-archive/compare/v2.0.0...v2.1.0)
 
 **Closed issues:**
@@ -17,18 +31,23 @@ These should not affect the functionality of the module.
 **Merged pull requests:**
 
 - Fix typos in puppet:/// URL example [\#298](https://github.com/voxpupuli/puppet-archive/pull/298) ([gabe-sky](https://github.com/gabe-sky))
+- Release 2.0.0 [\#297](https://github.com/voxpupuli/puppet-archive/pull/297) ([alexjfisher](https://github.com/alexjfisher))
 - Update cacert.pem [\#290](https://github.com/voxpupuli/puppet-archive/pull/290) ([nanliu](https://github.com/nanliu))
 - Support Nexus 3 urls for artifact downloads [\#285](https://github.com/voxpupuli/puppet-archive/pull/285) ([rvdh](https://github.com/rvdh))
 
 ## [v2.0.0](https://github.com/voxpupuli/puppet-archive/tree/v2.0.0) (2017-08-25)
+
 [Full Changelog](https://github.com/voxpupuli/puppet-archive/compare/v1.3.0...v2.0.0)
+
+**Breaking changes:**
+
+- BREAKING: Drop puppet 3 support. Replace validate\_\* functions with Puppet 4 data type validations [\#264](https://github.com/voxpupuli/puppet-archive/pull/264) ([jkroepke](https://github.com/jkroepke))
 
 **Implemented enhancements:**
 
 - Enable allow\_insecure in archive::download [\#295](https://github.com/voxpupuli/puppet-archive/pull/295) ([alexjfisher](https://github.com/alexjfisher))
 - Add custom download options [\#279](https://github.com/voxpupuli/puppet-archive/pull/279) ([nanliu](https://github.com/nanliu))
 - Add support for downloading puppet URL’s [\#270](https://github.com/voxpupuli/puppet-archive/pull/270) ([hajee](https://github.com/hajee))
-- BREAKING: Drop puppet 3 support. Replace validate\_\* functions with Puppet 4 data type validations [\#264](https://github.com/voxpupuli/puppet-archive/pull/264) ([jkroepke](https://github.com/jkroepke))
 
 **Fixed bugs:**
 
@@ -45,19 +64,20 @@ These should not affect the functionality of the module.
 
 **Merged pull requests:**
 
-- Release 2.0.0 [\#297](https://github.com/voxpupuli/puppet-archive/pull/297) ([alexjfisher](https://github.com/alexjfisher))
 - Change how ruby proxy is invoked. [\#280](https://github.com/voxpupuli/puppet-archive/pull/280) ([nanliu](https://github.com/nanliu))
 - Pass proxy values using the wget -e option [\#272](https://github.com/voxpupuli/puppet-archive/pull/272) ([nanliu](https://github.com/nanliu))
 - GH-260 Fix rubocop RSpec/MessageSpies [\#271](https://github.com/voxpupuli/puppet-archive/pull/271) ([nanliu](https://github.com/nanliu))
 - Fix README typo on credentials file and add the config too [\#269](https://github.com/voxpupuli/puppet-archive/pull/269) ([aerostitch](https://github.com/aerostitch))
 - Add puppet-staging migration examples [\#268](https://github.com/voxpupuli/puppet-archive/pull/268) ([alexjfisher](https://github.com/alexjfisher))
+- release 1.3.0 [\#261](https://github.com/voxpupuli/puppet-archive/pull/261) ([bastelfreak](https://github.com/bastelfreak))
 
 ## [v1.3.0](https://github.com/voxpupuli/puppet-archive/tree/v1.3.0) (2017-02-10)
+
 [Full Changelog](https://github.com/voxpupuli/puppet-archive/compare/v1.2.0...v1.3.0)
 
 **Merged pull requests:**
 
-- release 1.3.0 [\#261](https://github.com/voxpupuli/puppet-archive/pull/261) ([bastelfreak](https://github.com/bastelfreak))
+- release 1.2.0 [\#253](https://github.com/voxpupuli/puppet-archive/pull/253) ([bastelfreak](https://github.com/bastelfreak))
 
 ## v1.2.0 (2016-12-25)
 
