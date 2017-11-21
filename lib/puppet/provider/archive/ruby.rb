@@ -189,7 +189,10 @@ Puppet::Type.type(:archive).provide(:ruby) do
     # conditionally verify checksum:
     if resource[:checksum_verify] == :true && resource[:checksum_type] != :none
       archive = PuppetX::Bodeco::Archive.new(temppath)
-      raise(Puppet::Error, 'Download file checksum mismatch') unless archive.checksum(resource[:checksum_type]) == checksum
+      actual_checksum = archive.checksum(resource[:checksum_type])
+      if actual_checksum != checksum
+        raise(Puppet::Error, "Download file checksum mismatch (expected: #{checksum} actual: #{actual_checksum})")
+      end
     end
 
     move_file_in_place(temppath, archive_filepath)
