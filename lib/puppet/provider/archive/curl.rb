@@ -1,4 +1,6 @@
-Puppet::Type.type(:archive).provide(:curl, parent: :ruby) do
+require_relative './ruby'
+
+Puppet::Type.type(:archive).provide(:curl, parent: Puppet::Type::Archive::ProviderRuby) do
   commands curl: 'curl'
   defaultfor feature: :posix
 
