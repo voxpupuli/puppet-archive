@@ -34,7 +34,7 @@ This module manages download, deployment, and cleanup of archive files.
 This module uses types and providers to download and manage compress files,
 with optional lifecycle functionality such as checksum, extraction, and
 cleanup. The benefits over existing modules such as
-[puppet-staging](https://github.com/voxpupoli/puppet-staging):
+[puppet-staging](https://github.com/voxpupuli/puppet-staging):
 
 * Implemented via types and provider instead of exec resource.
 * Follows 302 redirect and propagate download failure.
