@@ -395,7 +395,7 @@ archive { '/tmp/staging/master.zip':
 * `password`: password to download source file.
 * `allow_insecure`: Ignore HTTPS certificate errors (true|false). (default: false)
 * `cookie`: archive file download cookie.
-* `checksum_type`: archive file checksum type (none|md5|sha1|sha2|sh256|sha384|
+* `checksum_type`: archive file checksum type (none|md5|sha1|sha2|sha256|sha384|
   sha512). (default: none)
 * `checksum`: archive file checksum (match checksum_type)
 * `checksum_url`: archive file checksum source (instead of specify checksum)
