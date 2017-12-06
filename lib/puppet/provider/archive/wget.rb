@@ -1,4 +1,6 @@
-Puppet::Type.type(:archive).provide(:wget, parent: :ruby) do
+require_relative './ruby'
+
+Puppet::Type.type(:archive).provide(:wget, parent: Puppet::Type::Archive::ProviderRuby) do
   commands wget: 'wget'
 
   def wget_params(params)
