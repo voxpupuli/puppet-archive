@@ -77,8 +77,7 @@ define archive::artifactory (
     $sha1     = $latest_url_data['sha1']
   } else {
     $file_url = $url
-    $sha1_url = regsubst($url, '/artifactory/', '/artifactory/api/storage/')
-    $sha1     = artifactory_sha1($sha1_url)
+    $sha1     = archive::artifactory_checksum($url,'sha1')
   }
 
   archive { $file_path:
