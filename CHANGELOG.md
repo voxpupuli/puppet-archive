@@ -4,7 +4,25 @@ All notable changes to this project will be documented in this file.
 Each new release typically also includes the latest modulesync defaults.
 These should not affect the functionality of the module.
 
-## [v2.3.0](https://github.com/voxpupuli/puppet-archive/tree/v2.3.0) (2018-02-15)
+## [v3.0.0](https://github.com/voxpupuli/puppet-archive/tree/v3.0.0) (2018-03-31)
+
+[Full Changelog](https://github.com/voxpupuli/puppet-archive/compare/v2.3.0...v3.0.0)
+
+**Breaking changes:**
+
+- Rewrite artifactory\_sha1 function with puppet v4 api [\#323](https://github.com/voxpupuli/puppet-archive/pull/323) ([alexjfisher](https://github.com/alexjfisher))
+- Remove deprecated archive::artifactory parameters [\#322](https://github.com/voxpupuli/puppet-archive/pull/322) ([alexjfisher](https://github.com/alexjfisher))
+
+**Implemented enhancements:**
+
+- Adding windows server 2016 to metadata.json [\#325](https://github.com/voxpupuli/puppet-archive/pull/325) ([TraGicCode](https://github.com/TraGicCode))
+
+**Merged pull requests:**
+
+- bump puppet to latest supported version 4.10.0 [\#326](https://github.com/voxpupuli/puppet-archive/pull/326) ([bastelfreak](https://github.com/bastelfreak))
+- Don't glob archive URL with curl [\#318](https://github.com/voxpupuli/puppet-archive/pull/318) ([derekhiggins](https://github.com/derekhiggins))
+
+## [v2.3.0](https://github.com/voxpupuli/puppet-archive/tree/v2.3.0) (2018-02-21)
 
 [Full Changelog](https://github.com/voxpupuli/puppet-archive/compare/v2.2.0...v2.3.0)
 
@@ -22,10 +40,8 @@ These should not affect the functionality of the module.
 
 **Merged pull requests:**
 
-- modulesync 1.6.0 [\#312](https://github.com/voxpupuli/puppet-archive/pull/312) ([bastelfreak](https://github.com/bastelfreak))
 - Fix checksum\_type sh256 -\> sha256 typo [\#309](https://github.com/voxpupuli/puppet-archive/pull/309) ([tylerjl](https://github.com/tylerjl))
 - Fix typo "voxpupoli" [\#308](https://github.com/voxpupuli/puppet-archive/pull/308) ([nmesstorff](https://github.com/nmesstorff))
-- Release 2.2.0 [\#306](https://github.com/voxpupuli/puppet-archive/pull/306) ([bastelfreak](https://github.com/bastelfreak))
 
 ## [v2.2.0](https://github.com/voxpupuli/puppet-archive/tree/v2.2.0) (2017-11-21)
 
@@ -38,7 +54,6 @@ These should not affect the functionality of the module.
 **Merged pull requests:**
 
 - Log actual and expected checksums on mismatch [\#305](https://github.com/voxpupuli/puppet-archive/pull/305) ([jeffmccune](https://github.com/jeffmccune))
-- release 2.1.0 [\#301](https://github.com/voxpupuli/puppet-archive/pull/301) ([bastelfreak](https://github.com/bastelfreak))
 
 ## [v2.1.0](https://github.com/voxpupuli/puppet-archive/tree/v2.1.0) (2017-10-10)
 
@@ -92,7 +107,6 @@ These should not affect the functionality of the module.
 - GH-260 Fix rubocop RSpec/MessageSpies [\#271](https://github.com/voxpupuli/puppet-archive/pull/271) ([nanliu](https://github.com/nanliu))
 - Fix README typo on credentials file and add the config too [\#269](https://github.com/voxpupuli/puppet-archive/pull/269) ([aerostitch](https://github.com/aerostitch))
 - Add puppet-staging migration examples [\#268](https://github.com/voxpupuli/puppet-archive/pull/268) ([alexjfisher](https://github.com/alexjfisher))
-- release 1.3.0 [\#261](https://github.com/voxpupuli/puppet-archive/pull/261) ([bastelfreak](https://github.com/bastelfreak))
 
 ## [v1.3.0](https://github.com/voxpupuli/puppet-archive/tree/v1.3.0) (2017-02-10)
 
@@ -100,7 +114,6 @@ These should not affect the functionality of the module.
 
 **Merged pull requests:**
 
-- release 1.2.0 [\#253](https://github.com/voxpupuli/puppet-archive/pull/253) ([bastelfreak](https://github.com/bastelfreak))
 
 ## v1.2.0 (2016-12-25)
 
