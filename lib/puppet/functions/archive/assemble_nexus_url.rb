@@ -1,5 +1,5 @@
 Puppet::Functions.create_function(:'archive::assemble_nexus_url') do
-  require "cgi"
+  require 'cgi'
 
   dispatch :assemble_nexus_url do
     required_param 'String', :nexus_url

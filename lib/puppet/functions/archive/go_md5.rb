@@ -1,13 +1,9 @@
-# Public: go file md5 checksum
-#
-# args[0] - username
-# args[1] - password
-# args[2] - file_name
-# args[3] - go md5 checksum url
-#
-# http://www.thoughtworks.com/products/docs/go/12.4/help/Artifacts_API.html
-#
-# Returns specific file's md5 from go server md5 checksum file
+# @summary A function that returns the checksum value of an artifact stored in Artifactory
+# @param username Your Artifactory username
+# @param password Your Artifactory password
+# @param file File name
+# @param url The URL of the artifact.
+# @return [String] Returns the checksum.
 
 Puppet::Functions.create_function(:'archive::go_md5') do
   require 'puppet_x/bodeco/util'
