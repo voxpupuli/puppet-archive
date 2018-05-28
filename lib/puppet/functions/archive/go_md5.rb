@@ -6,7 +6,12 @@
 # @return [String] Returns the checksum.
 
 Puppet::Functions.create_function(:'archive::go_md5') do
-  require_relative '../../../puppet_x/bodeco/util'
+  begin
+    require "puppet_x/bodeco/util"
+  rescue LoadError
+    require 'pathname'
+    require Pathname.new(__FILE__).dirname + "../../" + "puppet_x/bodeco/util"
+  end
 
   dispatch :main do
     required_param 'String', :username
