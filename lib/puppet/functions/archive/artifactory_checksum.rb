@@ -1,5 +1,5 @@
 require 'json'
-require File.new(__FILE__).dirname + "../../../puppet_x/bodeco/util"
+require File.dirname(__FILE__) + "/../../../puppet_x/bodeco/util"
 
 Puppet::Functions.create_function(:'archive::artifactory_checksum') do
   # @summary A function that returns the checksum value of an artifact stored in Artifactory
