@@ -1,10 +1,5 @@
 require 'json'
-begin
-  require "puppet_x/bodeco/util"
-rescue LoadError
-  require 'pathname'
-  require Pathname.new(__FILE__).dirname + "../../" + "puppet_x/bodeco/util"
-end
+require File.new(__FILE__).dirname + "../../../puppet_x/bodeco/util"
 
 Puppet::Functions.create_function(:'archive::artifactory_latest_url') do
   dispatch :artifactory_latest_url do
