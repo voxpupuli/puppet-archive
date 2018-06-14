@@ -4,6 +4,20 @@ All notable changes to this project will be documented in this file.
 Each new release typically also includes the latest modulesync defaults.
 These should not affect the functionality of the module.
 
+## [v3.1.0](https://github.com/voxpupuli/puppet-archive/tree/v3.1.0) (2018-06-14)
+
+[Full Changelog](https://github.com/voxpupuli/puppet-archive/compare/v3.0.0...v3.1.0)
+
+**Closed issues:**
+
+- HTTPS download broken again on windows [\#289](https://github.com/voxpupuli/puppet-archive/issues/289)
+
+**Merged pull requests:**
+
+- Allow Ubuntu 18.04 [\#336](https://github.com/voxpupuli/puppet-archive/pull/336) ([mpdude](https://github.com/mpdude))
+- Remove docker nodesets [\#334](https://github.com/voxpupuli/puppet-archive/pull/334) ([bastelfreak](https://github.com/bastelfreak))
+- drop EOL OSs; fix puppet version range [\#332](https://github.com/voxpupuli/puppet-archive/pull/332) ([bastelfreak](https://github.com/bastelfreak))
+
 ## [v3.0.0](https://github.com/voxpupuli/puppet-archive/tree/v3.0.0) (2018-03-31)
 
 [Full Changelog](https://github.com/voxpupuli/puppet-archive/compare/v2.3.0...v3.0.0)
@@ -33,10 +47,6 @@ These should not affect the functionality of the module.
 **Fixed bugs:**
 
 - Fix typo in digest\_type: sh256 -\> sha256 [\#315](https://github.com/voxpupuli/puppet-archive/pull/315) ([mark0n](https://github.com/mark0n))
-
-**Closed issues:**
-
-- Can't download latest SNAPSHOT artifactory artifacts [\#282](https://github.com/voxpupuli/puppet-archive/issues/282)
 
 **Merged pull requests:**
 
@@ -69,7 +79,6 @@ These should not affect the functionality of the module.
 **Merged pull requests:**
 
 - Fix typos in puppet:/// URL example [\#298](https://github.com/voxpupuli/puppet-archive/pull/298) ([gabe-sky](https://github.com/gabe-sky))
-- Release 2.0.0 [\#297](https://github.com/voxpupuli/puppet-archive/pull/297) ([alexjfisher](https://github.com/alexjfisher))
 - Update cacert.pem [\#290](https://github.com/voxpupuli/puppet-archive/pull/290) ([nanliu](https://github.com/nanliu))
 - Support Nexus 3 urls for artifact downloads [\#285](https://github.com/voxpupuli/puppet-archive/pull/285) ([rvdh](https://github.com/rvdh))
 
@@ -94,6 +103,7 @@ These should not affect the functionality of the module.
 **Closed issues:**
 
 - allow\_insecure is not working [\#294](https://github.com/voxpupuli/puppet-archive/issues/294)
+- Can't download latest SNAPSHOT artifactory artifacts [\#282](https://github.com/voxpupuli/puppet-archive/issues/282)
 - Need option to set curl SSL protocol [\#273](https://github.com/voxpupuli/puppet-archive/issues/273)
 - Add guide for migrating from puppet-staging [\#266](https://github.com/voxpupuli/puppet-archive/issues/266)
 - Rubocop: fix RSpec/MessageSpies [\#260](https://github.com/voxpupuli/puppet-archive/issues/260)
@@ -111,9 +121,6 @@ These should not affect the functionality of the module.
 ## [v1.3.0](https://github.com/voxpupuli/puppet-archive/tree/v1.3.0) (2017-02-10)
 
 [Full Changelog](https://github.com/voxpupuli/puppet-archive/compare/v1.2.0...v1.3.0)
-
-**Merged pull requests:**
-
 
 ## v1.2.0 (2016-12-25)
 
