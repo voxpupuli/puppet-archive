@@ -115,6 +115,27 @@ archive { '/tmp/test100k.db':
 }
 ```
 
+If you want to extract a `.tar.gz` file:
+
+```puppet
+$install_path        = '/opt/wso2'
+$package_name        = 'wso2esb'
+$package_ensure      = '4.9.0'
+$repository_url      = 'http://company.com/repository/wso2'
+$wso2_package_source = "${repository_url}/${package_name}-${package_ensure}.tgz"
+$archive_name = "${package_name}-${package_ensure}.tgz"
+
+archive { 'app_package_zip':
+  path         => "/tmp/${archive_name}",
+  source       => $wso2_package_source,
+  extract      => true,
+  extract_path => $install_path,
+  creates      => "${install_path}/${package_name}-${package_ensure}",
+  cleanup      => true,
+  require      => File['wso2_appdir'],
+}
+```
+
 ### Puppet URL
 
 Since march 2017, the Archive type also supports puppet URLs. Here is an example
