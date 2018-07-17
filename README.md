@@ -122,10 +122,10 @@ $install_path        = '/opt/wso2'
 $package_name        = 'wso2esb'
 $package_ensure      = '4.9.0'
 $repository_url      = 'http://company.com/repository/wso2'
-$wso2_package_source = "${repository_url}/${package_name}-${package_ensure}.tgz"
-$archive_name = "${package_name}-${package_ensure}.tgz"
+$archive_name        = "${package_name}-${package_ensure}.tgz"
+$wso2_package_source = "${repository_url}/${archive_name}"
 
-archive { 'app_package_zip':
+archive { $archive_name:
   path         => "/tmp/${archive_name}",
   source       => $wso2_package_source,
   extract      => true,
