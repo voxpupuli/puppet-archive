@@ -7,7 +7,11 @@ module PuppetX
     class Archive
       def initialize(file)
         @file = file
-        @file_path = Shellwords.shellescape file
+        if Facter.value(:osfamily) == 'windows'
+          @file_path = file
+        else
+          @file_path = Shellwords.shellescape file
+        end
       end
 
       def checksum(type)
