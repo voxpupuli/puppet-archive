@@ -9,11 +9,8 @@ addons:
       - augeas
     packages:
       - libaugeas-dev
-# related to https://github.com/rubygems/rubygems/issues/2123
 before_install:
-  - 'rm -f Gemfile.lock'
-  - 'gem update --system'
-  - 'gem install bundler'
+  - rm -f Gemfile.lock
 script:
   - 'bundle exec rake $CHECK'
 matrix:
