@@ -78,15 +78,15 @@ describe PuppetX::Bodeco::Archive do
 
     tar = described_class.new('test.tar.gz')
     tar.stubs(:win_7zip).returns('7z.exe')
-    expect(tar.send(:command, :undef)).to eq '7z.exe x -aoa test.tar.gz'
-    expect(tar.send(:command, 'x -aot')).to eq '7z.exe x -aot test.tar.gz'
+    expect(tar.send(:command, :undef)).to eq '7z.exe x -aoa "test.tar.gz"'
+    expect(tar.send(:command, 'x -aot')).to eq '7z.exe x -aot "test.tar.gz"'
 
     zip = described_class.new('test.zip')
     zip.stubs(:win_7zip).returns('7z.exe')
-    expect(zip.send(:command, :undef)).to eq '7z.exe x -aoa test.zip'
+    expect(zip.send(:command, :undef)).to eq '7z.exe x -aoa "test.zip"'
 
-    zip = described_class.new('C:/Program Files/test.zip')
+    zip = described_class.new('C:/Program Files/test+xy.zip')
     zip.stubs(:win_7zip).returns('7z.exe')
-    expect(zip.send(:command, :undef)).to eq '7z.exe x -aoa C:/Program\ Files/test.zip'
+    expect(zip.send(:command, :undef)).to eq '7z.exe x -aoa "C:/Program Files/test+xyzip"'
   end
 end
