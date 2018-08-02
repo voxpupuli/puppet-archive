@@ -79,7 +79,7 @@
     }
   ],
   "name": "puppet-archive",
-  "version": "3.1.1",
+  "version": "3.1.2-rc0",
   "source": "https://github.com/voxpupuli/puppet-archive",
   "author": "Vox Pupuli",
   "license": "Apache-2.0",
