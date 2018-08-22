@@ -40,7 +40,7 @@ cleanup. The benefits over existing modules such as
 * Follows 302 redirect and propagate download failure.
 * Optional checksum verification of archive files.
 * Automatic dependency to parent directory.
-* Support Windows file extraction via 7zip.
+* Support Windows file extraction via 7zip or PowerShell (Zip file only).
 * Able to cleanup archive files after extraction.
 
 This module is compatible with [camptocamp/archive](https://forge.puppet.com/camptocamp/archive).
@@ -48,9 +48,12 @@ For this it provides compatibility shims.
 
 ## Setup
 
-The module requires 7zip for windows clients which is installed via `include
-'::archive'`. On posix systems, curl is the default provider. The default
-provider can be overwritten by configuring resource defaults in site.pp:
+On Windows 7zip is required to extract all archives except zip files which will
+be extracted with PowerShell if 7zip is not available (requires 
+`System.IO.Compression.FileSystem`/Windows 2012+). Windows clients can install
+7zip via `include '::archive'`. On posix systems, curl is the default provider. 
+The default provider can be overwritten by configuring resource defaults in 
+site.pp:
 
 ```puppet
 Archive {

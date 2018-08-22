@@ -65,6 +65,36 @@ module PuppetX
           'C:\\Program Files\\7-Zip\\7z.exe'
         elsif File.directory?('C:\\Program Files (x86)\\7-zip')
           'C:\\Program Files (x86)\\7-Zip\\7z.exe'
+        elsif @file_path =~ %r{.zip"$}
+          # Fallback to powershell for zipfiles - this works with windows
+          # 2012+ if your powershell/.net is too old the script will fail
+          # on execution and ask user to install 7zip.
+          # We have to manually extract each entry in the zip file
+          # to ensure we extract fresh copy because `ExtractToDirectory`
+          # method does not support overwriting
+          ps = <<-END
+          try {
+              Add-Type -AssemblyName System.IO.Compression.FileSystem -erroraction "silentlycontinue"
+              $zipFile = [System.IO.Compression.ZipFile]::openread(#{@file_path})
+              foreach ($zipFileEntry in $zipFile.Entries) {
+                  $pwd = (Get-Item -Path ".\" -Verbose).FullName
+                  $outputFile = [io.path]::combine($pwd, $zipFileEntry.FullName)
+                  $dir = ([io.fileinfo]$outputFile).DirectoryName
+
+                  if (-not(Test-Path -type Container -path $dir)) {
+                      mkdir $dir
+                  }
+                  if ($zipFileEntry.Name -ne "") {
+                      write-host "[extract] $zipFileEntry.Name"
+                      [System.IO.Compression.ZipFileExtensions]::ExtractToFile($zipFileEntry, $outputFile, $true)
+                  }
+              }
+          } catch [System.invalidOperationException] {
+              write-error "Your OS does not support System.IO.Compression.FileSystem - please install 7zip"
+          }
+          END
+
+          "powershell -command #{ps.gsub(%r{"}, '\\"').gsub(%r{\n}, '; ')}"
         else
           raise Exception, '7z.exe not available'
         end
@@ -73,7 +103,8 @@ module PuppetX
       def command(options)
         if Facter.value(:osfamily) == 'windows'
           opt = parse_flags('x -aoa', options, '7z')
-          "#{win_7zip} #{opt} #{@file_path}"
+          cmd = win_7zip
+          cmd =~ %r{7z.exe} ? "#{cmd} #{opt} #{@file_path}" : cmd
         else
           case @file
           when %r{\.tar$}

@@ -88,5 +88,9 @@ describe PuppetX::Bodeco::Archive do
     zip = described_class.new('C:/Program Files/test.zip')
     zip.stubs(:win_7zip).returns('7z.exe')
     expect(zip.send(:command, :undef)).to eq '7z.exe x -aoa "C:/Program Files/test.zip"'
+
+    zip = described_class.new('C:/Program Files/test.zip')
+    zip.stubs(:win_7zip).returns('powershell')
+    expect(zip.send(:command, :undef)).to eq 'powershell'
   end
 end
