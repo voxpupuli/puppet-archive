@@ -4,7 +4,16 @@ All notable changes to this project will be documented in this file.
 Each new release typically also includes the latest modulesync defaults.
 These should not affect the functionality of the module.
 
-## [v3.1.1](https://github.com/voxpupuli/puppet-archive/tree/v3.1.1) (2018-07-31)
+## [v3.2.0](https://github.com/voxpupuli/puppet-archive/tree/v3.2.0) (2018-08-26)
+
+[Full Changelog](https://github.com/voxpupuli/puppet-archive/compare/v3.1.1...v3.2.0)
+
+**Implemented enhancements:**
+
+- Bump stdlib dependency to \<6.0.0 [\#352](https://github.com/voxpupuli/puppet-archive/pull/352) ([HelenCampbell](https://github.com/HelenCampbell))
+- Fallback to PowerShell for zip files on Windows [\#351](https://github.com/voxpupuli/puppet-archive/pull/351) ([GeoffWilliams](https://github.com/GeoffWilliams))
+
+## [v3.1.1](https://github.com/voxpupuli/puppet-archive/tree/v3.1.1) (2018-08-02)
 
 [Full Changelog](https://github.com/voxpupuli/puppet-archive/compare/v3.1.0...v3.1.1)
 
