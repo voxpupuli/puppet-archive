@@ -51,7 +51,7 @@ For this it provides compatibility shims.
 On Windows 7zip is required to extract all archives except zip files which will
 be extracted with PowerShell if 7zip is not available (requires 
 `System.IO.Compression.FileSystem`/Windows 2012+). Windows clients can install
-7zip via `include '::archive'`. On posix systems, curl is the default provider. 
+7zip via `include 'archive'`. On posix systems, curl is the default provider. 
 The default provider can be overwritten by configuring resource defaults in 
 site.pp:
 
@@ -65,7 +65,7 @@ Users of the module is responsbile for archive package dependencies for
 alternative providers and all extraction utilities such as tar, gunzip, bunzip:
 
 ```puppet
-if $::facts['osfamily'] != 'windows' {
+if $facts['osfamily'] != 'windows' {
   package { 'wget':
     ensure => present,
   }
@@ -97,8 +97,21 @@ class { 'archive':
 
 ### Usage Example
 
+Simple example that donwloads from web server:
+
 ```puppet
-include '::archive' # NOTE: optional for posix platforms
+archive { '/tmp/vagrant.deb':
+  ensure => present,
+  source => 'https://releases.hashicorp.com/vagrant/2.2.3/vagrant_2.2.3_x86_64.deb',
+  user   => 0,
+  group  => 0,
+}
+```
+
+More complex example :
+
+```puppet
+include 'archive' # NOTE: optional for posix platforms
 
 archive { '/tmp/jta-1.1.jar':
   ensure        => present,
@@ -213,7 +226,7 @@ archive { $filename:
 
 exec { 'tomcat permission':
   command   => "chown tomcat:tomcat $install_path",
-  path      => $::path,
+  path      => $path,
   subscribe => Archive[$filename],
 }
 ```
@@ -269,7 +282,7 @@ By default this dependency is only installed for Linux VMs running on AWS, or
 enabled via `aws_cli_install` option:
 
 ```puppet
-class { '::archive':
+class { 'archive':
   aws_cli_install => true,
 }
 
@@ -320,7 +333,7 @@ beware of the order of defaults:
 
 This option can also be applied globally to address issues for specific OS:
 ```puppet
-if $::facts['osfamily'] != 'RedHat' {
+if $facts['osfamily'] != 'RedHat' {
   Archive {
     download_options => '--tlsv1',
   }
