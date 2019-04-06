@@ -49,10 +49,10 @@ For this it provides compatibility shims.
 ## Setup
 
 On Windows 7zip is required to extract all archives except zip files which will
-be extracted with PowerShell if 7zip is not available (requires 
+be extracted with PowerShell if 7zip is not available (requires
 `System.IO.Compression.FileSystem`/Windows 2012+). Windows clients can install
-7zip via `include 'archive'`. On posix systems, curl is the default provider. 
-The default provider can be overwritten by configuring resource defaults in 
+7zip via `include 'archive'`. On posix systems, curl is the default provider.
+The default provider can be overwritten by configuring resource defaults in
 site.pp:
 
 ```puppet
