@@ -53,7 +53,7 @@ define archive::artifactory (
   Optional[Stdlib::Absolutepath] $archive_path = undef,
 ) {
 
-  include ::archive::params
+  include archive::params
 
   if $archive_path {
     $file_path = "${archive_path}/${name}"

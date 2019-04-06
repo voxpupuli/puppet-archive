@@ -46,7 +46,7 @@ define archive::nexus (
   Optional[Boolean] $allow_insecure  = undef,
 ) {
 
-  include ::archive::params
+  include archive::params
 
   $artifact_info = split($gav, ':')
 
