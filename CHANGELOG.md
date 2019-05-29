@@ -4,6 +4,22 @@ All notable changes to this project will be documented in this file.
 Each new release typically also includes the latest modulesync defaults.
 These should not affect the functionality of the module.
 
+## [v4.0.0](https://github.com/voxpupuli/puppet-archive/tree/v4.0.0) (2019-05-29)
+
+[Full Changelog](https://github.com/voxpupuli/puppet-archive/compare/v3.2.1...v4.0.0)
+
+**Breaking changes:**
+
+- modulesync 2.7.0 and drop puppet 4 [\#368](https://github.com/voxpupuli/puppet-archive/pull/368) ([bastelfreak](https://github.com/bastelfreak))
+
+**Implemented enhancements:**
+
+- Allow `puppetlabs/stdlib` 6.x [\#369](https://github.com/voxpupuli/puppet-archive/pull/369) ([alexjfisher](https://github.com/alexjfisher))
+
+**Merged pull requests:**
+
+- explain how to download as simple as possible [\#366](https://github.com/voxpupuli/puppet-archive/pull/366) ([Dan33l](https://github.com/Dan33l))
+
 ## [v3.2.1](https://github.com/voxpupuli/puppet-archive/tree/v3.2.1) (2018-10-19)
 
 [Full Changelog](https://github.com/voxpupuli/puppet-archive/compare/v3.2.0...v3.2.1)
