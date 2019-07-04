@@ -4,6 +4,19 @@ All notable changes to this project will be documented in this file.
 Each new release typically also includes the latest modulesync defaults.
 These should not affect the functionality of the module.
 
+## [v4.1.0](https://github.com/voxpupuli/puppet-archive/tree/v4.1.0) (2019-07-04)
+
+[Full Changelog](https://github.com/voxpupuli/puppet-archive/compare/v4.0.0...v4.1.0)
+
+**Closed issues:**
+
+- 4 Certificates expired, 3 expiring soon in cacert.pem [\#372](https://github.com/voxpupuli/puppet-archive/issues/372)
+
+**Merged pull requests:**
+
+- Update cacert.pem [\#373](https://github.com/voxpupuli/puppet-archive/pull/373) ([alexjfisher](https://github.com/alexjfisher))
+- drop Ubuntu 14.04 support [\#371](https://github.com/voxpupuli/puppet-archive/pull/371) ([bastelfreak](https://github.com/bastelfreak))
+
 ## [v4.0.0](https://github.com/voxpupuli/puppet-archive/tree/v4.0.0) (2019-05-29)
 
 [Full Changelog](https://github.com/voxpupuli/puppet-archive/compare/v3.2.1...v4.0.0)
