@@ -39,6 +39,8 @@ describe PuppetX::Bodeco::Archive do
     expect(tar.send(:command, :undef)).to eq 'unxz -dc test.tar.xz | tar xf -'
     gunzip = described_class.new('test.gz')
     expect(gunzip.send(:command, :undef)).to eq 'gunzip -d test.gz'
+    bunzip2 = described_class.new('test.bz2')
+    expect(bunzip2.send(:command, :undef)).to eq 'bunzip2 -d test.bz2'
     zip = described_class.new('test.zip')
     expect(zip.send(:command, :undef)).to eq 'unzip -o test.zip'
     expect(zip.send(:command, '-a')).to eq 'unzip -a test.zip'

@@ -140,6 +140,9 @@ module PuppetX
           when %r{(\.zip|\.war|\.jar)$}
             opt = parse_flags('-o', options, 'zip')
             "unzip #{opt} #{@file_path}"
+          when %r{(\.bz2)$}
+            opt = parse_flags('-d', options, 'bunzip2')
+            "bunzip2 #{opt} #{@file_path}"
           else
             raise NotImplementedError, "Unknown filetype: #{@file}"
           end
