@@ -4,6 +4,15 @@ All notable changes to this project will be documented in this file.
 Each new release typically also includes the latest modulesync defaults.
 These should not affect the functionality of the module.
 
+## [v4.3.0](https://github.com/voxpupuli/puppet-archive/tree/v4.3.0) (2019-10-15)
+
+[Full Changelog](https://github.com/voxpupuli/puppet-archive/compare/v4.2.0...v4.3.0)
+
+**Implemented enhancements:**
+
+- Add Archlinux compatibility [\#383](https://github.com/voxpupuli/puppet-archive/pull/383) ([bastelfreak](https://github.com/bastelfreak))
+- Add CentOS/RHEL 8 compatibility [\#382](https://github.com/voxpupuli/puppet-archive/pull/382) ([bastelfreak](https://github.com/bastelfreak))
+
 ## [v4.2.0](https://github.com/voxpupuli/puppet-archive/tree/v4.2.0) (2019-08-14)
 
 [Full Changelog](https://github.com/voxpupuli/puppet-archive/compare/v4.1.0...v4.2.0)
