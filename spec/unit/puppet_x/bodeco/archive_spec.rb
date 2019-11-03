@@ -72,6 +72,9 @@ describe PuppetX::Bodeco::Archive do
       zip = described_class.new('/tmp/fun folder/test.zip')
       expect(zip.send(:command, :undef)).to eq 'unzip -o /tmp/fun\ folder/test.zip'
       expect(zip.send(:command, '-a')).to eq 'unzip -a /tmp/fun\ folder/test.zip'
+
+      tar = described_class.new('test.tar.Z')
+      expect(tar.send(:command, :undef)).to eq 'uncompress -c test.tar.Z | tar xf -'
     end
   end
 

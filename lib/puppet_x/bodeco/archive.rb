@@ -143,6 +143,9 @@ module PuppetX
           when %r{(\.bz2)$}
             opt = parse_flags('-d', options, 'bunzip2')
             "bunzip2 #{opt} #{@file_path}"
+          when %r{(\.tar\.Z)$}
+            tar_opt = parse_flags('xf', options, 'tar')
+            "uncompress -c #{@file_path} | tar #{tar_opt} -"
           else
             raise NotImplementedError, "Unknown filetype: #{@file}"
           end
