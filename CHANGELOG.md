@@ -4,7 +4,20 @@ All notable changes to this project will be documented in this file.
 Each new release typically also includes the latest modulesync defaults.
 These should not affect the functionality of the module.
 
-## [v4.3.0](https://github.com/voxpupuli/puppet-archive/tree/v4.3.0) (2019-10-15)
+## [v4.4.0](https://github.com/voxpupuli/puppet-archive/tree/v4.4.0) (2019-11-04)
+
+[Full Changelog](https://github.com/voxpupuli/puppet-archive/compare/v4.3.0...v4.4.0)
+
+**Implemented enhancements:**
+
+- Extract .zip using PowerShell \(native\) as alternative to 7-zip [\#380](https://github.com/voxpupuli/puppet-archive/issues/380)
+- Add support for .tar.Z files and uncompress [\#385](https://github.com/voxpupuli/puppet-archive/pull/385) ([hajee](https://github.com/hajee))
+
+**Merged pull requests:**
+
+- Put the cookie option at the end when using curl [\#349](https://github.com/voxpupuli/puppet-archive/pull/349) ([kapouik](https://github.com/kapouik))
+
+## [v4.3.0](https://github.com/voxpupuli/puppet-archive/tree/v4.3.0) (2019-10-16)
 
 [Full Changelog](https://github.com/voxpupuli/puppet-archive/compare/v4.2.0...v4.3.0)
 
