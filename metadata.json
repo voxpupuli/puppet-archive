@@ -76,6 +76,12 @@
     },
     {
       "operatingsystem": "Archlinux"
+    },
+    {
+      "operatingsystem": "Darwin",
+      "operatingsystemrelease": [
+        "19"
+      ]
     }
   ],
   "requirements": [
