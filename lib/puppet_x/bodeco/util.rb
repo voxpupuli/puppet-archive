@@ -14,7 +14,7 @@ module PuppetX
       end
 
       #
-      # This allows you to use a puppet syntax for a file and return it's content.
+      # This allows you to use a puppet syntax for a file and return its content.
       #
       # @example
       #  puppet_download 'puppet:///modules/my_module_name/my_file.dat

@@ -1,5 +1,5 @@
 require 'json'
-require 'puppet_x/bodeco/util'
+require_relative '../../../puppet_x/bodeco/util.rb'
 
 Puppet::Functions.create_function(:'archive::artifactory_latest_url') do
   dispatch :artifactory_latest_url do
