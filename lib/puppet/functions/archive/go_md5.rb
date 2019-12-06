@@ -29,8 +29,8 @@ Puppet::Functions.create_function(:'archive::go_md5') do
 
     checksums = response.split("\n")
     line = checksums.find { |x| x =~ %r{#{file}=} }
-    md5 = line.match(%r{\b[0-9a-f]{5,40}\b})
-    raise("Could not parse md5 from url#{url} response: #{response.body}") unless md5
+    md5 = line.match(%r{\b[0-9a-f]{5,40}\b}) unless line.nil?
+    raise("Could not parse md5 from url #{url} response: #{response}") unless md5
     md5[0]
   end
 end
