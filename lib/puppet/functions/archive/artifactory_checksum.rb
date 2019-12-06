@@ -1,5 +1,5 @@
 require 'json'
-require 'puppet_x/bodeco/util'
+require_relative '../../../puppet_x/bodeco/util.rb'
 
 Puppet::Functions.create_function(:'archive::artifactory_checksum') do
   # @summary A function that returns the checksum value of an artifact stored in Artifactory
