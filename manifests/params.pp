@@ -1,12 +1,9 @@
-# Class: archive::params
-# ======================
-#
-# archive settings such as default user and file mode.
-#
+# @summary OS specific `archive` settings such as default user and file mode.
+# @api private
 class archive::params {
   case $facts['os']['family'] {
     'Windows': {
-      $path               = $::archive_windir
+      $path               = $facts['archive_windir']
       $owner              = 'S-1-5-32-544' # Adminstrators
       $group              = 'S-1-5-18'     # SYSTEM
       $mode               = '0640'
