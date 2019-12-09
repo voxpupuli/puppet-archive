@@ -61,7 +61,7 @@ Archive {
 }
 ```
 
-Users of the module is responsbile for archive package dependencies for
+Users of the module are responsible for archive package dependencies, for
 alternative providers and all extraction utilities such as tar, gunzip, bunzip:
 
 ```puppet
@@ -83,9 +83,9 @@ if $facts['osfamily'] != 'windows' {
 
 ## Usage
 
-Archive module dependency is managed by the archive class. This is only
-required for windows platform. By default 7zip is installed via chocolatey, but
-can be adjusted to use the msi package instead:
+Archive module dependencies are managed by the `archive` class. This is only
+required on Windows. By default 7zip is installed via chocolatey, but
+the MSI package can be installed instead:
 
 ```puppet
 class { 'archive':
@@ -276,10 +276,8 @@ archive { '/var/lib/example.zip':
 
 ### S3 bucket
 
-S3 support is implemented via the [AWS
-CLI](http://docs.aws.amazon.com/cli/latest/userguide/cli-chap-welcome.html).
-By default this dependency is only installed for Linux VMs running on AWS, or
-enabled via `aws_cli_install` option:
+S3 support is implemented via the [AWS CLI](http://docs.aws.amazon.com/cli/latest/userguide/cli-chap-welcome.html).
+On non-Windows systems, the `archive` class will install this dependency when the `aws_cli_install` parameter is set to `true`:
 
 ```puppet
 class { 'archive':
