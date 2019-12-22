@@ -103,7 +103,7 @@ describe Puppet::Type.type(:archive) do
 
   it 'accepts valid resource[:checksum_type]' do
     expect do
-      [:none, :md5, :sha1, :sha2, :sha256, :sha384, :sha512].each do |type|
+      %i[none md5 sha1 sha2 sha256 sha384 sha512].each do |type|
         resource[:checksum_type] = type
       end
     end.not_to raise_error
@@ -117,7 +117,7 @@ describe Puppet::Type.type(:archive) do
 
   it 'verify resource[:allow_insecure] is valid' do
     expect do
-      [:true, :false, :yes, :no].each do |type|
+      %i[true false yes no].each do |type|
         resource[:allow_insecure] = type
       end
     end.not_to raise_error
