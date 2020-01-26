@@ -9,6 +9,7 @@ RSpec.describe curl_provider do
     let(:name)      { '/tmp/example.zip' }
     let(:resource)  { Puppet::Type::Archive.new(resource_properties) }
     let(:provider)  { curl_provider.new(resource) }
+    let(:tempfile)  { Tempfile.new('mock') }
 
     let(:default_options) do
       [
@@ -24,6 +25,7 @@ RSpec.describe curl_provider do
     before do
       allow(FileUtils).to receive(:mv)
       allow(provider).to receive(:curl)
+      allow(Tempfile).to receive(:new).with('.puppet_archive_curl').and_return(tempfile)
     end
 
     context 'no extra properties specified' do
@@ -40,21 +42,6 @@ RSpec.describe curl_provider do
       end
     end
 
-    context 'username specified' do
-      let(:resource_properties) do
-        {
-          name: name,
-          source: 'http://home.lan/example.zip',
-          username: 'foo'
-        }
-      end
-
-      it 'calls curl with default options and username' do
-        provider.download(name)
-        expect(provider).to have_received(:curl).with(default_options << '--user' << 'foo')
-      end
-    end
-
     context 'username and password specified' do
       let(:resource_properties) do
         {
@@ -65,9 +52,23 @@ RSpec.describe curl_provider do
         }
       end
 
-      it 'calls curl with default options and password' do
+      it 'populates temp netrc file with credentials' do
+        allow(provider).to receive(:delete_netrcfile) # Don't delete the file or we won't be able to examine its contents.
         provider.download(name)
-        expect(provider).to have_received(:curl).with(default_options << '--user' << 'foo:bar')
+        nettc_content = File.open(tempfile.path).read
+        expect(nettc_content).to eq("machine home.lan\nlogin foo\npassword bar\n")
+      end
+
+      it 'calls curl with default options and path to netrc file' do
+        netrc_filepath = tempfile.path
+        provider.download(name)
+        expect(provider).to have_received(:curl).with(default_options << '--netrc-file' << netrc_filepath)
+      end
+
+      it 'deletes netrc file' do
+        netrc_filepath = tempfile.path
+        provider.download(name)
+        expect(File.exist?(netrc_filepath)).to eq(false)
       end
     end
 
