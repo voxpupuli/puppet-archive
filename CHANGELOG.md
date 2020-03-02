@@ -4,6 +4,27 @@ All notable changes to this project will be documented in this file.
 Each new release typically also includes the latest modulesync defaults.
 These should not affect the functionality of the module.
 
+## [v4.5.0](https://github.com/voxpupuli/puppet-archive/tree/v4.5.0) (2020-03-02)
+
+[Full Changelog](https://github.com/voxpupuli/puppet-archive/compare/v4.4.0...v4.5.0)
+
+**Implemented enhancements:**
+
+- Add VZ 6/7 to metadata.json [\#402](https://github.com/voxpupuli/puppet-archive/pull/402) ([bastelfreak](https://github.com/bastelfreak))
+
+**Closed issues:**
+
+- Could not autoload puppet/parser/functions/artifactory\_sha1: no such file to load -- puppet\_x/bodeco/util [\#320](https://github.com/voxpupuli/puppet-archive/issues/320)
+
+**Merged pull requests:**
+
+- Convert `archive` class docs to puppet-strings and small README improvements [\#394](https://github.com/voxpupuli/puppet-archive/pull/394) ([alexjfisher](https://github.com/alexjfisher))
+- Convert `go_md5` function to modern API [\#392](https://github.com/voxpupuli/puppet-archive/pull/392) ([alexjfisher](https://github.com/alexjfisher))
+- Use `relative_require` in artifactory functions [\#391](https://github.com/voxpupuli/puppet-archive/pull/391) ([alexjfisher](https://github.com/alexjfisher))
+- Convert `assemble_nexus_url` to modern API [\#390](https://github.com/voxpupuli/puppet-archive/pull/390) ([alexjfisher](https://github.com/alexjfisher))
+- Remove duplicate CONTRIBUTING.md file [\#389](https://github.com/voxpupuli/puppet-archive/pull/389) ([dhoppe](https://github.com/dhoppe))
+- Add Darwin \(mac os x\) compatibility [\#387](https://github.com/voxpupuli/puppet-archive/pull/387) ([bjoernhaeuser](https://github.com/bjoernhaeuser))
+
 ## [v4.4.0](https://github.com/voxpupuli/puppet-archive/tree/v4.4.0) (2019-11-04)
 
 [Full Changelog](https://github.com/voxpupuli/puppet-archive/compare/v4.3.0...v4.4.0)
