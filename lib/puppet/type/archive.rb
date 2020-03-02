@@ -153,7 +153,7 @@ Puppet::Type.newtype(:archive) do
     munge do |val|
       if val.nil? || val.empty? || val == :undef
         :false
-      elsif %i[true false].include? val
+      elsif [:true, :false].include? val
         resource[:checksum_verify] = val
       else
         val

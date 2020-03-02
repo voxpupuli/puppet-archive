@@ -36,7 +36,7 @@ module PuppetX
       # @private
       # rubocop:disable HandleExceptions
       def self.load_file_with_any_terminus(url)
-        termini_to_try = %i[file_server rest]
+        termini_to_try = [:file_server, :rest]
         termini_to_try.each do |terminus|
           with_terminus(terminus) do
             begin
