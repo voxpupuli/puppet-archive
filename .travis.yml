@@ -2,12 +2,6 @@
 dist: bionic
 language: ruby
 cache: bundler
-addons:
-  apt:
-    sources:
-      - augeas
-    packages:
-      - libaugeas-dev
 before_install:
   - yes | gem update --system
   - bundle --version
