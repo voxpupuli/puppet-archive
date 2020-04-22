@@ -9,12 +9,12 @@
 [![Puppet Forge - scores](https://img.shields.io/puppetforge/f/puppet/archive.svg)](https://forge.puppetlabs.com/puppet/archive)
 [![Camptocamp compatible](https://img.shields.io/badge/camptocamp-compatible-orange.svg)](https://forge.puppet.com/camptocamp/archive)
 
-#### Table of Contents
+## Table of Contents
 
 1. [Overview](#overview)
-2. [Module Description](#module-description)
-3. [Setup](#setup)
-4. [Usage](#usage)
+1. [Module Description](#module-description)
+1. [Setup](#setup)
+1. [Usage](#usage)
    * [Example](#usage-example)
    * [Puppet URL](#puppet-url)
    * [File permission](#file-permission)
@@ -22,8 +22,8 @@
    * [Extract customization](#extract-customization)
    * [S3 Bucket](#s3-bucket)
    * [Migrating from puppet-staging](#migrating-from-puppet-staging)
-5. [Reference](#reference)
-6. [Development](#development)
+1. [Reference](#reference)
+1. [Development](#development)
 
 ## Overview
 
@@ -277,7 +277,8 @@ archive { '/var/lib/example.zip':
 ### S3 bucket
 
 S3 support is implemented via the [AWS CLI](http://docs.aws.amazon.com/cli/latest/userguide/cli-chap-welcome.html).
-On non-Windows systems, the `archive` class will install this dependency when the `aws_cli_install` parameter is set to `true`:
+On non-Windows systems, the `archive` class will install this dependency when
+the `aws_cli_install` parameter is set to `true`:
 
 ```puppet
 class { 'archive':
@@ -311,6 +312,7 @@ supplied via `download_options`. Since this parameter is provider specific,
 beware of the order of defaults:
 
 * s3:// files accepts aws cli options
+
   ```puppet
   archive { '/tmp/gravatar.png':
     ensure           => present,
@@ -318,7 +320,9 @@ beware of the order of defaults:
     download_options => ['--region', 'eu-central-1'],
   }
   ```
+
 * puppet `provider` override:
+
   ```puppet
   archive { '/tmp/jta-1.1.jar':
     ensure           => present,
@@ -327,9 +331,11 @@ beware of the order of defaults:
     download_options => '--continue',
   }
   ```
+
 * Linux default provider is `curl`, and Windows default is `ruby` (no effect).
 
 This option can also be applied globally to address issues for specific OS:
+
 ```puppet
 if $facts['osfamily'] != 'RedHat' {
   Archive {
@@ -343,9 +349,7 @@ if $facts['osfamily'] != 'RedHat' {
 It is recommended to use puppet-archive instead of puppet-staging.
 Users wishing to migrate may find the following examples useful.
 
-#### Simple example without extraction
-
-##### puppet-staging
+#### puppet-staging (without extraction)
 
 ```puppet
 class { 'staging':
@@ -357,7 +361,7 @@ staging::file { 'master.zip':
 }
 ```
 
-##### puppet-archive
+#### puppet-archive (without extraction)
 
 ```puppet
 archive { '/tmp/staging/master.zip':
@@ -365,9 +369,7 @@ archive { '/tmp/staging/master.zip':
 }
 ```
 
-#### Example with zip file extraction
-
-##### puppet-staging
+#### puppet-staging (with zip file extraction)
 
 ```puppet
 class { 'staging':
@@ -383,7 +385,7 @@ staging::extract { 'master.zip':
 }
 ```
 
-##### puppet-archive
+#### puppet-archive (with zip file extraction)
 
 ```puppet
 archive { '/tmp/staging/master.zip':
@@ -439,9 +441,9 @@ archive { '/tmp/staging/master.zip':
   (default: false)
 * `extract_path`: target folder path to extract archive.
 * `extract_command`: custom extraction command ('tar xvf example.tar.gz'), also
-* `temp_dir`: specify an alternative temporary directory to use for file downloads, if unset the OS default is used
-  support sprintf format ('tar xvf %s') which will be processed with the
-  filename: sprintf('tar xvf %s', filename)
+* `temp_dir`: specify an alternative temporary directory to use for file downloads,
+  if unset the OS default is used support sprintf format ('tar xvf %s') which will
+  be processed with the filename: sprintf('tar xvf %s', filename)
 * `extract_flags`: custom extraction options, this replaces the default flags.
   A string such as 'xvf' for a tar file would replace the default xf flag. A
   hash is useful when custom flags are needed for different platforms. {'tar'
