@@ -17,7 +17,6 @@ define archive::go (
   Optional[Boolean]         $cleanup      = undef,
   Optional[Stdlib::Compat::Absolute_path] $archive_path = undef,
 ) {
-
   include archive::params
 
   if $archive_path {

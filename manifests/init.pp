@@ -30,7 +30,6 @@ class archive (
   Optional[String[1]]                       $seven_zip_source   = undef,
   Boolean                                   $aws_cli_install    = false,
 ) inherits archive::params {
-
   if $facts['os']['family'] == 'Windows' and !($seven_zip_provider in ['', undef]) {
     package { '7zip':
       ensure   => present,
@@ -52,7 +51,7 @@ class archive (
 
       archive { 'awscli-bundle.zip':
         ensure       => present,
-        path         =>  '/opt/awscli-bundle/awscli-bundle.zip',
+        path         => '/opt/awscli-bundle/awscli-bundle.zip',
         source       => 'https://s3.amazonaws.com/aws-cli/awscli-bundle.zip',
         extract      => true,
         extract_path => '/opt',
