@@ -31,7 +31,7 @@ describe PuppetX::Bodeco::Archive do
     subject { |example| described_class.new(example.metadata[:filename]) }
 
     before { allow(Facter).to receive(:value).with(:osfamily).and_return(os) }
-    after { expect(Facter).to have_received(:value).with(:osfamily).at_least(:twice) }
+    after { expect(Facter).to have_received(:value).with(:osfamily).at_least(:twice) } # rubocop:disable RSpec/ExpectInHook
 
     describe 'on RedHat' do
       let(:os) { 'RedHat' }
