@@ -97,7 +97,7 @@ class { 'archive':
 
 ### Usage Example
 
-Simple example that donwloads from web server:
+Simple example that downloads from web server:
 
 ```puppet
 archive { '/tmp/vagrant.deb':
