@@ -52,7 +52,6 @@ define archive::artifactory (
   Optional[Boolean]              $cleanup      = undef,
   Optional[Stdlib::Absolutepath] $archive_path = undef,
 ) {
-
   include archive::params
 
   if $archive_path {
@@ -66,7 +65,7 @@ define archive::artifactory (
   }
 
   $maven2_data = archive::parse_artifactory_url($url)
-  if $maven2_data and $maven2_data['folder_iteg_rev'] == 'SNAPSHOT'{
+  if $maven2_data and $maven2_data['folder_iteg_rev'] == 'SNAPSHOT' {
     # URL represents a SNAPSHOT version. eg 'http://artifactory.example.com/artifactory/repo/com/example/artifact/0.0.1-SNAPSHOT/artifact-0.0.1-SNAPSHOT.zip'
     # Only Artifactory Pro lets you download this directly but the corresponding fileinfo endpoint (where the sha1 checksum is published) doesn't exist.
     # This means we can't use the artifactory_sha1 function

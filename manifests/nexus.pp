@@ -45,7 +45,6 @@ define archive::nexus (
   Optional[String]  $proxy_type      = undef,
   Optional[Boolean] $allow_insecure  = undef,
 ) {
-
   include archive::params
 
   $artifact_info = split($gav, ':')
@@ -55,7 +54,6 @@ define archive::nexus (
   $version = $artifact_info[2]
 
   $query_params = {
-
     'g' => $group_id,
     'a' => $artifact_id,
     'v' => $version,
@@ -63,7 +61,6 @@ define archive::nexus (
     'p' => $packaging,
     'c' => $classifier,
     'e' => $extension,
-
   }.filter |$keys, $values| { $values != undef }
 
   if $use_nexus3_urls {
@@ -72,9 +69,20 @@ define archive::nexus (
     } else {
       $c = ''
     }
-    $artifact_url = sprintf('%s/repository/%s/%s/%s/%s/%s-%s%s.%s', $url,
-                            $repository, regsubst($group_id, '\.', '/', 'G'), $artifact_id,
-                            $version, $artifact_id, $version, $c, $packaging)
+
+    $artifact_url = sprintf(
+      '%s/repository/%s/%s/%s/%s/%s-%s%s.%s',
+      $url,
+      $repository,
+      regsubst($group_id, '\.', '/', 'G'),
+      $artifact_id,
+      $version,
+      $artifact_id,
+      $version,
+      $c,
+      $packaging
+    )
+
     $checksum_url = sprintf('%s.%s', $artifact_url, $checksum_type)
   } else {
     $artifact_url = archive::assemble_nexus_url($url, $query_params)
