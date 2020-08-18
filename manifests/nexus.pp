@@ -44,6 +44,8 @@ define archive::nexus (
   Optional[String]  $proxy_server    = undef,
   Optional[String]  $proxy_type      = undef,
   Optional[Boolean] $allow_insecure  = undef,
+  Optional[String]  $proxy_type      = undef,
+  Optional[String]  $temp_dir        = undef,
 ) {
   include archive::params
 
@@ -107,6 +109,7 @@ define archive::nexus (
     proxy_server    => $proxy_server,
     proxy_type      => $proxy_type,
     allow_insecure  => $allow_insecure,
+    temp_dir        => $temp_dir,
   }
 
   $file_owner = pick($owner, $archive::params::owner)
