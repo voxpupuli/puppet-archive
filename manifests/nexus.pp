@@ -44,7 +44,7 @@ define archive::nexus (
   Optional[String]  $proxy_server    = undef,
   Optional[String]  $proxy_type      = undef,
   Optional[Boolean] $allow_insecure  = undef,
-  Optional[String]  $temp_dir        = undef,
+  Optional[Stdlib::Absolutepath] $temp_dir = undef,
 ) {
   include archive::params
 
