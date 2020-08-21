@@ -44,7 +44,8 @@ describe 'archive::nexus' do
         extract: true,
         extract_path: '/opt',
         creates: '/opt/artifact/WEB-INF',
-        cleanup: true
+        cleanup: true,
+        temp_dir: '/tmp'
       }
     end
 
@@ -55,7 +56,8 @@ describe 'archive::nexus' do
         'extract' => true,
         'extract_path' => '/opt',
         'creates' => '/opt/artifact/WEB-INF',
-        'cleanup' => true
+        'cleanup' => true,
+        'temp_dir' => '/tmp'
       )
     end
 
