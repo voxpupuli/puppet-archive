@@ -4,7 +4,25 @@ All notable changes to this project will be documented in this file.
 Each new release typically also includes the latest modulesync defaults.
 These should not affect the functionality of the module.
 
-## [v4.5.0](https://github.com/voxpupuli/puppet-archive/tree/v4.5.0) (2020-03-02)
+## [v4.6.0](https://github.com/voxpupuli/puppet-archive/tree/v4.6.0) (2020-08-21)
+
+[Full Changelog](https://github.com/voxpupuli/puppet-archive/compare/v4.5.0...v4.6.0)
+
+**Implemented enhancements:**
+
+- Add `temp_dir` parameter to `archive::nexus` [\#415](https://github.com/voxpupuli/puppet-archive/pull/415) ([alexcit](https://github.com/alexcit))
+- Use curl netrc file instead of `--user` [\#399](https://github.com/voxpupuli/puppet-archive/pull/399) ([alexjfisher](https://github.com/alexjfisher))
+
+**Closed issues:**
+
+- Feature request: make password sensitive and hide on fail [\#397](https://github.com/voxpupuli/puppet-archive/issues/397)
+
+**Merged pull requests:**
+
+- README.md: correct spelling typo [\#414](https://github.com/voxpupuli/puppet-archive/pull/414) ([kenyon](https://github.com/kenyon))
+- Fix several markdown lint issues [\#408](https://github.com/voxpupuli/puppet-archive/pull/408) ([dhoppe](https://github.com/dhoppe))
+
+## [v4.5.0](https://github.com/voxpupuli/puppet-archive/tree/v4.5.0) (2020-04-02)
 
 [Full Changelog](https://github.com/voxpupuli/puppet-archive/compare/v4.4.0...v4.5.0)
 
