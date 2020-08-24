@@ -66,6 +66,7 @@ require 'tempfile'
 
 Puppet::Type.type(:archive).provide(:ruby) do
   optional_commands aws: 'aws'
+  optional_commands gsutil: 'gsutil'
   defaultfor feature: :microsoft_windows
   attr_reader :archive_checksum
 
@@ -179,6 +180,8 @@ Puppet::Type.type(:archive).provide(:ruby) do
       FileUtils.copy(Puppet::Util.uri_to_path(uri), temppath)
     when %r{^s3}
       s3_download(temppath)
+    when %r{^gs}
+      gs_download(temppath)
     when nil
       raise(Puppet::Error, 'Unable to fetch archive, the source parameter is nil.')
     else
@@ -234,6 +237,18 @@ Puppet::Type.type(:archive).provide(:ruby) do
     params += resource[:download_options] if resource[:download_options]
 
     aws(params)
+  end
+
+  def gs_download(path)
+    params = [
+      'gsutil',
+      'cp',
+      resource[:source],
+      path
+    ]
+    params += resource[:download_options] if resource[:download_options]
+
+    gsutil(params)
   end
 
   def optional_switch(value, option)
