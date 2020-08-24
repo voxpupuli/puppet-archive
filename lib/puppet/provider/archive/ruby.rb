@@ -241,7 +241,6 @@ Puppet::Type.type(:archive).provide(:ruby) do
 
   def gs_download(path)
     params = [
-      'gsutil',
       'cp',
       resource[:source],
       path
