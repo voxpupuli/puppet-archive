@@ -82,14 +82,14 @@ RSpec.describe ruby_provider do
         {
           name: name,
           source: 'gs://home.lan/example.zip',
-          download_options: ['--region', 'eu-central-1']
+          download_options: []
         }
       end
 
       context 'default resource property' do
         it '#gs_download' do
           provider.gs_download(name)
-          expect(provider).to have_received(:gsutil).with(gs_download_options << '--region' << 'eu-central-1')
+          expect(provider).to have_received(:gsutil).with(gs_download_options)
         end
       end
     end
