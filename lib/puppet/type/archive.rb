@@ -122,9 +122,9 @@ Puppet::Type.newtype(:archive) do
   end
 
   newparam(:source) do
-    desc 'archive file source, supports puppet|http|https|ftp|file|s3 uri.'
+    desc 'archive file source, supports puppet|http|https|ftp|file|s3|gs uri.'
     validate do |value|
-      unless value =~ URI.regexp(%w[puppet http https ftp file s3]) || Puppet::Util.absolute_path?(value)
+      unless value =~ URI.regexp(%w[puppet http https ftp file s3 gs]) || Puppet::Util.absolute_path?(value)
         raise ArgumentError, "invalid source url: #{value}"
       end
     end
@@ -235,7 +235,7 @@ Puppet::Type.newtype(:archive) do
   end
 
   newparam(:download_options) do
-    desc 'provider download options (affects curl, wget, and only s3 downloads for ruby provider)'
+    desc 'provider download options (affects curl, wget, gs, and only s3 downloads for ruby provider)'
 
     validate do |val|
       unless val.is_a?(::String) || val.is_a?(::Array)
@@ -264,6 +264,10 @@ Puppet::Type.newtype(:archive) do
 
   autorequire(:exec) do
     ['install_aws_cli']
+  end
+
+  autorequire(:exec) do
+    ['install_gsutil']
   end
 
   validate do

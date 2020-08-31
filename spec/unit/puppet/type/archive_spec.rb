@@ -43,6 +43,7 @@ describe Puppet::Type.type(:archive) do
         resource[:source] = 'https://home.lan/example.zip'
         resource[:source] = 'ftp://home.lan/example.zip'
         resource[:source] = 's3://home.lan/example.zip'
+        resource[:source] = 'gs://home.lan/example.zip'
         resource[:source] = '/tmp/example.zip'
       end.not_to raise_error
     end
