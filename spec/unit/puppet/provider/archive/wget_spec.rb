@@ -167,6 +167,5 @@ RSpec.describe wget_provider do
         expect(execution).to have_received(:execute).with([default_options, '--ca-certificate=/custom-ca-bundle.pem'].join(' '))
       end
     end
-
   end
 end
