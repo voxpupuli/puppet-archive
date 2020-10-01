@@ -22,6 +22,7 @@ describe Puppet::Type.type(:archive) do
     it { expect(resource[:allow_insecure]).to eq false }
     it { expect(resource[:download_options]).to eq nil }
     it { expect(resource[:temp_dir]).to eq nil }
+    it { expect(resource[:cacert_file]).to eq nil }
   end
 
   it 'verify resource[:path] is absolute filepath' do
@@ -34,6 +35,12 @@ describe Puppet::Type.type(:archive) do
     expect do
       resource[:temp_dir] = 'relative/file'
     end.to raise_error(Puppet::Error, %r{Invalid temp_dir})
+  end
+
+  it 'verify resource[:cacert_file] is absolute path' do
+    expect do
+      resource[:cacert_file] = 'relative/file'
+    end.to raise_error(Puppet::Error, %r{cacert_file must be absolute})
   end
 
   describe 'on posix', if: Puppet.features.posix? do

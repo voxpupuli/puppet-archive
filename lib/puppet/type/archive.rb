@@ -234,6 +234,15 @@ Puppet::Type.newtype(:archive) do
     defaultto :false
   end
 
+  newparam(:cacert_file) do
+    desc 'path to a custom CA certificate bundle file'
+    validate do |value|
+      unless !value.nil? && Puppet::Util.absolute_path?(value)
+        raise ArgumentError, "cacert_file must be absolute: #{value}"
+      end
+    end
+  end
+
   newparam(:download_options) do
     desc 'provider download options (affects curl, wget, gs, and only s3 downloads for ruby provider)'
 

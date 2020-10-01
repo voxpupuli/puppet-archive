@@ -14,6 +14,7 @@ Puppet::Type.type(:archive).provide(:curl, parent: :ruby) do
     params += ['--insecure'] if resource[:allow_insecure]
     params += resource[:download_options] if resource[:download_options]
     params += optional_switch(resource[:cookie], ['--cookie', '%s'])
+    params += optional_switch(resource[:cacert_file], ['--cacert', '%s'])
 
     params
   end

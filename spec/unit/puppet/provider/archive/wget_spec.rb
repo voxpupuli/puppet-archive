@@ -152,5 +152,21 @@ RSpec.describe wget_provider do
         end
       end
     end
+
+    context 'with cacert_file' do
+      let(:resource_properties) do
+        {
+          name: name,
+          source: 'http://home.lan/example.zip',
+          cacert_file: '/custom-ca-bundle.pem'
+        }
+      end
+
+      it 'calls wget with default options and --ca-certificate' do
+        provider.download(name)
+        expect(execution).to have_received(:execute).with([default_options, '--ca-certificate=/custom-ca-bundle.pem'].join(' '))
+      end
+    end
+
   end
 end

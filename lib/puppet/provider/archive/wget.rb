@@ -8,6 +8,7 @@ Puppet::Type.type(:archive).provide(:wget, parent: :ruby) do
     params += optional_switch(resource[:proxy_server], ['-e use_proxy=yes', "-e #{resource[:proxy_type]}_proxy=#{resource[:proxy_server]}"])
     params += ['--no-check-certificate'] if resource[:allow_insecure]
     params += resource[:download_options] if resource[:download_options]
+    params += optional_switch(resource[:cacert_file], ['--ca-certificate=%s'])
 
     params
   end
