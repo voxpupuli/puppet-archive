@@ -15,6 +15,14 @@
 #     aws_cli_install => true,
 #   }
 #
+# @example Deploy a specific archive
+#   class { 'archive':
+#     archives => { '/tmp/jta-1.1.jar' => {
+#                     'ensure' => 'present',
+#                     'source'  => 'http://central.maven.org/maven2/javax/transaction/jta/1.1/jta-1.1.jar',
+#                     }, }
+#   }
+#
 # @param seven_zip_name
 #   7zip package name.  This parameter only applies to Windows.
 # @param seven_zip_provider
@@ -26,12 +34,15 @@
 # @param gsutil_install
 #   Installs the GSUtil CLI command needed for downloading from GS buckets.  This parameter is currently not implemented on Windows.
 #
+# @param archives
+#   A hash of archive resources this module should create.
 class archive (
   Optional[String[1]]                       $seven_zip_name     = $archive::params::seven_zip_name,
   Optional[Enum['chocolatey','windows','']] $seven_zip_provider = $archive::params::seven_zip_provider,
   Optional[String[1]]                       $seven_zip_source   = undef,
   Boolean                                   $aws_cli_install    = false,
   Boolean                                   $gsutil_install     = false,
+  Hash                                      $archives           = {},
 ) inherits archive::params {
   if $facts['os']['family'] == 'Windows' and !($seven_zip_provider in ['', undef]) {
     package { '7zip':
@@ -95,6 +106,12 @@ class archive (
         refreshonly => true,
         subscribe   => Archive['gsutil.zip'],
       }
+    }
+  }
+
+  $archives.each |$archive_name, $archive_settings| {
+    archive { $archive_name:
+      * => $archive_settings,
     }
   }
 }

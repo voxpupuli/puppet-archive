@@ -30,6 +30,18 @@ describe 'archive' do
       it { is_expected.to contain_archive('awscli-bundle.zip') }
       it { is_expected.to contain_exec('install_aws_cli') }
     end
+
+    context 'with archives' do
+      let(:params) do
+        {
+          archives: {
+            '/tmp/foo.tar.gz' => { 'ensure' => 'present' }
+          }
+        }
+      end
+
+      it { is_expected.to contain_archive('/tmp/foo.tar.gz') }
+    end
   end
 
   describe 'Windows' do
@@ -95,6 +107,24 @@ describe 'archive' do
       end
 
       it { is_expected.not_to contain_package('7zip') }
+    end
+
+    context 'with archives' do
+      let(:facts) do
+        {
+          archive_windir: 'C:/staging'
+        }.merge(default_facts)
+      end
+
+      let(:params) do
+        {
+          archives: {
+            'C:/staging/foo.zip' => { 'ensure' => 'present' }
+          }
+        }
+      end
+
+      it { is_expected.to contain_archive('C:/staging/foo.zip') }
     end
   end
 end
