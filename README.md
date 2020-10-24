@@ -96,6 +96,18 @@ class { 'archive':
 }
 ```
 
+To automatically load archives as part of this class you can define the
+`archives` parameter.
+
+```puppet
+class { 'archive':
+  archives => { '/tmp/jta-1.1.jar' => {
+                  'ensure' => 'present',
+                  'source'  => 'http://central.maven.org/maven2/javax/transaction/jta/1.1/jta-1.1.jar',
+                  }, }
+}
+```
+
 ### Usage Example
 
 Simple example that downloads from web server:
@@ -423,6 +435,7 @@ archive { '/tmp/staging/master.zip':
 ### Classes
 
 * `archive`: install 7zip package (Windows only) and aws cli or gsutil for s3/gs support.
+  It also permits passing an `archives` argument to generate `archive` resources.
 * `archive::staging`: install package dependencies and creates staging directory
   for backwards compatibility. Use the archive class instead if you do not need
   the staging directory.
