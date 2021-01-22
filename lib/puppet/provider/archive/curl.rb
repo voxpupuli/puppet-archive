@@ -7,8 +7,14 @@ Puppet::Type.type(:archive).provide(:curl, parent: :ruby) do
 
   def curl_params(params)
     if resource[:username]
-      create_netrcfile
-      params += ['--netrc-file', @netrc_file.path]
+      if resource[:username] =~ %r{\s} || resource[:password] =~ %r{\s}
+        Puppet.warning('Username or password contains a space.  Unable to use netrc file to hide credentials')
+        account = [resource[:username], resource[:password]].compact.join(':')
+        params += optional_switch(account, ['--user', '%s'])
+      else
+        create_netrcfile
+        params += ['--netrc-file', @netrc_file.path]
+      end
     end
     params += optional_switch(resource[:proxy_server], ['--proxy', '%s'])
     params += ['--insecure'] if resource[:allow_insecure]

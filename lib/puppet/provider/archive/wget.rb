@@ -2,8 +2,10 @@ Puppet::Type.type(:archive).provide(:wget, parent: :ruby) do
   commands wget: 'wget'
 
   def wget_params(params)
-    params += optional_switch(resource[:username], ['--user=%s'])
-    params += optional_switch(resource[:password], ['--password=%s'])
+    username = Shellwords.shellescape(resource[:username]) if resource[:username]
+    password = Shellwords.shellescape(resource[:password]) if resource[:password]
+    params += optional_switch(username, ['--user=%s'])
+    params += optional_switch(password, ['--password=%s'])
     params += optional_switch(resource[:cookie], ['--header="Cookie: %s"'])
     params += optional_switch(resource[:proxy_server], ['-e use_proxy=yes', "-e #{resource[:proxy_type]}_proxy=#{resource[:proxy_server]}"])
     params += ['--no-check-certificate'] if resource[:allow_insecure]
