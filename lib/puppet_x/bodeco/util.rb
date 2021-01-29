@@ -85,7 +85,7 @@ module PuppetX
                        elsif ENV.key?('SSL_CERT_FILE')
                          ENV['SSL_CERT_FILE']
                        elsif Facter.value(:osfamily) == 'windows'
-                         File.expand_path(File.join(__FILE__, '..', 'cacert.pem'))
+                         File.join(__dir__, 'cacert.pem')
                        end
       end
 
