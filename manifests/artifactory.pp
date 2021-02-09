@@ -50,6 +50,8 @@ define archive::artifactory (
   Optional[String]               $extract_path = undef,
   Optional[String]               $creates      = undef,
   Optional[Boolean]              $cleanup      = undef,
+  Optional[String]               $username     = undef,
+  Optional[String]               $password     = undef,
   Optional[Stdlib::Absolutepath] $archive_path = undef,
 ) {
   include archive::params
@@ -84,6 +86,8 @@ define archive::artifactory (
     path          => $file_path,
     extract       => $extract,
     extract_path  => $extract_path,
+    username      => $username,
+    password      => $password,
     source        => $file_url,
     checksum      => $sha1,
     checksum_type => 'sha1',
