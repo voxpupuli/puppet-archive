@@ -4,6 +4,33 @@ All notable changes to this project will be documented in this file.
 Each new release typically also includes the latest modulesync defaults.
 These should not affect the functionality of the module.
 
+## [v5.0.0](https://github.com/voxpupuli/puppet-archive/tree/v5.0.0) (2021-04-16)
+
+[Full Changelog](https://github.com/voxpupuli/puppet-archive/compare/v4.6.0...v5.0.0)
+
+**Breaking changes:**
+
+- metadata.json: drop Puppet 5, add Puppet 7 support [\#436](https://github.com/voxpupuli/puppet-archive/pull/436) ([kenyon](https://github.com/kenyon))
+- Drop support for CentOS/RHEL 6 and variants [\#431](https://github.com/voxpupuli/puppet-archive/pull/431) ([alexjfisher](https://github.com/alexjfisher))
+
+**Implemented enhancements:**
+
+- Enable Debian 9/10 support [\#439](https://github.com/voxpupuli/puppet-archive/pull/439) ([bastelfreak](https://github.com/bastelfreak))
+- Support stdlib 7.x [\#437](https://github.com/voxpupuli/puppet-archive/pull/437) ([treydock](https://github.com/treydock))
+- Add `archives` parameter to make use with an ENC or hiera easier [\#423](https://github.com/voxpupuli/puppet-archive/pull/423) ([jcpunk](https://github.com/jcpunk))
+- Add initial support for gsutil and pulling from Google Storage buckets [\#421](https://github.com/voxpupuli/puppet-archive/pull/421) ([j0sh3rs](https://github.com/j0sh3rs))
+
+**Fixed bugs:**
+
+- Fix downloading when passwords contain spaces [\#430](https://github.com/voxpupuli/puppet-archive/pull/430) ([alexjfisher](https://github.com/alexjfisher))
+- Windows: find 7zip binary [\#428](https://github.com/voxpupuli/puppet-archive/pull/428) ([joerg16](https://github.com/joerg16))
+
+**Merged pull requests:**
+
+- Produce a better error for the puppet downloader when file not found [\#434](https://github.com/voxpupuli/puppet-archive/pull/434) ([hajee](https://github.com/hajee))
+- Pass over credentials in archive::artifactory [\#433](https://github.com/voxpupuli/puppet-archive/pull/433) ([jramosf](https://github.com/jramosf))
+- Clean up temporary files when checksums don't match [\#412](https://github.com/voxpupuli/puppet-archive/pull/412) ([benridley](https://github.com/benridley))
+
 ## [v4.6.0](https://github.com/voxpupuli/puppet-archive/tree/v4.6.0) (2020-08-21)
 
 [Full Changelog](https://github.com/voxpupuli/puppet-archive/compare/v4.5.0...v4.6.0)
