@@ -80,13 +80,7 @@ module PuppetX
           @proxy_port = uri.port
         end
 
-        @cacert_file = if options.key?[:cacert_file]
-                         options[:cacert_file]
-                       elsif ENV.key?('SSL_CERT_FILE')
-                         ENV['SSL_CERT_FILE']
-                       elsif Facter.value(:osfamily) == 'windows'
-                         File.join(__dir__, 'cacert.pem')
-                       end
+        ENV['SSL_CERT_FILE'] = File.expand_path(File.join(__FILE__, '..', 'cacert.pem')) if Facter.value(:osfamily) == 'windows' && !ENV.key?('SSL_CERT_FILE')
       end
 
       def generate_request(uri)
@@ -104,9 +98,6 @@ module PuppetX
                     else
                       { use_ssl: false }
                     end
-
-        http_opts[:ca_file] = @cacert_file unless @cacert_file.nil?
-
         Net::HTTP.start(uri.host, uri.port, @proxy_addr, @proxy_port, http_opts) do |http|
           http.request(generate_request(uri)) do |response|
             case response

@@ -217,8 +217,7 @@ Puppet::Type.type(:archive).provide(:ruby) do
       cookie: resource[:cookie],
       proxy_server: resource[:proxy_server],
       proxy_type: resource[:proxy_type],
-      insecure: resource[:allow_insecure],
-      cacert_file: resource[:cacert_file]
+      insecure: resource[:allow_insecure]
     )
   end
 

@@ -464,7 +464,6 @@ archive { '/tmp/staging/master.zip':
 * `source`: archive file source, supports http|https|ftp|file|s3|gs uri.
 * `username`: username to download source file.
 * `password`: password to download source file.
-* `cacert_file`: Path to a CA certificate bundle.
 * `allow_insecure`: Ignore HTTPS certificate errors (true|false). (default: false)
 * `cookie`: archive file download cookie.
 * `checksum_type`: archive file checksum type (none|md5|sha1|sha2|sha256|sha384|
