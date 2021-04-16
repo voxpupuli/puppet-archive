@@ -29,7 +29,7 @@ module PuppetX
         # trial and error method. First we start withe the default. And if it doesn't work, we try the
         # other ones
         status = load_file_with_any_terminus(url)
-        raise ArgumentError, "Could not retrieve information from environment #{Puppet['environment']} source(s) #{url}'" unless status
+        raise ArgumentError, "Previous error(s) resulted in Puppet being unable to retrieve information from environment #{Puppet['environment']} source(s) #{url}'\nMost probable cause is file not found." unless status
         File.open(filepath, 'w') { |file| file.write(status.content) }
       end
 
@@ -41,7 +41,7 @@ module PuppetX
           with_terminus(terminus) do
             begin
               content = Puppet::FileServing::Content.indirection.find(url)
-            rescue SocketError, Timeout::Error, Errno::ECONNREFUSED, Errno::EHOSTDOWN, Errno::EHOSTUNREACH, Errno::ETIMEDOUT
+            rescue SocketError, Timeout::Error, Errno::ECONNREFUSED, Errno::EHOSTDOWN, Errno::EHOSTUNREACH, Errno::ETIMEDOUT, Puppet::HTTP::RouteError
               # rescue any network error
             end
             return content if content
