@@ -185,20 +185,5 @@ RSpec.describe curl_provider do
         expect(provider).to have_received(:curl).with(default_options << '--tlsv1')
       end
     end
-
-    context 'using cacert_file' do
-      let(:resource_properties) do
-        {
-          name: name,
-          source: 'http://home.lan/example.zip',
-          cacert_file: '/custom-ca-bundle.pem'
-        }
-      end
-
-      it 'calls curl with --cacert' do
-        provider.download(name)
-        expect(provider).to have_received(:curl).with(default_options << '--cacert' << '/custom-ca-bundle.pem')
-      end
-    end
   end
 end
