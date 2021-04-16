@@ -45,3 +45,31 @@ jobs:
           bundler-cache: true
       - name: Run tests
         run: bundle exec rake
+
+  acceptance:
+    needs: setup_matrix
+    runs-on: ubuntu-latest
+    env:
+      BUNDLE_WITHOUT: development:test:release
+    strategy:
+      fail-fast: false
+      matrix:
+        setfile: ${{fromJson(needs.setup_matrix.outputs.beaker_setfiles)}}
+        puppet: ${{fromJson(needs.setup_matrix.outputs.puppet_major_versions)}}
+    name: ${{ matrix.puppet.name }} - ${{ matrix.setfile.name }}
+    steps:
+      - name: Enable IPv6 on docker
+        run: |
+          echo '{"ipv6":true,"fixed-cidr-v6":"2001:db8:1::/64"}' | sudo tee /etc/docker/daemon.json
+          sudo service docker restart
+      - uses: actions/checkout@v2
+      - name: Setup ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: '2.7'
+          bundler-cache: true
+      - name: Run tests
+        run: bundle exec rake beaker
+        env:
+          BEAKER_PUPPET_COLLECTION: ${{ matrix.puppet.collection }}
+          BEAKER_setfile: ${{ matrix.setfile.value }}

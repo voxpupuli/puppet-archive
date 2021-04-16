@@ -70,6 +70,22 @@ RSpec.describe curl_provider do
         provider.download(name)
         expect(File.exist?(netrc_filepath)).to eq(false)
       end
+
+      context 'with password containing space' do
+        let(:resource_properties) do
+          {
+            name: name,
+            source: 'http://home.lan/example.zip',
+            username: 'foo',
+            password: 'b ar'
+          }
+        end
+
+        it 'calls curl with default options and username and password on command line' do
+          provider.download(name)
+          expect(provider).to have_received(:curl).with(default_options << '--user' << 'foo:b ar')
+        end
+      end
     end
 
     context 'allow_insecure true' do
