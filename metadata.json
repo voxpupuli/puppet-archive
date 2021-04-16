@@ -41,6 +41,13 @@
       ]
     },
     {
+      "operatingsystem": "Debian",
+      "operatingsystemrelease": [
+        "9",
+        "10"
+      ]
+    },
+    {
       "operatingsystem": "Solaris",
       "operatingsystemrelease": [
         "10",
