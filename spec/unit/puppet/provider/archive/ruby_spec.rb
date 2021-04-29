@@ -93,5 +93,35 @@ RSpec.describe ruby_provider do
         end
       end
     end
+
+    describe 'checksum match' do
+      let(:resource_properties) do
+        {
+          name: name,
+          source: '/dev/null',
+          checksum: 'da39a3ee5e6b4b0d3255bfef95601890afd80709',
+          checksum_type: 'sha1',
+        }
+      end
+
+      it 'does not raise an error' do
+        provider.transfer_download(name)
+      end
+    end
+
+    describe 'checksum mismatch' do
+      let(:resource_properties) do
+        {
+          name: name,
+          source: '/dev/null',
+          checksum: '9edf7cd9dfa0d83cd992e5501a480ea502968f15109aebe9ba2203648f3014db',
+          checksum_type: 'sha1',
+        }
+      end
+
+      it 'raises PuppetError (Download file checksum mismatch)' do
+        expect { provider.transfer_download(name) }.to raise_error(Puppet::Error, %r{Download file checksum mismatch})
+      end
+    end
   end
 end
