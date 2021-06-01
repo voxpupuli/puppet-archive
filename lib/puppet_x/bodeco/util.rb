@@ -30,7 +30,7 @@ module PuppetX
         # other ones
         status = load_file_with_any_terminus(url)
         raise ArgumentError, "Previous error(s) resulted in Puppet being unable to retrieve information from environment #{Puppet['environment']} source(s) #{url}'\nMost probable cause is file not found." unless status
-        File.open(filepath, 'w') { |file| file.write(status.content) }
+        File.open(filepath, 'wb') { |file| file.write(status.content) }
       end
 
       # @private
