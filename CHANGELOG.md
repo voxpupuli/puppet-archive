@@ -4,6 +4,21 @@ All notable changes to this project will be documented in this file.
 Each new release typically also includes the latest modulesync defaults.
 These should not affect the functionality of the module.
 
+## [v5.0.1](https://github.com/voxpupuli/puppet-archive/tree/v5.0.1) (2021-07-29)
+
+[Full Changelog](https://github.com/voxpupuli/puppet-archive/compare/v5.0.0...v5.0.1)
+
+**Fixed bugs:**
+
+- Update CA certificate bundle to 2021-05-25 [\#444](https://github.com/voxpupuli/puppet-archive/pull/444) ([l-avila](https://github.com/l-avila))
+- Fix Could not set 'present' on ensure: wrong number of arguments \(given 1, expected 0\) [\#443](https://github.com/voxpupuli/puppet-archive/pull/443) ([jeffmccune](https://github.com/jeffmccune))
+- Write downloaded files as binary [\#442](https://github.com/voxpupuli/puppet-archive/pull/442) ([benohara](https://github.com/benohara))
+
+**Closed issues:**
+
+- no parameter named 'provider'  [\#446](https://github.com/voxpupuli/puppet-archive/issues/446)
+- Still 2 Certificates expired  in cacert.pem [\#376](https://github.com/voxpupuli/puppet-archive/issues/376)
+
 ## [v5.0.0](https://github.com/voxpupuli/puppet-archive/tree/v5.0.0) (2021-04-16)
 
 [Full Changelog](https://github.com/voxpupuli/puppet-archive/compare/v4.6.0...v5.0.0)
