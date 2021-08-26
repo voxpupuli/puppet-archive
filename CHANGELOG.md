@@ -4,6 +4,14 @@ All notable changes to this project will be documented in this file.
 Each new release typically also includes the latest modulesync defaults.
 These should not affect the functionality of the module.
 
+## [v6.0.1](https://github.com/voxpupuli/puppet-archive/tree/v6.0.1) (2021-08-26)
+
+[Full Changelog](https://github.com/voxpupuli/puppet-archive/compare/v6.0.0...v6.0.1)
+
+**Fixed bugs:**
+
+- Fix `archive::download::digest_type` data type \(reverts 6.0.0 breaking change\) [\#460](https://github.com/voxpupuli/puppet-archive/pull/460) ([alexjfisher](https://github.com/alexjfisher))
+
 ## [v6.0.0](https://github.com/voxpupuli/puppet-archive/tree/v6.0.0) (2021-08-25)
 
 [Full Changelog](https://github.com/voxpupuli/puppet-archive/compare/v5.0.0...v6.0.0)
@@ -15,24 +23,18 @@ These should not affect the functionality of the module.
 - Drop EoL Windows versions [\#453](https://github.com/voxpupuli/puppet-archive/pull/453) ([genebean](https://github.com/genebean))
 - Drop Debian 9 [\#452](https://github.com/voxpupuli/puppet-archive/pull/452) ([genebean](https://github.com/genebean))
 - Drop Ubuntu 16.04 [\#451](https://github.com/voxpupuli/puppet-archive/pull/451) ([genebean](https://github.com/genebean))
-- Set optional param to undef to fix failling test [\#449](https://github.com/voxpupuli/puppet-archive/pull/449) ([yachub](https://github.com/yachub))
+- Set optional param to undef to fix failing test \(REVERTED IN 6.0.1\) [\#449](https://github.com/voxpupuli/puppet-archive/pull/449) ([yachub](https://github.com/yachub))
 
 **Implemented enhancements:**
 
 - Add support for Debian 11 [\#458](https://github.com/voxpupuli/puppet-archive/pull/458) ([smortex](https://github.com/smortex))
 - Add ubuntu 20.04 [\#456](https://github.com/voxpupuli/puppet-archive/pull/456) ([genebean](https://github.com/genebean))
+- Update CA certificate bundle to 2021-05-25 [\#444](https://github.com/voxpupuli/puppet-archive/pull/444) ([l-avila](https://github.com/l-avila))
 
 **Fixed bugs:**
 
-- Update CA certificate bundle to 2021-05-25 [\#444](https://github.com/voxpupuli/puppet-archive/pull/444) ([l-avila](https://github.com/l-avila))
 - Fix Could not set 'present' on ensure: wrong number of arguments \(given 1, expected 0\) [\#443](https://github.com/voxpupuli/puppet-archive/pull/443) ([jeffmccune](https://github.com/jeffmccune))
 - Write downloaded files as binary [\#442](https://github.com/voxpupuli/puppet-archive/pull/442) ([benohara](https://github.com/benohara))
-
-**Closed issues:**
-
-- Fix archive::download Param Default Value [\#450](https://github.com/voxpupuli/puppet-archive/issues/450)
-- no parameter named 'provider'  [\#446](https://github.com/voxpupuli/puppet-archive/issues/446)
-- Still 2 Certificates expired  in cacert.pem [\#376](https://github.com/voxpupuli/puppet-archive/issues/376)
 
 **Merged pull requests:**
 
