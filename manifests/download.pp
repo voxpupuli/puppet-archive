@@ -41,7 +41,7 @@ define archive::download (
   Boolean                       $allow_insecure   = false,
   Boolean                       $follow_redirects = false,   # ignored (default)
   Boolean                       $verbose          = true,    # ignored
-  String                        $path             = $::path, # ignored
+  String                        $path             = $facts['path'], # ignored
   Optional[String]              $proxy_server     = undef,
   Optional[String]              $user             = undef,
 ) {
