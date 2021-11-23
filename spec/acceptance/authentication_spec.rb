@@ -3,7 +3,7 @@ require 'uri'
 
 context 'authenticated download' do
   let(:source) do
-    URI.escape("http://httpbin.org/basic-auth/user/#{password}")
+    CGI.escape("http://httpbin.org/basic-auth/user/#{password}")
   end
   let(:pp) do
     <<-EOS
