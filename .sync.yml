@@ -4,3 +4,6 @@ spec/spec_helper.rb:
     - "Dir['./spec/support/**/*.rb'].sort.each { |f| require f }"
 spec/spec_helper_acceptance.rb:
   unmanaged: false
+.puppet-lint.rc:
+  enabled_lint_checks:
+    - parameter_types
