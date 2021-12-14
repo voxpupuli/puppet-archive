@@ -1,5 +1,7 @@
+# frozen_string_literal: true
+
 require 'json'
-require_relative '../../../puppet_x/bodeco/util.rb'
+require_relative '../../../puppet_x/bodeco/util'
 
 Puppet::Functions.create_function(:'archive::artifactory_latest_url') do
   dispatch :artifactory_latest_url do
@@ -26,7 +28,7 @@ Puppet::Functions.create_function(:'archive::artifactory_latest_url') do
 
     raise("Couldn't find any Artifactory artifacts") if uris.empty?
 
-    latest = uris.sort_by { |x| x['uri'] }.last['uri']
+    latest = uris.max_by { |x| x['uri'] }['uri']
     Puppet.debug("Latest artifact found for #{url} was #{latest}")
 
     # Now GET the fileinfo endpoint of the resolved latest version file
@@ -38,7 +40,7 @@ Puppet::Functions.create_function(:'archive::artifactory_latest_url') do
     sha1 = content['checksums'] && content['checksums']['sha1']
 
     {
-      'url'  => url,
+      'url' => url,
       'sha1' => sha1
     }
   end

@@ -1,3 +1,6 @@
+# frozen_string_literal: true
+
+# rubocop:disable RSpec/MultipleMemoizedHelpers
 require 'spec_helper'
 
 curl_provider = Puppet::Type.type(:archive).provider(:curl)
@@ -187,3 +190,4 @@ RSpec.describe curl_provider do
     end
   end
 end
+# rubocop:enable RSpec/MultipleMemoizedHelpers

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'spec_helper'
 
 describe 'archive::nexus' do
@@ -16,14 +18,14 @@ describe 'archive::nexus' do
     end
 
     it do
-      is_expected.to contain_archive('/tmp/hawtio.war').with(
+      expect(subject).to contain_archive('/tmp/hawtio.war').with(
         source: 'https://oss.sonatype.org/service/local/artifact/maven/content?g=io.hawt&a=hawtio-web&v=1.4.36&r=releases&p=war',
         checksum_url: 'https://oss.sonatype.org/service/local/artifact/maven/content?g=io.hawt&a=hawtio-web&v=1.4.36&r=releases&p=war.md5'
       )
     end
 
     it do
-      is_expected.to contain_file('/tmp/hawtio.war').that_requires('Archive[/tmp/hawtio.war]').with(
+      expect(subject).to contain_file('/tmp/hawtio.war').that_requires('Archive[/tmp/hawtio.war]').with(
         owner: '0',
         group: '0'
       )
@@ -50,7 +52,7 @@ describe 'archive::nexus' do
     end
 
     it do
-      is_expected.to contain_archive('/tmp/artifact.war').with(
+      expect(subject).to contain_archive('/tmp/artifact.war').with(
         'user' => 'tom',
         'group' => 'worker',
         'extract' => true,
@@ -62,7 +64,7 @@ describe 'archive::nexus' do
     end
 
     it do
-      is_expected.to contain_file('/tmp/artifact.war').that_requires('Archive[/tmp/artifact.war]').with(
+      expect(subject).to contain_file('/tmp/artifact.war').that_requires('Archive[/tmp/artifact.war]').with(
         'owner' => 'tom',
         'group' => 'worker'
       )
@@ -91,7 +93,7 @@ describe 'archive::nexus' do
     end
 
     it do
-      is_expected.to contain_archive('/tmp/artifact.war').with(
+      expect(subject).to contain_archive('/tmp/artifact.war').with(
         'user' => 'tom',
         'group' => 'worker',
         'extract' => true,
@@ -103,12 +105,13 @@ describe 'archive::nexus' do
     end
 
     it do
-      is_expected.to contain_file('/tmp/artifact.war').that_requires('Archive[/tmp/artifact.war]').with(
+      expect(subject).to contain_file('/tmp/artifact.war').that_requires('Archive[/tmp/artifact.war]').with(
         'owner' => 'tom',
         'group' => 'worker'
       )
     end
   end
+
   context 'nexus archive with allow_insecure => true' do
     let(:title) { '/tmp/artifact.war' }
 
@@ -124,6 +127,7 @@ describe 'archive::nexus' do
 
     it { is_expected.to contain_archive('/tmp/artifact.war').with_allow_insecure(true) }
   end
+
   context 'nexus archive with allow_insecure => false' do
     let(:title) { '/tmp/artifact.war' }
 
@@ -139,6 +143,7 @@ describe 'archive::nexus' do
 
     it { is_expected.to contain_archive('/tmp/artifact.war').with_allow_insecure(false) }
   end
+
   context 'nexus archive with allow_insecure => \'foobar\'' do
     let(:title) { '/tmp/artifact.war' }
 
@@ -154,6 +159,7 @@ describe 'archive::nexus' do
 
     it { is_expected.to compile.and_raise_error(%r{parameter 'allow_insecure' expects a value of type Undef or Boolean, got String}) }
   end
+
   context 'nexus archive with use_nexus3_urls => false' do
     let(:title) { '/tmp/artifact.war' }
 
@@ -169,6 +175,7 @@ describe 'archive::nexus' do
 
     it { is_expected.to contain_archive('/tmp/artifact.war').with_source('https://oss.sonatype.org/service/local/artifact/maven/content?g=io.hawt&a=hawtio-web&v=1.4.36&r=releases&p=war') }
   end
+
   context 'nexus archive with use_nexus3_urls => true' do
     let(:title) { '/tmp/artifact.war' }
 

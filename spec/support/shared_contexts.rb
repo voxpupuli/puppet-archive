@@ -1,7 +1,9 @@
+# frozen_string_literal: true
+
 require 'tmpdir'
 require 'pathname'
 
-shared_context :some_context do
+shared_context 'some context' do
   # example only,
   let(:hiera_data) do
     {}

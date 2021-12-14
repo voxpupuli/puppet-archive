@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'spec_helper'
 require 'puppet'
 
@@ -104,7 +106,7 @@ describe Puppet::Type.type(:archive) do
 
   it 'accepts valid resource[:checksum_type]' do
     expect do
-      [:none, :md5, :sha1, :sha2, :sha256, :sha384, :sha512].each do |type|
+      %i[none md5 sha1 sha2 sha256 sha384 sha512].each do |type|
         resource[:checksum_type] = type
       end
     end.not_to raise_error
@@ -118,7 +120,7 @@ describe Puppet::Type.type(:archive) do
 
   it 'verify resource[:allow_insecure] is valid' do
     expect do
-      [:true, :false, :yes, :no].each do |type|
+      %i[true false yes no].each do |type|
         resource[:allow_insecure] = type
       end
     end.not_to raise_error
@@ -152,9 +154,11 @@ describe Puppet::Type.type(:archive) do
     it 'creates relationship' do
       expect(auto_req.size).to be 1
     end
+
     it 'links to archive resource' do
       expect(auto_req[0].target).to eql archive_resource
     end
+
     it 'autorequires parent directory' do
       expect(auto_req[0].source).to eql file_resource
     end

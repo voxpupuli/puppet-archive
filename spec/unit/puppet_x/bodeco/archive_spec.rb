@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'spec_helper'
 require 'puppet_x/bodeco/archive'
 
@@ -7,13 +9,14 @@ describe PuppetX::Bodeco::Archive do
   end
 
   describe '#checksum' do
-    include_context 'uses temp dir'
-
     subject { described_class.new(tempfile) }
+
+    include_context 'uses temp dir'
 
     let(:tempfile) { File.join(temp_dir, 'test.zip') }
 
     before { FileUtils.cp(zipfile, tempfile) }
+
     it { expect(subject.checksum(:none)).to be nil }
     it { expect(subject.checksum(:md5)).to eq '557e2ebb67b35d1fddff18090b6bc26b' }
     it { expect(subject.checksum(:sha1)).to eq '377ec712d7fdb7266221db3441e3af2055448ead' }
@@ -31,6 +34,7 @@ describe PuppetX::Bodeco::Archive do
     subject { |example| described_class.new(example.metadata[:filename]) }
 
     before { allow(Facter).to receive(:value).with(:osfamily).and_return(os) }
+
     after { expect(Facter).to have_received(:value).with(:osfamily).at_least(:twice) } # rubocop:disable RSpec/ExpectInHook
 
     describe 'on RedHat' do

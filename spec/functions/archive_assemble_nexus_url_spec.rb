@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'spec_helper'
 
 describe 'archive::assemble_nexus_url' do
@@ -16,7 +18,7 @@ describe 'archive::assemble_nexus_url' do
       'p' => 'ear'
     }
 
-    is_expected.to run.with_params(nexus_url, parameters).and_return(expected_url)
+    expect(subject).to run.with_params(nexus_url, parameters).and_return(expected_url)
   end
 
   it 'builds url with version containing "+" sign correctly' do
@@ -30,6 +32,6 @@ describe 'archive::assemble_nexus_url' do
       'p' => 'ear'
     }
 
-    is_expected.to run.with_params(nexus_url, parameters).and_return(expected_url)
+    expect(subject).to run.with_params(nexus_url, parameters).and_return(expected_url)
   end
 end

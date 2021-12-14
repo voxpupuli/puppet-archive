@@ -1,21 +1,14 @@
-RSpec.configure do |c|
-  c.formatter = 'documentation'
-  c.mock_framework = :rspec
+# frozen_string_literal: true
+
+ENV['COVERAGE'] ||= 'yes' if Dir.exist?(File.expand_path('../lib', __dir__))
+
+require 'voxpupuli/test/spec_helper'
+
+if File.exist?(File.join(__dir__, 'default_module_facts.yml'))
+  facts = YAML.safe_load(File.read(File.join(__dir__, 'default_module_facts.yml')))
+  facts&.each do |name, value|
+    add_custom_fact name.to_sym, value
+  end
 end
 
-require 'puppetlabs_spec_helper/module_spec_helper'
-
-require 'rspec-puppet-utils'
-require 'rspec/mocks'
-require 'rspec-puppet-facts'
-include RspecPuppetFacts
-
-unless RUBY_VERSION =~ %r{^1.9}
-  require 'coveralls'
-  Coveralls.wear!
-end
-
-#
-# Require all support files
-#
 Dir['./spec/support/**/*.rb'].sort.each { |f| require f }

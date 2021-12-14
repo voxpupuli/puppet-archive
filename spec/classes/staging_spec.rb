@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'spec_helper'
 
 describe 'archive::staging' do
@@ -5,8 +7,9 @@ describe 'archive::staging' do
     let(:facts) { { os: { family: 'RedHat' }, puppetversion: '4.4.0' } }
 
     it { is_expected.to contain_class 'archive' }
+
     it do
-      is_expected.to contain_file('/opt/staging').with(
+      expect(subject).to contain_file('/opt/staging').with(
         owner: '0',
         group: '0',
         mode: '0640'
@@ -27,8 +30,9 @@ describe 'archive::staging' do
     end
 
     it { is_expected.to contain_class 'archive' }
+
     it do
-      is_expected.to contain_file('/tmp/staging').with(
+      expect(subject).to contain_file('/tmp/staging').with(
         owner: 'puppet',
         group: 'puppet',
         mode: '0755'
@@ -46,8 +50,9 @@ describe 'archive::staging' do
     end
 
     it { is_expected.to contain_class 'archive' }
+
     it do
-      is_expected.to contain_file('C:/Windows/Temp/staging').with(
+      expect(subject).to contain_file('C:/Windows/Temp/staging').with(
         owner: 'S-1-5-32-544',
         group: 'S-1-5-18',
         mode: '0640'

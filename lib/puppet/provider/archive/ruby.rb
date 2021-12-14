@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 begin
   require 'puppet_x/bodeco/archive'
   require 'puppet_x/bodeco/util'
@@ -5,6 +7,7 @@ rescue LoadError
   require 'pathname' # WORK_AROUND #14073 and #7788
   archive = Puppet::Module.find('archive', Puppet[:environment].to_s)
   raise(LoadError, "Unable to find archive module in modulepath #{Puppet[:basemodulepath] || Puppet[:modulepath]}") unless archive
+
   require File.join archive.path, 'lib/puppet_x/bodeco/archive'
   require File.join archive.path, 'lib/puppet_x/bodeco/util'
 end
@@ -73,6 +76,7 @@ Puppet::Type.type(:archive).provide(:ruby) do
   def exists?
     return checksum? unless extracted?
     return checksum? if File.exist? archive_filepath
+
     cleanup
     true
   end
@@ -129,7 +133,7 @@ Puppet::Type.type(:archive).provide(:ruby) do
 
   # Private: See if local archive checksum matches.
   # returns boolean
-  def checksum?(store_checksum = true)
+  def checksum?(store_checksum = true) # rubocop:disable Style/OptionalBooleanParameter
     return false unless File.exist? archive_filepath
     return true  if resource[:checksum_type] == :none
 
@@ -141,6 +145,7 @@ Puppet::Type.type(:archive).provide(:ruby) do
 
   def cleanup
     return unless extracted? && resource[:cleanup] == :true
+
     Puppet.debug("Cleanup archive #{archive_filepath}")
     destroy
   end
@@ -148,6 +153,7 @@ Puppet::Type.type(:archive).provide(:ruby) do
   def extract
     return unless resource[:extract] == :true
     raise(ArgumentError, 'missing archive extract_path') unless resource[:extract_path]
+
     PuppetX::Bodeco::Archive.new(archive_filepath).extract(
       resource[:extract_path],
       custom_command: resource[:extract_command],
@@ -162,9 +168,8 @@ Puppet::Type.type(:archive).provide(:ruby) do
   end
 
   def transfer_download(archive_filepath)
-    if resource[:temp_dir] && !File.directory?(resource[:temp_dir])
-      raise Puppet::Error, "Temporary directory #{resource[:temp_dir]} doesn't exist"
-    end
+    raise Puppet::Error, "Temporary directory #{resource[:temp_dir]} doesn't exist" if resource[:temp_dir] && !File.directory?(resource[:temp_dir])
+
     tempfile = Tempfile.new(tempfile_name, resource[:temp_dir])
 
     temppath = tempfile.path
@@ -186,6 +191,7 @@ Puppet::Type.type(:archive).provide(:ruby) do
       raise(Puppet::Error, 'Unable to fetch archive, the source parameter is nil.')
     else
       raise(Puppet::Error, "Source file: #{resource[:source]} does not exists.") unless File.exist?(resource[:source])
+
       FileUtils.copy(resource[:source], temppath)
     end
 

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 Facter.add(:archive_windir) do
   confine :osfamily => :windows # rubocop:disable Style/HashSyntax
   setcode do

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module PuppetX
   module Bodeco
     module Util
@@ -30,13 +32,13 @@ module PuppetX
         # other ones
         status = load_file_with_any_terminus(url)
         raise ArgumentError, "Previous error(s) resulted in Puppet being unable to retrieve information from environment #{Puppet['environment']} source(s) #{url}'\nMost probable cause is file not found." unless status
+
         File.open(filepath, 'wb') { |file| file.write(status.content) }
       end
 
       # @private
-      # rubocop:disable HandleExceptions
       def self.load_file_with_any_terminus(url)
-        termini_to_try = [:file_server, :rest]
+        termini_to_try = %i[file_server rest]
         termini_to_try.each do |terminus|
           with_terminus(terminus) do
             begin
@@ -49,7 +51,6 @@ module PuppetX
         end
         nil
       end
-      # rubocop:enable HandleExceptions
 
       def self.with_terminus(terminus)
         old_terminus = Puppet[:default_file_terminus]
@@ -59,11 +60,12 @@ module PuppetX
         value
       end
     end
+
     class HTTP
       require 'net/http'
 
       FOLLOW_LIMIT = 5
-      URI_UNSAFE = %r{[^\-_.!~*'()a-zA-Z\d;\/?:@&=+$,\[\]%]}
+      URI_UNSAFE = %r{[^\-_.!~*'()a-zA-Z\d;/?:@&=+$,\[\]%]}.freeze
 
       def initialize(_url, options)
         @username = options[:username]
@@ -73,9 +75,7 @@ module PuppetX
 
         if options[:proxy_server]
           uri = URI(options[:proxy_server])
-          unless uri.scheme
-            uri = URI("#{options[:proxy_type]}://#{options[:proxy_server]}")
-          end
+          uri = URI("#{options[:proxy_type]}://#{options[:proxy_server]}") unless uri.scheme
           @proxy_addr = uri.hostname
           @proxy_port = uri.port
         end
@@ -105,7 +105,8 @@ module PuppetX
               yield response
             when Net::HTTPRedirection
               limit = option[:limit] - 1
-              raise Puppet::Error, "Redirect limit exceeded, last url: #{uri}" if limit < 0
+              raise Puppet::Error, "Redirect limit exceeded, last url: #{uri}" if limit.negative?
+
               location = safe_escape(response['location'])
               new_uri = URI(location)
               new_uri = URI(uri.to_s + location) if new_uri.relative?
@@ -135,7 +136,7 @@ module PuppetX
 
       def safe_escape(uri)
         uri.to_s.gsub(URI_UNSAFE) do |match|
-          '%' + match.unpack('H2' * match.bytesize).join('%').upcase
+          "%#{match.unpack('H2' * match.bytesize).join('%').upcase}"
         end
       end
     end
