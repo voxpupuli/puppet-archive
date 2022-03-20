@@ -133,7 +133,7 @@ Puppet::Type.type(:archive).provide(:ruby) do
 
   # Private: See if local archive checksum matches.
   # returns boolean
-  def checksum?(store_checksum = true) # rubocop:disable Style/OptionalBooleanParameter
+  def checksum?(store_checksum = true)
     return false unless File.exist? archive_filepath
     return true  if resource[:checksum_type] == :none
 
