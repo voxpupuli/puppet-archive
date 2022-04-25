@@ -122,7 +122,7 @@ Puppet::Type.newtype(:archive) do
   end
 
   newparam(:source) do
-    desc 'archive file source, supports puppet|http|https|ftp|file|s3|gs uri.'
+    desc 'archive file source, supports puppet|http|https|ftp|file|s3|gs|abspath uri.'
     validate do |value|
       unless value =~ URI.regexp(%w[puppet http https ftp file s3 gs]) || Puppet::Util.absolute_path?(value)
         raise ArgumentError, "invalid source url: #{value}"
@@ -131,10 +131,10 @@ Puppet::Type.newtype(:archive) do
   end
 
   newparam(:url) do
-    desc 'archive file source, supports http|https|ftp|file uri.
+    desc 'archive file source, supports puppet|http|https|ftp|file|s3|gs|abspath uri.
     (for camptocamp/archive compatibility)'
     validate do |value|
-      unless value =~ URI.regexp(%w[http https file ftp])
+      unless value =~ URI.regexp(%w[puppet http https ftp file s3 gs]) || Puppet::Util.absolute_path?(value)
         raise ArgumentError, "invalid source url: #{value}"
       end
     end
@@ -174,7 +174,13 @@ Puppet::Type.newtype(:archive) do
   end
 
   newparam(:checksum_url) do
-    desc 'archive file checksum source (instead of specifying checksum)'
+    desc 'archive file checksum source (instead of specifying checksum),
+    supports http|https'
+    validate do |value|
+      unless value =~ URI.regexp(%w[http https])
+        raise ArgumentError, "invalid checksum url: #{value}"
+      end
+    end
   end
   newparam(:digest_url) do
     desc 'archive file checksum source (instead of specifying checksum)
