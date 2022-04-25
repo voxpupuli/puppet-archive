@@ -132,7 +132,7 @@ archive { '/tmp/jta-1.1.jar':
   extract_path  => '/tmp',
   source        => 'http://central.maven.org/maven2/javax/transaction/jta/1.1/jta-1.1.jar',
   checksum      => '2ca09f0b36ca7d71b762e14ea2ff09d5eac57558',
-  checksum_type => 'sha1',
+  checksum_type => sha1,
   creates       => '/tmp/javax',
   cleanup       => true,
 }
@@ -202,7 +202,7 @@ archive { $filename:
   path          => "/tmp/${filename}",
   source        => 'http://www-eu.apache.org/dist/tomcat/tomcat-9/v9.0.0.M3/bin/apache-tomcat-9.0.0.M3.zip',
   checksum      => 'f2aaf16f5e421b97513c502c03c117fab6569076',
-  checksum_type => 'sha1',
+  checksum_type => sha1,
   extract       => true,
   extract_path  => '/opt',
   creates       => "${install_path}/bin",
@@ -229,11 +229,11 @@ archive { $filename:
   path          => "/tmp/${filename}",
   source        => "http://www-eu.apache.org/dist/tomcat/tomcat-9/v9.0.0.M3/bin/apache-tomcat-9.0.0.M3.zip",
   checksum      => 'f2aaf16f5e421b97513c502c03c117fab6569076',
-  checksum_type => 'sha1',
+  checksum_type => sha1,
   extract       => true,
   extract_path  => '/opt',
-  creates       => $install_path,
-  cleanup       => 'true',
+  creates       => "${install_path}/bin",
+  cleanup       => true,
   require       => File[$install_path],
 }
 
@@ -255,7 +255,7 @@ archive { '/nfs/repo/software.zip':
   source        => '/nfs/repo/software.zip'
   extract       => true,
   extract_path  => '/opt',
-  checksum_type => 'none', # typically unecessary
+  checksum_type => none,   # typically unecessary
   cleanup       => false,  # keep the file on the server
 }
 ```
@@ -489,7 +489,9 @@ archive { '/tmp/staging/master.zip':
   file permission to 0644 so the user can read the file).
 * `cleanup`: whether archive file will be removed after extraction (true|false).
   (default: true)
-* `creates`: if file/directory exists, will not download/extract archive.
+* `creates`: if file/directory exists, will not download/extract archive. If
+  `extract` and `cleanup` are both `true, this should be set to prevent Puppet
+  from re-downloading and re-extracting the archive every run.
 * `proxy_server`: specify a proxy server, with port number if needed. ie:
   `https://example.com:8080`.
 * `proxy_type`: proxy server type (none|http|https|ftp)
