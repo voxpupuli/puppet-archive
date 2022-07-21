@@ -991,7 +991,8 @@ Default value: `none`
 
 ##### <a name="checksum_url"></a>`checksum_url`
 
-archive file checksum source (instead of specifying checksum)
+archive file checksum source (instead of specifying checksum),
+supports http|https
 
 ##### <a name="checksum_verify"></a>`checksum_verify`
 
@@ -1095,7 +1096,7 @@ proxy type (none|ftp|http|https)
 
 ##### <a name="source"></a>`source`
 
-archive file source, supports puppet|http|https|ftp|file|s3|gs uri.
+archive file source, supports puppet|http|https|ftp|file|s3|gs|abspath uri.
 
 ##### <a name="target"></a>`target`
 
@@ -1108,7 +1109,7 @@ used.
 
 ##### <a name="url"></a>`url`
 
-archive file source, supports http|https|ftp|file uri.
+archive file source, supports puppet|http|https|ftp|file|s3|gs|abspath uri.
 (for camptocamp/archive compatibility)
 
 ##### <a name="user"></a>`user`
