@@ -5,7 +5,7 @@ require 'uri'
 
 context 'authenticated download' do
   let(:source) do
-    URI.escape("http://httpbin.org/basic-auth/user/#{password}")
+    URI.escape("http://httpbin.org/basic-auth/user/#{password}") # rubocop:disable Lint/UriEscapeUnescape
   end
   let(:pp) do
     <<-EOS
