@@ -84,6 +84,7 @@ Puppet::Type.type(:archive).provide(:ruby) do
   def create
     transfer_download(archive_filepath) unless checksum?
     extract
+  ensure
     cleanup
   end
 
@@ -144,8 +145,7 @@ Puppet::Type.type(:archive).provide(:ruby) do
   end
 
   def cleanup
-    return unless extracted? && resource[:cleanup] == :true
-
+    return unless resource[:cleanup] == :true and resource[:extract] == :true
     Puppet.debug("Cleanup archive #{archive_filepath}")
     destroy
   end
@@ -201,12 +201,13 @@ Puppet::Type.type(:archive).provide(:ruby) do
       actual_checksum = archive.checksum(resource[:checksum_type])
       if actual_checksum != checksum
         destroy
-        FileUtils.rm_f(temppath) if File.exist?(temppath)
         raise(Puppet::Error, "Download file checksum mismatch (expected: #{checksum} actual: #{actual_checksum})")
       end
     end
 
     move_file_in_place(temppath, archive_filepath)
+  ensure
+    FileUtils.rm_f(temppath) if File.exist?(temppath)
   end
 
   def move_file_in_place(from, to)
