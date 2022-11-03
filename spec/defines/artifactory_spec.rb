@@ -67,4 +67,24 @@ describe 'archive::artifactory' do
       )
     end
   end
+
+  context 'artifactory archive with header specified' do
+    let(:title) { 'example.zip' }
+    let(:params) do
+      {
+        archive_path: '/opt/app',
+        url: 'http://home.lan:8081/artifactory/path/example.zip',
+        headers: ['X-JFrog-Art-Api: 123ABC']
+      }
+    end
+
+    it do
+      is_expected.to contain_archive('/opt/app/example.zip').with(
+        path: '/opt/app/example.zip',
+        source: 'http://home.lan:8081/artifactory/path/example.zip',
+        checksum: '0d4f4b4b039c10917cfc49f6f6be71e4',
+        checksum_type: 'sha1'
+      )
+    end
+  end
 end

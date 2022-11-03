@@ -18,7 +18,7 @@ RSpec.describe curl_provider do
       [
         'http://home.lan/example.zip',
         '-o',
-        String,
+        '/tmp/example.zip',
         '-fsSLg',
         '--max-redirs',
         5
@@ -133,6 +133,21 @@ RSpec.describe curl_provider do
       it 'calls curl with proxy' do
         provider.download(name)
         expect(provider).to have_received(:curl).with(default_options << '--proxy' << 'https://home.lan:8080')
+      end
+    end
+
+    context 'header specified' do
+      let(:resource_properties) do
+        {
+          name: name,
+          source: 'http://home.lan/example.zip',
+          headers: ['Authorization: OAuth 123ABC']
+        }
+      end
+
+      it 'calls curl with header' do
+        provider.download(name)
+        expect(provider).to have_received(:curl).with(['--header'] << 'Authorization: OAuth 123ABC' | default_options)
       end
     end
 

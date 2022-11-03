@@ -204,6 +204,16 @@ Puppet::Type.newtype(:archive) do
     desc 'password to download source file.'
   end
 
+  newparam(:headers) do
+    desc 'optional header(s) to pass.'
+
+    validate do |val|
+      unless val.is_a?(::Array)
+        raise ArgumentError, "headers must be an array: #{val}"
+      end
+    end
+  end
+
   newparam(:user) do
     desc 'extract command user (using this option will configure the archive file permission to 0644 so the user can read the file).'
   end
