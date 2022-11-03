@@ -147,7 +147,7 @@ RSpec.describe curl_provider do
 
       it 'calls curl with header' do
         provider.download(name)
-        expect(provider).to have_received(:curl).with(['--header'] << 'Authorization: OAuth 123ABC' | default_options)
+        expect(provider).to have_received(:curl).with((['--header'] << 'Authorization: OAuth 123ABC') | default_options)
       end
     end
 

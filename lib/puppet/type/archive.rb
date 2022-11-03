@@ -208,9 +208,7 @@ Puppet::Type.newtype(:archive) do
     desc 'optional header(s) to pass.'
 
     validate do |val|
-      unless val.is_a?(::Array)
-        raise ArgumentError, "headers must be an array: #{val}"
-      end
+      raise ArgumentError, "headers must be an array: #{val}" unless val.is_a?(::Array)
     end
   end
 
