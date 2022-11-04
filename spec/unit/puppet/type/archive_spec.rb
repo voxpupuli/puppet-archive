@@ -18,12 +18,12 @@ describe Puppet::Type.type(:archive) do
     it { expect(resource[:extract]).to eq :false }
     it { expect(resource[:cleanup]).to eq :true }
     it { expect(resource[:checksum_type]).to eq :none }
-    it { expect(resource[:digest_type]).to eq nil }
+    it { expect(resource[:digest_type]).to be_nil }
     it { expect(resource[:checksum_verify]).to eq :true }
     it { expect(resource[:extract_flags]).to eq :undef }
-    it { expect(resource[:allow_insecure]).to eq false }
-    it { expect(resource[:download_options]).to eq nil }
-    it { expect(resource[:temp_dir]).to eq nil }
+    it { expect(resource[:allow_insecure]).to be false }
+    it { expect(resource[:download_options]).to be_nil }
+    it { expect(resource[:temp_dir]).to be_nil }
   end
 
   it 'verify resource[:path] is absolute filepath' do

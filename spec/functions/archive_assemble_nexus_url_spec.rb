@@ -5,7 +5,7 @@ require 'spec_helper'
 describe 'archive::assemble_nexus_url' do
   let(:nexus_url) { 'http://nexus.local' }
 
-  it { is_expected.not_to eq(nil) }
+  it { is_expected.not_to be_nil }
 
   it 'builds url correctly' do
     expected_url = 'http://nexus.local/service/local/artifact/maven/content?g=com.test&a=test&v=1.0.0&r=binary-staging&p=ear'

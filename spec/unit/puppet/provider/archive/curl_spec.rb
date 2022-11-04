@@ -71,7 +71,7 @@ RSpec.describe curl_provider do
       it 'deletes netrc file' do
         netrc_filepath = tempfile.path
         provider.download(name)
-        expect(File.exist?(netrc_filepath)).to eq(false)
+        expect(File.exist?(netrc_filepath)).to be(false)
       end
 
       context 'with password containing space' do

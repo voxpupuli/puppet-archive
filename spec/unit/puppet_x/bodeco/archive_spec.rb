@@ -17,7 +17,7 @@ describe PuppetX::Bodeco::Archive do
 
     before { FileUtils.cp(zipfile, tempfile) }
 
-    it { expect(subject.checksum(:none)).to be nil }
+    it { expect(subject.checksum(:none)).to be_nil }
     it { expect(subject.checksum(:md5)).to eq '557e2ebb67b35d1fddff18090b6bc26b' }
     it { expect(subject.checksum(:sha1)).to eq '377ec712d7fdb7266221db3441e3af2055448ead' }
   end

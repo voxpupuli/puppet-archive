@@ -7,7 +7,7 @@ describe 'archive::artifactory_checksum' do
   let(:url) { 'https://repo.jfrog.org/artifactory/distributions/images/Artifactory_120x75.png' }
   let(:uri) { URI(url.sub('/artifactory/', '/artifactory/api/storage/')) }
 
-  it { is_expected.not_to eq(nil) }
+  it { is_expected.not_to be_nil }
   it { is_expected.to run.with_params.and_raise_error(ArgumentError) }
   it { is_expected.to run.with_params('not_a_url').and_raise_error(ArgumentError) }
 
