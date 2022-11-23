@@ -9,7 +9,7 @@
 #### Public Classes
 
 * [`archive`](#archive): Manages archive module's dependencies.
-* [`archive::staging`](#archivestaging): Class: archive::staging =======================  backwards compatibility class for staging module.
+* [`archive::staging`](#archivestaging): Backwards-compatibility class for staging module
 
 #### Private Classes
 
@@ -17,8 +17,8 @@
 
 ### Defined types
 
-* [`archive::artifactory`](#archiveartifactory): Define: archive::artifactory ============================  archive wrapper for downloading files from artifactory  Parameters ----------  * p
-* [`archive::download`](#archivedownload): == Definition: archive::download  Archive downloader with integrity verification.  Parameters:  - *$url: - *$digest_url: - *$digest_string: D
+* [`archive::artifactory`](#archiveartifactory): Archive wrapper for downloading files from artifactory
+* [`archive::download`](#archivedownload): Archive downloader with integrity verification
 * [`archive::go`](#archivego): download from go
 * [`archive::nexus`](#archivenexus): define: archive::nexus ======================  archive wrapper for downloading files from Nexus using REST API. Nexus API: https://repository
 
@@ -143,10 +143,7 @@ Default value: `{}`
 
 ### <a name="archivestaging"></a>`archive::staging`
 
-Class: archive::staging
-=======================
-
-backwards compatibility class for staging module.
+Backwards-compatibility class for staging module
 
 #### Parameters
 
@@ -161,7 +158,7 @@ The following parameters are available in the `archive::staging` class:
 
 Data type: `String`
 
-
+Absolute path of staging directory to create
 
 Default value: `$archive::params::path`
 
@@ -169,7 +166,7 @@ Default value: `$archive::params::path`
 
 Data type: `String`
 
-
+Username of directory owner
 
 Default value: `$archive::params::owner`
 
@@ -177,7 +174,7 @@ Default value: `$archive::params::owner`
 
 Data type: `String`
 
-
+Group of directory owner
 
 Default value: `$archive::params::group`
 
@@ -185,7 +182,7 @@ Default value: `$archive::params::group`
 
 Data type: `String`
 
-
+Mode (permissions) on staging directory
 
 Default value: `$archive::params::mode`
 
@@ -193,35 +190,24 @@ Default value: `$archive::params::mode`
 
 ### <a name="archiveartifactory"></a>`archive::artifactory`
 
-Define: archive::artifactory
-============================
+Archive wrapper for downloading files from artifactory
 
-archive wrapper for downloading files from artifactory
+#### Examples
 
-Parameters
-----------
+##### 
 
-* path: fully qualified filepath for the download the file or use archive_path and only supply filename. (namevar).
-* ensure: ensure the file is present/absent.
-* url: artifactory download URL.
-* owner: file owner (see archive params for defaults).
-* group: file group (see archive params for defaults).
-* mode: file mode (see archive params for defaults).
-* archive_path: the parent directory of local filepath.
-* extract: whether to extract the files (true/false).
-* creates: the file created when the archive is extracted (true/false).
-* cleanup: remove archive file after file extraction (true/false).
-
-Examples
---------
-
+```puppet
 archive::artifactory { '/tmp/logo.png':
   url   => 'https://repo.jfrog.org/artifactory/distributions/images/Artifactory_120x75.png',
   owner => 'root',
   group => 'root',
   mode  => '0644',
 }
+```
 
+##### 
+
+```puppet
 $dirname = 'gradle-1.0-milestone-4-20110723151213+0300'
 $filename = "${dirname}-bin.zip"
 
@@ -233,36 +219,46 @@ archive::artifactory { $filename:
   creates      => "/opt/${dirname}",
   cleanup      => true,
 }
+```
 
 #### Parameters
 
 The following parameters are available in the `archive::artifactory` defined type:
 
 * [`url`](#url)
+* [`headers`](#headers)
 * [`path`](#path)
 * [`ensure`](#ensure)
-* [`owner`](#owner)
+* [`cleanup`](#cleanup)
+* [`extract`](#extract)
+* [`archive_path`](#archive_path)
+* [`creates`](#creates)
+* [`extract_path`](#extract_path)
 * [`group`](#group)
 * [`mode`](#mode)
-* [`extract`](#extract)
-* [`extract_path`](#extract_path)
-* [`creates`](#creates)
-* [`cleanup`](#cleanup)
-* [`username`](#username)
+* [`owner`](#owner)
 * [`password`](#password)
-* [`archive_path`](#archive_path)
+* [`username`](#username)
 
 ##### <a name="url"></a>`url`
 
 Data type: `Stdlib::HTTPUrl`
 
+artifactory download URL
 
+##### <a name="headers"></a>`headers`
+
+Data type: `Array`
+
+HTTP header(s) to pass to source
+
+Default value: `[]`
 
 ##### <a name="path"></a>`path`
 
 Data type: `String`
 
-
+absolute path for the download file (or use archive_path and only supply filename)
 
 Default value: `$name`
 
@@ -270,47 +266,31 @@ Default value: `$name`
 
 Data type: `Enum['present', 'absent']`
 
+ensure download file present/absent
 
+Default value: `'present'`
 
-Default value: `present`
+##### <a name="cleanup"></a>`cleanup`
 
-##### <a name="owner"></a>`owner`
+Data type: `Boolean`
 
-Data type: `Optional[String]`
+remove archive after file extraction
 
-
-
-Default value: ``undef``
-
-##### <a name="group"></a>`group`
-
-Data type: `Optional[String]`
-
-
-
-Default value: ``undef``
-
-##### <a name="mode"></a>`mode`
-
-Data type: `Optional[String]`
-
-
-
-Default value: ``undef``
+Default value: ``false``
 
 ##### <a name="extract"></a>`extract`
 
-Data type: `Optional[Boolean]`
+Data type: `Boolean`
 
+whether to extract the files
 
+Default value: ``false``
 
-Default value: ``undef``
+##### <a name="archive_path"></a>`archive_path`
 
-##### <a name="extract_path"></a>`extract_path`
+Data type: `Optional[Stdlib::Absolutepath]`
 
-Data type: `Optional[String]`
-
-
+parent directory to download archive into
 
 Default value: ``undef``
 
@@ -318,23 +298,39 @@ Default value: ``undef``
 
 Data type: `Optional[String]`
 
-
-
-Default value: ``undef``
-
-##### <a name="cleanup"></a>`cleanup`
-
-Data type: `Optional[Boolean]`
-
-
+the file created when the archive is extracted
 
 Default value: ``undef``
 
-##### <a name="username"></a>`username`
+##### <a name="extract_path"></a>`extract_path`
 
 Data type: `Optional[String]`
 
+absolute path to extract archive into
 
+Default value: ``undef``
+
+##### <a name="group"></a>`group`
+
+Data type: `Optional[String]`
+
+file group (see archive params for defaults)
+
+Default value: ``undef``
+
+##### <a name="mode"></a>`mode`
+
+Data type: `Optional[String]`
+
+file mode (see archive params for defaults)
+
+Default value: ``undef``
+
+##### <a name="owner"></a>`owner`
+
+Data type: `Optional[String]`
+
+file owner (see archive params for defaults)
 
 Default value: ``undef``
 
@@ -342,67 +338,56 @@ Default value: ``undef``
 
 Data type: `Optional[String]`
 
-
+Password to authenticate with
 
 Default value: ``undef``
 
-##### <a name="archive_path"></a>`archive_path`
+##### <a name="username"></a>`username`
 
-Data type: `Optional[Stdlib::Absolutepath]`
+Data type: `Optional[String]`
 
-
+User to authenticate as
 
 Default value: ``undef``
 
 ### <a name="archivedownload"></a>`archive::download`
 
-== Definition: archive::download
+Archive downloader with integrity verification
 
-Archive downloader with integrity verification.
+#### Examples
 
-Parameters:
+##### 
 
-- *$url:
-- *$digest_url:
-- *$digest_string: Default value undef
-- *$digest_type: Default value "md5".
-- *$timeout: Default value 120. (ignored)
-- *$src_target: Default value "/usr/src".
-- *$allow_insecure: Default value false.
-- *$follow_redirects: Default value false.
-- *$verbose: Default value true.
-- *$proxy_server: Default value undef.
-- *$user: The user used to download the archive
+```puppet
+archive::download {"apache-tomcat-6.0.26.tar.gz":
+  ensure => present,
+  url    => "http://archive.apache.org/dist/tomcat/tomcat-6/v6.0.26/bin/apache-tomcat-6.0.26.tar.gz",
+}
+```
 
-Example usage:
+##### 
 
- archive::download {"apache-tomcat-6.0.26.tar.gz":
-   ensure => present,
-   url    => "http://archive.apache.org/dist/tomcat/tomcat-6/v6.0.26/bin/apache-tomcat-6.0.26.tar.gz",
- }
-
- archive::download {"apache-tomcat-6.0.26.tar.gz":
-   ensure        => present,
-   digest_string => "f9eafa9bfd620324d1270ae8f09a8c89",
-   url           => "http://archive.apache.org/dist/tomcat/tomcat-6/v6.0.26/bin/apache-tomcat-6.0.26.tar.gz",
- }
+```puppet
+archive::download {"apache-tomcat-6.0.26.tar.gz":
+  ensure        => present,
+  digest_string => "f9eafa9bfd620324d1270ae8f09a8c89",
+  url           => "http://archive.apache.org/dist/tomcat/tomcat-6/v6.0.26/bin/apache-tomcat-6.0.26.tar.gz",
+}
+```
 
 #### Parameters
 
 The following parameters are available in the `archive::download` defined type:
 
 * [`url`](#url)
-* [`ensure`](#ensure)
-* [`checksum`](#checksum)
-* [`digest_url`](#digest_url)
-* [`digest_string`](#digest_string)
-* [`digest_type`](#digest_type)
-* [`timeout`](#timeout)
-* [`src_target`](#src_target)
+* [`headers`](#headers)
 * [`allow_insecure`](#allow_insecure)
-* [`follow_redirects`](#follow_redirects)
-* [`verbose`](#verbose)
-* [`path`](#path)
+* [`checksum`](#checksum)
+* [`digest_type`](#digest_type)
+* [`ensure`](#ensure)
+* [`src_target`](#src_target)
+* [`digest_string`](#digest_string)
+* [`digest_url`](#digest_url)
 * [`proxy_server`](#proxy_server)
 * [`user`](#user)
 
@@ -410,101 +395,77 @@ The following parameters are available in the `archive::download` defined type:
 
 Data type: `String`
 
+source
 
+##### <a name="headers"></a>`headers`
 
-##### <a name="ensure"></a>`ensure`
+Data type: `Array`
 
-Data type: `Enum['present', 'absent']`
+HTTP (s) to pass to source
 
-
-
-Default value: `present`
-
-##### <a name="checksum"></a>`checksum`
-
-Data type: `Boolean`
-
-
-
-Default value: ``true``
-
-##### <a name="digest_url"></a>`digest_url`
-
-Data type: `Optional[String]`
-
-
-
-Default value: ``undef``
-
-##### <a name="digest_string"></a>`digest_string`
-
-Data type: `Optional[String]`
-
-
-
-Default value: ``undef``
-
-##### <a name="digest_type"></a>`digest_type`
-
-Data type: `Enum['none', 'md5', 'sha1', 'sha2','sha256', 'sha384', 'sha512']`
-
-
-
-Default value: `'md5'`
-
-##### <a name="timeout"></a>`timeout`
-
-Data type: `Integer`
-
-
-
-Default value: `120`
-
-##### <a name="src_target"></a>`src_target`
-
-Data type: `Stdlib::Compat::Absolute_path`
-
-
-
-Default value: `'/usr/src'`
+Default value: `[]`
 
 ##### <a name="allow_insecure"></a>`allow_insecure`
 
 Data type: `Boolean`
 
-
-
-Default value: ``false``
-
-##### <a name="follow_redirects"></a>`follow_redirects`
-
-Data type: `Boolean`
-
-
+Allow self-signed certificate on source?
 
 Default value: ``false``
 
-##### <a name="verbose"></a>`verbose`
+##### <a name="checksum"></a>`checksum`
 
 Data type: `Boolean`
 
-
+Should checksum be validated?
 
 Default value: ``true``
 
-##### <a name="path"></a>`path`
+##### <a name="digest_type"></a>`digest_type`
 
-Data type: `String`
+Data type: `Enum['none', 'md5', 'sha1', 'sha2','sha256', 'sha384', 'sha512']`
 
+Digest to use for calculating checksum
 
+Default value: `'md5'`
 
-Default value: `$facts['path']`
+##### <a name="ensure"></a>`ensure`
+
+Data type: `Enum['present', 'absent']`
+
+ensure file present/absent
+
+Default value: `'present'`
+
+##### <a name="src_target"></a>`src_target`
+
+Data type: `Stdlib::Compat::Absolute_path`
+
+Absolute path to staging location
+
+Default value: `'/usr/src'`
+
+##### <a name="digest_string"></a>`digest_string`
+
+Data type: `Optional[String]`
+
+Value  expected checksum
+
+Default value: ``undef``
+
+##### <a name="digest_url"></a>`digest_url`
+
+Data type: `Optional[String]`
+
+URL  expected checksum value
+
+Default value: ``undef``
 
 ##### <a name="proxy_server"></a>`proxy_server`
 
 Data type: `Optional[String]`
 
-
+FQDN of proxy server
 
 Default value: ``undef``
 
@@ -512,7 +473,7 @@ Default value: ``undef``
 
 Data type: `Optional[String]`
 
-
+User used to download the archive
 
 Default value: ``undef``
 
@@ -955,6 +916,7 @@ The following parameters are available in the `archive` type.
 * [`extract_path`](#extract_path)
 * [`filename`](#filename)
 * [`group`](#group)
+* [`headers`](#headers)
 * [`password`](#password)
 * [`path`](#path)
 * [`provider`](#provider)
@@ -1069,6 +1031,10 @@ archive file name (derived from path).
 
 extract command group (using this option will configure the archive file permisison to 0644 so the user can read the
 file).
+
+##### <a name="headers"></a>`headers`
+
+optional header(s) to pass.
 
 ##### <a name="password"></a>`password`
 

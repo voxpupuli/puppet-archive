@@ -4,6 +4,22 @@ All notable changes to this project will be documented in this file.
 Each new release typically also includes the latest modulesync defaults.
 These should not affect the functionality of the module.
 
+## [v6.1.0](https://github.com/voxpupuli/puppet-archive/tree/v6.1.0) (2022-11-23)
+
+[Full Changelog](https://github.com/voxpupuli/puppet-archive/compare/v6.0.2...v6.1.0)
+
+**Implemented enhancements:**
+
+- feature: Artifactory authentication support [\#265](https://github.com/voxpupuli/puppet-archive/issues/265)
+- add array of headers as optional parameter [\#475](https://github.com/voxpupuli/puppet-archive/pull/475) ([prolixalias](https://github.com/prolixalias))
+- Mark CentOS 9 and RHEL 9 as supported operating systems [\#473](https://github.com/voxpupuli/puppet-archive/pull/473) ([kajinamit](https://github.com/kajinamit))
+- Update CA certificate bundle to 2021-10-26 [\#468](https://github.com/voxpupuli/puppet-archive/pull/468) ([l-avila](https://github.com/l-avila))
+- modulesync 5.3 & update EoL URI syntax + a lot of rubocop rework [\#463](https://github.com/voxpupuli/puppet-archive/pull/463) ([bastelfreak](https://github.com/bastelfreak))
+
+**Merged pull requests:**
+
+- Improve/fix examples in README [\#470](https://github.com/voxpupuli/puppet-archive/pull/470) ([pillarsdotnet](https://github.com/pillarsdotnet))
+
 ## [v6.0.2](https://github.com/voxpupuli/puppet-archive/tree/v6.0.2) (2021-11-23)
 
 [Full Changelog](https://github.com/voxpupuli/puppet-archive/compare/v6.0.1...v6.0.2)
