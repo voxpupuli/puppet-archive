@@ -1,5 +1,3 @@
-  # Class: archive::staging
-# =======================
 #
 # @summary Backwards-compatibility class for staging module
 #
@@ -11,7 +9,6 @@
 #   Group of directory owner
 # @param mode
 #   Mode (permissions) on staging directory
-
 #
 class archive::staging (
   String $path  = $archive::params::path,

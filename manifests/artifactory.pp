@@ -1,5 +1,3 @@
-# Define: archive::artifactory
-# ============================
 #
 # @summary Archive wrapper for downloading files from artifactory
 #
@@ -51,7 +49,6 @@
 #     creates      => "/opt/${dirname}",
 #     cleanup      => true,
 #   }
-
 #
 define archive::artifactory (
   Stdlib::HTTPUrl $url,
