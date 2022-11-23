@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'spec_helper'
 require 'tmpdir'
 
@@ -22,15 +24,15 @@ RSpec.shared_examples 'an archive provider' do |provider_class|
 
         resource[:checksum] = '377ec712d7fdb7266221db3441e3af2055448ead'
         resource[:checksum_type] = :sha1
-        expect(provider.checksum?).to eq true
+        expect(provider.checksum?).to be true
 
         resource[:checksum] = '557e2ebb67b35d1fddff18090b6bc26b'
         resource[:checksum_type] = :md5
-        expect(provider.checksum?).to eq true
+        expect(provider.checksum?).to be true
 
         resource[:checksum] = '557e2ebb67b35d1fddff18090b6bc26b'
         resource[:checksum_type] = :sha1
-        expect(provider.checksum?).to eq false
+        expect(provider.checksum?).to be false
       end
     end
 
@@ -61,9 +63,9 @@ RSpec.shared_examples 'an archive provider' do |provider_class|
         resource[:creates] = extracted_file
         resource[:extract_path] = dir
 
-        expect(provider.extracted?).to eq false
+        expect(provider.extracted?).to be false
         provider.extract
-        expect(provider.extracted?).to eq true
+        expect(provider.extracted?).to be true
       end
     end
 
@@ -81,7 +83,7 @@ RSpec.shared_examples 'an archive provider' do |provider_class|
 
         provider.extract
         provider.cleanup
-        expect(File.exist?(resource[:path])).to eq false
+        expect(File.exist?(resource[:path])).to be false
       end
     end
 
@@ -99,7 +101,7 @@ RSpec.shared_examples 'an archive provider' do |provider_class|
 
         provider.create
         expect(File.read(extracted_file)).to eq "hello world\n"
-        expect(File.exist?(resource[:path])).to eq false
+        expect(File.exist?(resource[:path])).to be false
       end
     end
   end

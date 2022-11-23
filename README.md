@@ -338,6 +338,25 @@ archive { '/tmp/gravatar.png':
 }
 ```
 
+### Passing headers
+
+Sometimes headers need to be passed to source. This can be accomplished
+using `headers` parameter:
+
+```puppet
+archive { '/tmp/slack-desktop-4.28.184-amd64.deb':
+  ensure        => present,
+  extract       => true,
+  extract_path  => '/tmp',
+  source        => 'https://downloads.slack-edge.com/releases/linux/4.28.184/prod/x64/slack-desktop-4.28.184-amd64.deb',
+  checksum      => 'e5d63dc6bd112d40c97f210af4c5f66444d4d5e8',
+  checksum_type => sha1,
+  headers       => ['Authorization: OAuth ABC123']
+  creates       => '/usr/local/bin/slack',
+  cleanup       => true,
+}
+```
+
 ### Download customizations
 
 In some cases you may need custom flags for curl/wget/s3/gsutil which can be
@@ -462,6 +481,7 @@ archive { '/tmp/staging/master.zip':
 * `path`: namevar, archive file fully qualified file path.
 * `filename`: archive file name (derived from path).
 * `source`: archive file source, supports http|https|ftp|file|s3|gs uri.
+* `headers`: array of headers to pass source, like an authentication token
 * `username`: username to download source file.
 * `password`: password to download source file.
 * `allow_insecure`: Ignore HTTPS certificate errors (true|false). (default: false)
@@ -514,27 +534,62 @@ archive { '/tmp/staging/master.zip':
 * `extract`: whether to extract the files (true/false).
 * `creates`: the file created when the archive is extracted (true/false).
 * `cleanup`: remove archive file after file extraction (true/false).
+* `headers`: array of headers to pass source
 
 #### Archive::Artifactory Example
 
-```puppet
-$dirname = 'gradle-1.0-milestone-4-20110723151213+0300'
-$filename = "${dirname}-bin.zip"
+* retrieve gradle without authentication
 
-archive::artifactory { $filename:
-  archive_path => '/tmp',
-  url          => "http://repo.jfrog.org/artifactory/distributions/org/gradle/${filename}",
-  extract      => true,
-  extract_path => '/opt',
-  creates      => "/opt/${dirname}",
-  cleanup      => true,
-}
+  ```puppet
+  $dirname = 'gradle-1.0-milestone-4-20110723151213+0300'
+  $filename = "${dirname}-bin.zip"
 
-file { '/opt/gradle':
-  ensure => link,
-  target => "/opt/${dirname}",
-}
-```
+  archive::artifactory { $filename:
+    archive_path => '/tmp',
+    url          => "http://repo.jfrog.org/artifactory/distributions/org/gradle/${filename}",
+    extract      => true,
+    extract_path => '/opt',
+    creates      => "/opt/${dirname}",
+    cleanup      => true,
+  }
+
+  file { '/opt/gradle':
+    ensure => link,
+    target => "/opt/${dirname}",
+  }
+  ```
+
+* retrieve gradle with api token:
+
+  ```puppet
+  $dirname = 'gradle-1.0-milestone-4-20110723151213+0300'
+  $filename = "${dirname}-bin.zip"
+
+  archive::artifactory { $filename:
+    archive_path => '/tmp',
+    url          => "http://repo.jfrog.org/artifactory/distributions/org/gradle/${filename}",
+    headers      => ['X-JFrog-Art-Api: ABC123'],
+    extract      => true,
+    extract_path => '/opt',
+    creates      => "/opt/${dirname}",
+    cleanup      => true,
+  }
+
+  file { '/opt/gradle':
+    ensure => link,
+    target => "/opt/${dirname}",
+  }
+  ```
+
+* setup resource defaults
+
+  ```puppet
+  $artifactory_authentication = lookup('jfrog_token')
+
+  Archive::Artifactory {
+    headers => ["X-JFrog-Art-Api: ${artifactory_authentication}"],
+  }
+  ```
 
 #### Archive::Nexus
 

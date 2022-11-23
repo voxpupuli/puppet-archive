@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'pathname'
 require 'uri'
 require 'puppet/util'
@@ -20,13 +22,15 @@ Puppet::Type.newtype(:archive) do
     defaultto(:present)
 
     # The following changes allows us to notify if the resource is being replaced
-    def is_to_s(value) # rubocop:disable Style/PredicateName
+    def is_to_s(value)
       return "(#{resource[:checksum_type]})#{provider.archive_checksum}" if provider.archive_checksum
+
       super
     end
 
     def should_to_s(value)
       return "(#{resource[:checksum_type]})#{resource[:checksum]}" if provider.archive_checksum
+
       super
     end
 
@@ -53,9 +57,7 @@ Puppet::Type.newtype(:archive) do
   newparam(:path, namevar: true) do
     desc 'namevar, archive file fully qualified file path.'
     validate do |value|
-      unless Puppet::Util.absolute_path? value
-        raise ArgumentError, "archive path must be absolute: #{value}"
-      end
+      raise ArgumentError, "archive path must be absolute: #{value}" unless Puppet::Util.absolute_path? value
     end
   end
 
@@ -72,17 +74,13 @@ Puppet::Type.newtype(:archive) do
   newparam(:extract_path) do
     desc 'target folder path to extract archive.'
     validate do |value|
-      unless Puppet::Util.absolute_path? value
-        raise ArgumentError, "archive extract_path must be absolute: #{value}"
-      end
+      raise ArgumentError, "archive extract_path must be absolute: #{value}" unless Puppet::Util.absolute_path? value
     end
   end
   newparam(:target) do
     desc 'target folder path to extract archive. (this parameter is for camptocamp/archive compatibility)'
     validate do |value|
-      unless Puppet::Util.absolute_path? value
-        raise ArgumentError, "archive extract_path must be absolute: #{value}"
-      end
+      raise ArgumentError, "archive extract_path must be absolute: #{value}" unless Puppet::Util.absolute_path? value
     end
     munge do |val|
       resource[:extract_path] = val
@@ -96,9 +94,7 @@ Puppet::Type.newtype(:archive) do
   newparam(:temp_dir) do
     desc 'Specify an alternative temporary directory to use for copying files, if unset then the operating system default will be used.'
     validate do |value|
-      unless Puppet::Util.absolute_path?(value)
-        raise ArgumentError, "Invalid temp_dir #{value}"
-      end
+      raise ArgumentError, "Invalid temp_dir #{value}" unless Puppet::Util.absolute_path?(value)
     end
   end
 
@@ -124,9 +120,7 @@ Puppet::Type.newtype(:archive) do
   newparam(:source) do
     desc 'archive file source, supports puppet|http|https|ftp|file|s3|gs uri.'
     validate do |value|
-      unless value =~ URI.regexp(%w[puppet http https ftp file s3 gs]) || Puppet::Util.absolute_path?(value)
-        raise ArgumentError, "invalid source url: #{value}"
-      end
+      raise ArgumentError, "invalid source url: #{value}" unless value =~ %r{puppet|http|https|ftp|file|s3|gs} || Puppet::Util.absolute_path?(value)
     end
   end
 
@@ -134,9 +128,7 @@ Puppet::Type.newtype(:archive) do
     desc 'archive file source, supports http|https|ftp|file uri.
     (for camptocamp/archive compatibility)'
     validate do |value|
-      unless value =~ URI.regexp(%w[http https file ftp])
-        raise ArgumentError, "invalid source url: #{value}"
-      end
+      raise ArgumentError, "invalid source url: #{value}" unless value =~ %r{http|https|file|ftp}
     end
     munge do |val|
       resource[:source] = val
@@ -153,7 +145,7 @@ Puppet::Type.newtype(:archive) do
     munge do |val|
       if val.nil? || val.empty? || val == :undef
         :false
-      elsif [:true, :false].include? val
+      elsif %i[true false].include? val
         resource[:checksum_verify] = val
       else
         val
@@ -212,6 +204,14 @@ Puppet::Type.newtype(:archive) do
     desc 'password to download source file.'
   end
 
+  newparam(:headers) do
+    desc 'optional header(s) to pass.'
+
+    validate do |val|
+      raise ArgumentError, "headers must be an array: #{val}" unless val.is_a?(::Array)
+    end
+  end
+
   newparam(:user) do
     desc 'extract command user (using this option will configure the archive file permission to 0644 so the user can read the file).'
   end
@@ -238,9 +238,7 @@ Puppet::Type.newtype(:archive) do
     desc 'provider download options (affects curl, wget, gs, and only s3 downloads for ruby provider)'
 
     validate do |val|
-      unless val.is_a?(::String) || val.is_a?(::Array)
-        raise ArgumentError, "download_options should be String or Array: #{val}"
-      end
+      raise ArgumentError, "download_options should be String or Array: #{val}" unless val.is_a?(::String) || val.is_a?(::Array)
     end
 
     munge do |val|
@@ -273,12 +271,9 @@ Puppet::Type.newtype(:archive) do
   validate do
     filepath = Pathname.new(self[:path])
     self[:filename] = filepath.basename.to_s
-    if !self[:source].nil? && !self[:url].nil? && self[:source] != self[:url]
-      raise ArgumentError, "invalid parameter: url (#{self[:url]}) and source (#{self[:source]}) are mutually exclusive."
-    end
-    if !self[:checksum_url].nil? && !self[:digest_url].nil? && self[:checksum_url] != self[:digest_url]
-      raise ArgumentError, "invalid parameter: checksum_url (#{self[:checksum_url]}) and digest_url (#{self[:digest_url]}) are mutually exclusive."
-    end
+    raise ArgumentError, "invalid parameter: url (#{self[:url]}) and source (#{self[:source]}) are mutually exclusive." if !self[:source].nil? && !self[:url].nil? && self[:source] != self[:url]
+    raise ArgumentError, "invalid parameter: checksum_url (#{self[:checksum_url]}) and digest_url (#{self[:digest_url]}) are mutually exclusive." if !self[:checksum_url].nil? && !self[:digest_url].nil? && self[:checksum_url] != self[:digest_url]
+
     if self[:proxy_server]
       self[:proxy_type] ||= URI(self[:proxy_server]).scheme.to_sym
     else

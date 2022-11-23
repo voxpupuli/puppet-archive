@@ -1,12 +1,19 @@
+# frozen_string_literal: true
+
 require 'spec_helper_acceptance'
 require 'uri'
 
 context 'authenticated download' do
   let(:source) do
-    URI.escape("http://httpbin.org/basic-auth/user/#{password}")
+    parser = URI::RFC2396_Parser.new
+    parser.escape("http://httpbin.org/basic-auth/user/#{password}")
   end
   let(:pp) do
     <<-EOS
+      package { 'wget':
+       ensure => 'installed',
+      }
+
       archive { '/tmp/testfile':
         source   => '#{source.gsub("'") { "\\'" }}',
         username => 'user',

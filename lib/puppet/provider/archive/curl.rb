@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'uri'
 require 'tempfile'
 
@@ -6,22 +8,26 @@ Puppet::Type.type(:archive).provide(:curl, parent: :ruby) do
   defaultfor feature: :posix
 
   def curl_params(params)
+    params_ordered = []
+    params_ordered += optional_switch(resource[:headers], ['--header', '%s']) if resource[:headers]
+    params_ordered += params
+
     if resource[:username]
       if resource[:username] =~ %r{\s} || resource[:password] =~ %r{\s}
-        Puppet.warning('Username or password contains a space.  Unable to use netrc file to hide credentials')
+        Puppet.warning('Username or password contains a space. Unable to use netrc file to hide credentials')
         account = [resource[:username], resource[:password]].compact.join(':')
-        params += optional_switch(account, ['--user', '%s'])
+        params_ordered += optional_switch(account, ['--user', '%s'])
       else
         create_netrcfile
-        params += ['--netrc-file', @netrc_file.path]
+        params_ordered += ['--netrc-file', @netrc_file.path]
       end
     end
-    params += optional_switch(resource[:proxy_server], ['--proxy', '%s'])
-    params += ['--insecure'] if resource[:allow_insecure]
-    params += resource[:download_options] if resource[:download_options]
-    params += optional_switch(resource[:cookie], ['--cookie', '%s'])
+    params_ordered += optional_switch(resource[:proxy_server], ['--proxy', '%s'])
+    params_ordered += ['--insecure'] if resource[:allow_insecure]
+    params_ordered += resource[:download_options] if resource[:download_options]
+    params_ordered += optional_switch(resource[:cookie], ['--cookie', '%s'])
 
-    params
+    params_ordered
   end
 
   def create_netrcfile

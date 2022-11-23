@@ -1,3 +1,6 @@
+# frozen_string_literal: true
+
+# rubocop:disable RSpec/MultipleMemoizedHelpers
 require 'spec_helper'
 
 curl_provider = Puppet::Type.type(:archive).provider(:curl)
@@ -15,7 +18,7 @@ RSpec.describe curl_provider do
       [
         'http://home.lan/example.zip',
         '-o',
-        String,
+        '/tmp/example.zip',
         '-fsSLg',
         '--max-redirs',
         5
@@ -68,7 +71,7 @@ RSpec.describe curl_provider do
       it 'deletes netrc file' do
         netrc_filepath = tempfile.path
         provider.download(name)
-        expect(File.exist?(netrc_filepath)).to eq(false)
+        expect(File.exist?(netrc_filepath)).to be(false)
       end
 
       context 'with password containing space' do
@@ -133,6 +136,21 @@ RSpec.describe curl_provider do
       end
     end
 
+    context 'header specified' do
+      let(:resource_properties) do
+        {
+          name: name,
+          source: 'http://home.lan/example.zip',
+          headers: ['Authorization: OAuth 123ABC']
+        }
+      end
+
+      it 'calls curl with header' do
+        provider.download(name)
+        expect(provider).to have_received(:curl).with((['--header'] << 'Authorization: OAuth 123ABC') | default_options)
+      end
+    end
+
     describe '#checksum' do
       subject { provider.checksum }
 
@@ -187,3 +205,4 @@ RSpec.describe curl_provider do
     end
   end
 end
+# rubocop:enable RSpec/MultipleMemoizedHelpers

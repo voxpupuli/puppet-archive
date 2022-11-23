@@ -1,7 +1,17 @@
-# Class: archive::staging
+  # Class: archive::staging
 # =======================
 #
-# backwards compatibility class for staging module.
+# @summary Backwards-compatibility class for staging module
+#
+# @param path
+#   Absolute path of staging directory to create
+# @param owner
+#   Username of directory owner
+# @param group
+#   Group of directory owner
+# @param mode
+#   Mode (permissions) on staging directory
+
 #
 class archive::staging (
   String $path  = $archive::params::path,

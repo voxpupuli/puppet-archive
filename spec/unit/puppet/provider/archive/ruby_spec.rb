@@ -1,3 +1,6 @@
+# frozen_string_literal: true
+
+# rubocop:disable RSpec/MultipleMemoizedHelpers
 require 'spec_helper'
 
 ruby_provider = Puppet::Type.type(:archive).provider(:ruby)
@@ -43,7 +46,7 @@ RSpec.describe ruby_provider do
 
       before do
         resource[:checksum_url] = url if url
-        allow(PuppetX::Bodeco::Util).to receive(:content) .\
+        allow(PuppetX::Bodeco::Util).to receive(:content).\
           with(url, any_args).and_return(remote_hash)
       end
 
@@ -59,16 +62,19 @@ RSpec.describe ruby_provider do
 
           it { is_expected.to eq('a0c38e1aeb175201b0dacd65e2f37e187657050a') }
         end
+
         context 'responds with hash and newline' do
           let(:remote_hash) { "a0c38e1aeb175201b0dacd65e2f37e187657050a\n" }
 
           it { is_expected.to eq('a0c38e1aeb175201b0dacd65e2f37e187657050a') }
         end
+
         context 'responds with `sha1sum README.md` output' do
           let(:remote_hash) { "a0c38e1aeb175201b0dacd65e2f37e187657050a  README.md\n" }
 
           it { is_expected.to eq('a0c38e1aeb175201b0dacd65e2f37e187657050a') }
         end
+
         context 'responds with `openssl dgst -hex -sha256 README.md` output' do
           let(:remote_hash) { "SHA256(README.md)= 8fa3f0ff1f2557657e460f0f78232679380a9bcdb8670e3dcb33472123b22428\n" }
 
@@ -125,3 +131,4 @@ RSpec.describe ruby_provider do
     end
   end
 end
+# rubocop:enable RSpec/MultipleMemoizedHelpers

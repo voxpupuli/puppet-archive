@@ -1,4 +1,6 @@
-require_relative '../../../puppet_x/bodeco/util.rb'
+# frozen_string_literal: true
+
+require_relative '../../../puppet_x/bodeco/util'
 
 # @summary
 #   Retrieves and returns specific file's md5 from GoCD server md5 checksum file
@@ -31,6 +33,7 @@ Puppet::Functions.create_function(:'archive::go_md5') do
     line = checksums.find { |x| x =~ %r{#{file}=} }
     md5 = line.match(%r{\b[0-9a-f]{5,40}\b}) unless line.nil?
     raise("Could not parse md5 from url #{url} response: #{response}") unless md5
+
     md5[0]
   end
 end

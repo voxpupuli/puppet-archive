@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # A function to parse an Artifactory maven 2 repository URL
 Puppet::Functions.create_function(:'archive::parse_artifactory_url') do
   dispatch :parse_artifactory_url do
@@ -25,6 +27,7 @@ Puppet::Functions.create_function(:'archive::parse_artifactory_url') do
              (?<ext>(?:(?!\d))[^\-/]+|7z)
              }x)
     return nil unless matchdata
-    Hash[matchdata.names.zip(matchdata.captures)]
+
+    matchdata.names.zip(matchdata.captures).to_h
   end
 end

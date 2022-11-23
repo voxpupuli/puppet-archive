@@ -1,3 +1,6 @@
+# frozen_string_literal: true
+
+# rubocop:disable RSpec/MultipleMemoizedHelpers
 require 'spec_helper'
 
 wget_provider = Puppet::Type.type(:archive).provider(:wget)
@@ -154,3 +157,4 @@ RSpec.describe wget_provider do
     end
   end
 end
+# rubocop:enable RSpec/MultipleMemoizedHelpers
