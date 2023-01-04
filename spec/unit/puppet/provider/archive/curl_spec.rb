@@ -151,6 +151,21 @@ RSpec.describe curl_provider do
       end
     end
 
+    context 'multiple headers specified' do
+      let(:resource_properties) do
+        {
+          name: name,
+          source: 'http://home.lan/example.zip',
+          headers: ['Authorization: OAuth 123ABC', 'Accept: application/json']
+        }
+      end
+
+      it 'calls curl with headers' do
+        provider.download(name)
+        expect(provider).to have_received(:curl).with(['--header', 'Authorization: OAuth 123ABC', '--header', 'Accept: application/json'] + default_options)
+      end
+    end
+
     describe '#checksum' do
       subject { provider.checksum }
 
