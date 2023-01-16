@@ -4,7 +4,16 @@ All notable changes to this project will be documented in this file.
 Each new release typically also includes the latest modulesync defaults.
 These should not affect the functionality of the module.
 
-## [v6.1.0](https://github.com/voxpupuli/puppet-archive/tree/v6.1.0) (2022-11-23)
+## [v6.1.1](https://github.com/voxpupuli/puppet-archive/tree/v6.1.1) (2023-01-16)
+
+[Full Changelog](https://github.com/voxpupuli/puppet-archive/compare/v6.1.0...v6.1.1)
+
+**Fixed bugs:**
+
+- curl provider: array of multiple headers does not work [\#481](https://github.com/voxpupuli/puppet-archive/issues/481)
+- Bug fix when passing multiple headers [\#482](https://github.com/voxpupuli/puppet-archive/pull/482) ([sprankle](https://github.com/sprankle))
+
+## [v6.1.0](https://github.com/voxpupuli/puppet-archive/tree/v6.1.0) (2022-11-29)
 
 [Full Changelog](https://github.com/voxpupuli/puppet-archive/compare/v6.0.2...v6.1.0)
 
