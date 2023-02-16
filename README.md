@@ -510,7 +510,7 @@ archive { '/tmp/staging/master.zip':
 * `cleanup`: whether archive file will be removed after extraction (true|false).
   (default: true)
 * `creates`: if file/directory exists, will not download/extract archive. If
-  `extract` and `cleanup` are both `true, this should be set to prevent Puppet
+  `extract` and `cleanup` are both `true`, this should be set to prevent Puppet
   from re-downloading and re-extracting the archive every run.
 * `proxy_server`: specify a proxy server, with port number if needed. ie:
   `https://example.com:8080`.
