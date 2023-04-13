@@ -4,6 +4,24 @@ All notable changes to this project will be documented in this file.
 Each new release typically also includes the latest modulesync defaults.
 These should not affect the functionality of the module.
 
+## [v6.1.2](https://github.com/voxpupuli/puppet-archive/tree/v6.1.2) (2023-04-13)
+
+[Full Changelog](https://github.com/voxpupuli/puppet-archive/compare/v6.1.1...v6.1.2)
+
+**Fixed bugs:**
+
+- Fix catalog compilation failure when net/ftp is not available [\#491](https://github.com/voxpupuli/puppet-archive/pull/491) ([smortex](https://github.com/smortex))
+- ruby provider: ensure cleanup happens [\#474](https://github.com/voxpupuli/puppet-archive/pull/474) ([pillarsdotnet](https://github.com/pillarsdotnet))
+
+**Closed issues:**
+
+- Missing gem with ruby 3.1 [\#488](https://github.com/voxpupuli/puppet-archive/issues/488)
+- Cannot clean up unless 'creates' is specified. [\#328](https://github.com/voxpupuli/puppet-archive/issues/328)
+
+**Merged pull requests:**
+
+- README: add missing backtick [\#487](https://github.com/voxpupuli/puppet-archive/pull/487) ([kenyon](https://github.com/kenyon))
+
 ## [v6.1.1](https://github.com/voxpupuli/puppet-archive/tree/v6.1.1) (2023-01-16)
 
 [Full Changelog](https://github.com/voxpupuli/puppet-archive/compare/v6.1.0...v6.1.1)
