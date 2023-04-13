@@ -145,7 +145,8 @@ Puppet::Type.type(:archive).provide(:ruby) do
   end
 
   def cleanup
-    return unless resource[:cleanup] == :true and resource[:extract] == :true
+    return unless resource[:cleanup] == :true && resource[:extract] == :true
+
     Puppet.debug("Cleanup archive #{archive_filepath}")
     destroy
   end
