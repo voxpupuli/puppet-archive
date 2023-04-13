@@ -145,9 +145,9 @@ module PuppetX
     end
 
     class FTP
-      require 'net/ftp'
-
       def initialize(url, options)
+        require 'net/ftp'
+
         uri = URI(url)
         username = options[:username]
         password = options[:password]
