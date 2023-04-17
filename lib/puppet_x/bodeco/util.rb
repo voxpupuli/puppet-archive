@@ -89,7 +89,7 @@ module PuppetX
 
         request = Net::HTTP::Get.new(uri.request_uri, header)
         @headers.each do |h|
-          h_split = h.split(':')
+          h_split = h.split(':', 2)
           request[h_split[0].strip] = h_split[1].strip if h_split.length == 2
         end
         request.basic_auth(@username, @password) if @username && @password
