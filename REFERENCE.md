@@ -439,7 +439,7 @@ Default value: `'present'`
 
 ##### <a name="-archive--download--src_target"></a>`src_target`
 
-Data type: `Stdlib::Compat::Absolute_path`
+Data type: `Stdlib::Absolutepath`
 
 Absolute path to staging location
 
@@ -612,7 +612,7 @@ Default value: `undef`
 
 ##### <a name="-archive--go--archive_path"></a>`archive_path`
 
-Data type: `Optional[Stdlib::Compat::Absolute_path]`
+Data type: `Optional[Stdlib::Absolutepath]`
 
 
 
