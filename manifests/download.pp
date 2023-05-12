@@ -43,13 +43,13 @@ define archive::download (
   Boolean $checksum = true,
   Enum['none', 'md5', 'sha1', 'sha2','sha256', 'sha384', 'sha512'] $digest_type = 'md5',   # bad default!
   Enum['present', 'absent'] $ensure = 'present',
-  Stdlib::Compat::Absolute_path $src_target = '/usr/src',
+  Stdlib::Absolutepath $src_target = '/usr/src',
   Optional[String] $digest_string = undef,
   Optional[String] $digest_url = undef,
   Optional[String] $proxy_server = undef,
   Optional[String] $user = undef,
 ) {
-  $target = ($title =~ Stdlib::Compat::Absolute_path) ? {
+  $target = ($title =~ Stdlib::Absolutepath) ? {
     false   => "${src_target}/${title}",
     default => $title,
   }

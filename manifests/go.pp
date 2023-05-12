@@ -15,7 +15,7 @@ define archive::go (
   Optional[String]          $extract_path = undef,
   Optional[String]          $creates      = undef,
   Optional[Boolean]         $cleanup      = undef,
-  Optional[Stdlib::Compat::Absolute_path] $archive_path = undef,
+  Optional[Stdlib::Absolutepath] $archive_path = undef,
 ) {
   include archive::params
 
@@ -25,7 +25,7 @@ define archive::go (
     $file_path = $path
   }
 
-  if $file_path !~ Stdlib::Compat::Absolute_path {
+  if $file_path !~ Stdlib::Absolutepath {
     fail("archive::go[${name}]: \$name or \$archive_path must be an absolute path!") # lint:ignore:trailing_comma
   }
 
