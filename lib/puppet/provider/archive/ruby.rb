@@ -1,16 +1,7 @@
 # frozen_string_literal: true
 
-begin
-  require 'puppet_x/bodeco/archive'
-  require 'puppet_x/bodeco/util'
-rescue LoadError
-  require 'pathname' # WORK_AROUND #14073 and #7788
-  archive = Puppet::Module.find('archive', Puppet[:environment].to_s)
-  raise(LoadError, "Unable to find archive module in modulepath #{Puppet[:basemodulepath] || Puppet[:modulepath]}") unless archive
-
-  require File.join archive.path, 'lib/puppet_x/bodeco/archive'
-  require File.join archive.path, 'lib/puppet_x/bodeco/util'
-end
+require_relative '../../../puppet_x/bodeco/archive'
+require_relative '../../../puppet_x/bodeco/util'
 
 require 'securerandom'
 require 'tempfile'
