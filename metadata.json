@@ -103,7 +103,7 @@
   "dependencies": [
     {
       "name": "puppetlabs/stdlib",
-      "version_requirement": ">= 4.18.0 < 9.0.0"
+      "version_requirement": ">= 4.18.0 < 10.0.0"
     }
   ]
 }
