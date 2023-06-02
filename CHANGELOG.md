@@ -4,6 +4,22 @@ All notable changes to this project will be documented in this file.
 Each new release typically also includes the latest modulesync defaults.
 These should not affect the functionality of the module.
 
+## [v6.2.0](https://github.com/voxpupuli/puppet-archive/tree/v6.2.0) (2023-06-02)
+
+[Full Changelog](https://github.com/voxpupuli/puppet-archive/compare/v6.1.2...v6.2.0)
+
+**Breaking changes:**
+
+- Drop Puppet 6 support [\#495](https://github.com/voxpupuli/puppet-archive/pull/495) ([bastelfreak](https://github.com/bastelfreak))
+
+**Implemented enhancements:**
+
+- Use require\_relative to load libraries [\#494](https://github.com/voxpupuli/puppet-archive/pull/494) ([ekohl](https://github.com/ekohl))
+
+**Merged pull requests:**
+
+- puppetlabs/stdlib: Allow 9.x [\#499](https://github.com/voxpupuli/puppet-archive/pull/499) ([bastelfreak](https://github.com/bastelfreak))
+
 ## [v6.1.2](https://github.com/voxpupuli/puppet-archive/tree/v6.1.2) (2023-04-13)
 
 [Full Changelog](https://github.com/voxpupuli/puppet-archive/compare/v6.1.1...v6.1.2)
