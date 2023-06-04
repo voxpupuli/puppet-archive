@@ -4,9 +4,9 @@ All notable changes to this project will be documented in this file.
 Each new release typically also includes the latest modulesync defaults.
 These should not affect the functionality of the module.
 
-## [v6.2.0](https://github.com/voxpupuli/puppet-archive/tree/v6.2.0) (2023-06-02)
+## [v7.0.0](https://github.com/voxpupuli/puppet-archive/tree/v7.0.0) (2023-06-04)
 
-[Full Changelog](https://github.com/voxpupuli/puppet-archive/compare/v6.1.2...v6.2.0)
+[Full Changelog](https://github.com/voxpupuli/puppet-archive/compare/v6.1.2...v7.0.0)
 
 **Breaking changes:**
 
