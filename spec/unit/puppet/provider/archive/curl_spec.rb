@@ -58,7 +58,7 @@ RSpec.describe curl_provider do
       it 'populates temp netrc file with credentials' do
         allow(provider).to receive(:delete_netrcfile) # Don't delete the file or we won't be able to examine its contents.
         provider.download(name)
-        nettc_content = File.open(tempfile.path).read
+        nettc_content = File.read(tempfile.path)
         expect(nettc_content).to eq("machine home.lan\nlogin foo\npassword bar\n")
       end
 

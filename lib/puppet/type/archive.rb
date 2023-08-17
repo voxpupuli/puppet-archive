@@ -208,7 +208,7 @@ Puppet::Type.newtype(:archive) do
     desc 'optional header(s) to pass.'
 
     validate do |val|
-      raise ArgumentError, "headers must be an array: #{val}" unless val.is_a?(::Array)
+      raise ArgumentError, "headers must be an array: #{val}" unless val.is_a?(Array)
     end
   end
 
@@ -238,12 +238,12 @@ Puppet::Type.newtype(:archive) do
     desc 'provider download options (affects curl, wget, gs, and only s3 downloads for ruby provider)'
 
     validate do |val|
-      raise ArgumentError, "download_options should be String or Array: #{val}" unless val.is_a?(::String) || val.is_a?(::Array)
+      raise ArgumentError, "download_options should be String or Array: #{val}" unless val.is_a?(String) || val.is_a?(Array)
     end
 
     munge do |val|
       case val
-      when ::String
+      when String
         [val]
       else
         val
