@@ -17,7 +17,7 @@ describe 'archive::go_md5' do
   context 'when file doesn\'t exist' do
     it 'raises error' do
       allow(PuppetX::Bodeco::Util).to receive(:content).with(uri, username: 'user', password: 'pass').and_return(example_md5)
-      expect(subject).to run.with_params('user', 'pass', 'non-existent-file', url).and_raise_error(RuntimeError, "Could not parse md5 from url https://gocd\.lan/path/file\.md5 response: #{example_md5}")
+      expect(subject).to run.with_params('user', 'pass', 'non-existent-file', url).and_raise_error(RuntimeError, "Could not parse md5 from url https://gocd.lan/path/file.md5 response: #{example_md5}")
     end
   end
 end

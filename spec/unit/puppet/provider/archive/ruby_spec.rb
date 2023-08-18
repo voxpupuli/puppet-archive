@@ -46,7 +46,7 @@ RSpec.describe ruby_provider do
 
       before do
         resource[:checksum_url] = url if url
-        allow(PuppetX::Bodeco::Util).to receive(:content).\
+        allow(PuppetX::Bodeco::Util).to receive(:content). \
           with(url, any_args).and_return(remote_hash)
       end
 

@@ -79,7 +79,7 @@ module PuppetX
               Add-Type -AssemblyName System.IO.Compression.FileSystem -erroraction "silentlycontinue"
               $zipFile = [System.IO.Compression.ZipFile]::openread(#{@file_path})
               foreach ($zipFileEntry in $zipFile.Entries) {
-                  $pwd = (Get-Item -Path ".\" -Verbose).FullName
+                  $pwd = (Get-Item -Path "." -Verbose).FullName
                   $outputFile = [io.path]::combine($pwd, $zipFileEntry.FullName)
                   $dir = ([io.fileinfo]$outputFile).DirectoryName
 
