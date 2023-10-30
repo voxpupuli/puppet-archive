@@ -4,7 +4,18 @@ All notable changes to this project will be documented in this file.
 Each new release typically also includes the latest modulesync defaults.
 These should not affect the functionality of the module.
 
-## [v7.0.0](https://github.com/voxpupuli/puppet-archive/tree/v7.0.0) (2023-06-04)
+## [v7.1.0](https://github.com/voxpupuli/puppet-archive/tree/v7.1.0) (2023-10-30)
+
+[Full Changelog](https://github.com/voxpupuli/puppet-archive/compare/v7.0.0...v7.1.0)
+
+**Implemented enhancements:**
+
+- Add Rocky & AlmaLinux support [\#510](https://github.com/voxpupuli/puppet-archive/pull/510) ([bastelfreak](https://github.com/bastelfreak))
+- Add Debian 12 support [\#509](https://github.com/voxpupuli/puppet-archive/pull/509) ([bastelfreak](https://github.com/bastelfreak))
+- Add OracleLinux 9 support [\#508](https://github.com/voxpupuli/puppet-archive/pull/508) ([bastelfreak](https://github.com/bastelfreak))
+- Add Puppet 8 support [\#502](https://github.com/voxpupuli/puppet-archive/pull/502) ([bastelfreak](https://github.com/bastelfreak))
+
+## [v7.0.0](https://github.com/voxpupuli/puppet-archive/tree/v7.0.0) (2023-06-05)
 
 [Full Changelog](https://github.com/voxpupuli/puppet-archive/compare/v6.1.2...v7.0.0)
 
