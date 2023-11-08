@@ -14,8 +14,8 @@ describe 'archive' do
 
     context 'default' do
       it { is_expected.not_to contain_package('7zip') }
-      it { is_expected.not_to contain_file('/opt/awscli-bundle') }
-      it { is_expected.not_to contain_archive('awscli-bundle.zip') }
+      it { is_expected.not_to contain_file('/opt/aws') }
+      it { is_expected.not_to contain_archive('awscli-exe-linux-x86_64.zip') }
       it { is_expected.not_to contain_exec('install_aws_cli') }
       it { is_expected.to compile.with_all_deps }
       it { is_expected.to contain_class('archive::params') }
@@ -28,8 +28,8 @@ describe 'archive' do
         }
       end
 
-      it { is_expected.to contain_file('/opt/awscli-bundle') }
-      it { is_expected.to contain_archive('awscli-bundle.zip') }
+      it { is_expected.to contain_file('/opt/aws') }
+      it { is_expected.to contain_archive('awscli-exe-linux-x86_64.zip') }
       it { is_expected.to contain_exec('install_aws_cli') }
     end
 
@@ -69,7 +69,7 @@ describe 'archive' do
         )
       end
 
-      it { is_expected.not_to contain_archive('awscli-bundle.zip') }
+      it { is_expected.not_to contain_archive('awscli-exe-linux-x86_64.zip') }
     end
 
     context 'with 7zip msi package' do
