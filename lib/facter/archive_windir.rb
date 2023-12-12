@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 Facter.add(:archive_windir) do
-  confine :osfamily => :windows # rubocop:disable Style/HashSyntax
+  confine osfamily: :windows
   setcode do
     program_data = `echo %SYSTEMDRIVE%\\ProgramData`.chomp
     if File.directory? program_data
