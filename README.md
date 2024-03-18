@@ -183,7 +183,7 @@ archive { '/home/myuser/help':
 ### File permission
 
 When extracting files as non-root user, either ensure the target directory
-exists with the appropriate permission (see [tomcat.pp](tests/tomcat.pp) for
+exists with the appropriate permission (see [tomcat.pp](examples/tomcat.pp) for
 full working example):
 
 ```puppet
