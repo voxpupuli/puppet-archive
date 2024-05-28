@@ -61,12 +61,12 @@ module PuppetX
       private
 
       def win_7zip
-        if ENV['path'].include?('7-Zip') || system('where 7z.exe')
+        if system('where 7z.exe')
           '7z.exe'
-        elsif File.directory?('C:\\Program Files\\7-Zip')
-          'C:\\Program Files\\7-Zip\\7z.exe'
-        elsif File.directory?('C:\\Program Files (x86)\\7-zip')
-          'C:\\Program Files (x86)\\7-Zip\\7z.exe'
+        elsif File.exist?('C:\Program Files\7-Zip\7z.exe')
+          'C:\Program Files\7-Zip\7z.exe'
+        elsif File.exist?('C:\Program Files (x86)\7-zip\7z.exe')
+          'C:\Program Files (x86)\7-Zip\7z.exe'
         elsif @file_path =~ %r{.zip"$}
           # Fallback to powershell for zipfiles - this works with windows
           # 2012+ if your powershell/.net is too old the script will fail
