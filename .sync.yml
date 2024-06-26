@@ -1,5 +1,6 @@
 ---
 spec/spec_helper.rb:
+  facterdb_string_keys: true
   spec_overrides:
     - "Dir['./spec/support/**/*.rb'].sort.each { |f| require f }"
 spec/spec_helper_acceptance.rb:
