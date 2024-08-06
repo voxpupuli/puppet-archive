@@ -632,6 +632,11 @@ Parameters
 Examples
 --------
 
+#### Examples
+
+##### 
+
+```puppet
 archive::nexus { '/tmp/jtstand-ui-0.98.jar':
   url        => 'https://oss.sonatype.org',
   gav        => 'org.codehaus.jtstand:jtstand-ui:0.98',
@@ -639,6 +644,7 @@ archive::nexus { '/tmp/jtstand-ui-0.98.jar':
   packaging  => 'jar',
   extract    => false,
 }
+```
 
 #### Parameters
 
@@ -895,6 +901,72 @@ whether archive file should be present/absent (default: present)
 
 Default value: `present`
 
+##### `onlyif`
+
+A test command that checks the state of the target system and restricts
+when the `archive` can run. If present, Puppet runs this test command
+first, and only runs the main command if the test has an exit code of 0
+(success). For example:
+
+  ```
+  archive { '/tmp/jta-1.1.jar':
+    ensure        => present,
+    extract       => true,
+    extract_path  => '/tmp',
+    source        => 'http://central.maven.org/maven2/javax/transaction/jta/1.1/jta-1.1.jar',
+    onlyif        => 'test `java -version 2>&1 | awk -F '"' '/version/ {print $2}' | awk -F '.' '{sub("^$", "0", $2); print $1$2}'` -gt 15',
+    cleanup       => true,
+    env_path      => ["/bin", "/usr/bin", "/sbin", "/usr/sbin"],
+  }
+  ```
+
+Since this command is used in the process of determining whether the
+`archive` is already in sync, it must be run during a noop Puppet run.
+
+This parameter can also take an array of commands. For example:
+
+    onlyif => ['test -f /tmp/file1', 'test -f /tmp/file2'],
+
+or an array of arrays. For example:
+
+    onlyif => [['test', '-f', '/tmp/file1'], 'test -f /tmp/file2']
+
+This `archive` would only run if every command in the array has an
+exit code of 0 (success).
+
+##### `unless`
+
+A test command that checks the state of the target system and restricts
+when the `archive` can run. If present, Puppet runs this test command
+first, then runs the main command unless the test has an exit code of 0
+(success). For example:
+
+  ```
+  archive { '/tmp/jta-1.1.jar':
+    ensure        => present,
+    extract       => true,
+    extract_path  => '/tmp',
+    source        => 'http://central.maven.org/maven2/javax/transaction/jta/1.1/jta-1.1.jar',
+    unless        => 'test `java -version 2>&1 | awk -F '"' '/version/ {print $2}' | awk -F '.' '{sub("^$", "0", $2); print $1$2}'` -gt 15',
+    cleanup       => true,
+    env_path      => ["/bin", "/usr/bin", "/sbin", "/usr/sbin"],
+  }
+  ```
+
+Since this command is used in the process of determining whether the
+`archive` is already in sync, it must be run during a noop Puppet run.
+
+This parameter can also take an array of commands. For example:
+
+    unless => ['test -f /tmp/file1', 'test -f /tmp/file2'],
+
+or an array of arrays. For example:
+
+    unless => [['test', '-f', '/tmp/file1'], 'test -f /tmp/file2']
+
+This `archive` would only run if every command in the array has a
+non-zero exit code.
+
 #### Parameters
 
 The following parameters are available in the `archive` type.
@@ -910,6 +982,8 @@ The following parameters are available in the `archive` type.
 * [`digest_type`](#-archive--digest_type)
 * [`digest_url`](#-archive--digest_url)
 * [`download_options`](#-archive--download_options)
+* [`env_path`](#-archive--env_path)
+* [`environment`](#-archive--environment)
 * [`extract`](#-archive--extract)
 * [`extract_command`](#-archive--extract_command)
 * [`extract_flags`](#-archive--extract_flags)
@@ -997,6 +1071,20 @@ archive file checksum source (instead of specifying checksum)
 ##### <a name="-archive--download_options"></a>`download_options`
 
 provider download options (affects curl, wget, gs, and only s3 downloads for ruby provider)
+
+##### <a name="-archive--env_path"></a>`env_path`
+
+The search path used for check execution.
+Commands must be fully qualified if no path is specified.  Paths
+can be specified as an array or as a '
+
+##### <a name="-archive--environment"></a>`environment`
+
+An array of any additional environment variables you want to set for a
+command, such as `[ 'HOME=/root', 'MAIL=root@example.com']`.
+Note that if you use this to set PATH, it will override the `path`
+attribute. Multiple environment variables should be specified as an
+array.
 
 ##### <a name="-archive--extract"></a>`extract`
 

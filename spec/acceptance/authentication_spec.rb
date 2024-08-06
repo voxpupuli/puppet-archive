@@ -6,7 +6,7 @@ require 'uri'
 context 'authenticated download' do
   let(:source) do
     parser = URI::RFC2396_Parser.new
-    parser.escape("http://httpbin.org/basic-auth/user/#{password}")
+    parser.escape("https://httpbin.org/basic-auth/user/#{password}")
   end
   let(:pp) do
     <<-EOS
