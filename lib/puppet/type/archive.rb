@@ -294,7 +294,7 @@ Puppet::Type.newtype(:archive) do
     def check(value)
       # TRANSLATORS 'creates' is a parameter name and should not be translated
       debug("Checking that 'creates' path '#{value}' exists")
-      ! Puppet::FileSystem.exist?(value)
+      !Puppet::FileSystem.exist?(value)
     end
   end
 
