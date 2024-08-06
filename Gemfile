@@ -23,6 +23,7 @@ group :release do
   gem 'voxpupuli-release', '~> 3.0',  :require => false
 end
 
+gem 'pry'
 gem 'rake', :require => false
 gem 'facter', ENV['FACTER_GEM_VERSION'], :require => false, :groups => [:test]
 
