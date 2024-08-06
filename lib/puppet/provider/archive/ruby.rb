@@ -7,7 +7,6 @@ require 'securerandom'
 require 'tempfile'
 require 'puppet/util/execution'
 
-require 'pry'
 # This provider implements a simple state-machine. The following attempts to #
 # document it. In general, `def adjective?` implements a [state], while `def
 # verb` implements an {action}.
