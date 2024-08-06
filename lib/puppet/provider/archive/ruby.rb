@@ -293,16 +293,16 @@ Puppet::Type.type(:archive).provide(:ruby) do
     envlist = [envlist] unless envlist.is_a? Array
     envlist.each do |setting|
       unless (match = %r{^(\w+)=((.|\n)*)$}.match(setting))
-        warning format(_('Cannot understand environment setting %{setting}'), setting: setting.inspect)
+        warning "Cannot understand environment setting #{setting.inspect}"
         next
       end
       var = match[1]
       value = match[2]
 
-      warning format(_("Overriding environment setting '%{var}' with '%{value}'"), var: var, value: value) if env.include?(var) || env.include?(var.to_sym)
+      warning "Overriding environment setting '#{var}' with '#{value}'" if env.include?(var) || env.include?(var.to_sym)
 
       if value.nil? || value.empty?
-        msg = format(_("Empty environment setting '%{var}'"), var: var)
+        msg = "Empty environment setting '#{var}'"
         Puppet.warn_once('undefined_variables', "empty_env_var_#{var}", msg, resource.file, resource.line)
       end
 
@@ -364,6 +364,6 @@ Puppet::Type.type(:archive).provide(:ruby) do
   def validatecmd(command)
     exe = extractexe(command)
     # if we're not fully qualified, require a path
-    self.fail format(_("'%{exe}' is not qualified and no path was specified. Please qualify the command or specify a path."), exe: exe) if !absolute_path?(exe) && resource[:path].nil?
+    self.fail "'#{exe}' is not qualified and no path was specified. Please qualify the command or specify a path." if !absolute_path?(exe) && resource[:path].nil?
   end
 end

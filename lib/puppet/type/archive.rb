@@ -294,7 +294,7 @@ Puppet::Type.newtype(:archive) do
     def check(value)
       # TRANSLATORS 'creates' is a parameter name and should not be translated
       debug("Checking that 'creates' path '#{value}' exists")
-      Puppet::FileSystem.exist?(value)
+      ! Puppet::FileSystem.exist?(value)
     end
   end
 
@@ -457,7 +457,7 @@ Puppet::Type.newtype(:archive) do
   # Verify that we pass all of the checks.  The argument determines whether
   # we skip the :refreshonly check, which is necessary because we now check
   # within refresh
-  def check_all_attributes(_refreshing = false)
+  def check_all_attributes
     self.class.checks.each do |check|
       next unless @parameters.include?(check)
 
@@ -470,54 +470,11 @@ Puppet::Type.newtype(:archive) do
         # but don't print sensitive commands or parameters in the clear
         sourcestring = @parameters[:source].sensitive ? '[command redacted]' : @parameters[:source].value
 
-        debug(format("'%{source}' won't be executed because of failed check '%{check}'", source: sourcestring, check: check))
+        debug("'#{sourcestring}' won't be executed because of failed check '#{check}'")
 
-        return false
+        return true
       end
     end
-    true
-  end
-
-  def output
-    if property(:returns).nil?
-      nil
-    else
-      property(:returns).output
-    end
-  end
-
-  # Run the command, or optionally run a separately-specified command.
-  def refresh
-    return unless check_all_attributes(true)
-
-    cmd = self[:refresh]
-    if cmd
-      provider.run(cmd)
-    else
-      property(:returns).sync
-    end
-  end
-
-  private
-
-  def set_sensitive_parameters(sensitive_parameters)
-    # If any are sensitive, mark all as sensitive
-    sensitive = false
-    parameters_to_check = %i[command unless onlyif]
-
-    parameters_to_check.each do |p|
-      if sensitive_parameters.include?(p)
-        sensitive_parameters.delete(p)
-        sensitive = true
-      end
-    end
-
-    if sensitive
-      parameters_to_check.each do |p|
-        parameter(p).sensitive = true if parameters.include?(p)
-      end
-    end
-
-    super(sensitive_parameters)
+    false
   end
 end

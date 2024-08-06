@@ -245,41 +245,41 @@ describe Puppet::Type.type(:archive) do
         context 'with a single item' do
           it 'runs if the command exits non-zero' do
             resource[param] = cmd_fail
-            expect(resource.check_all_attributes).to be(true)
+            expect(resource.check_all_attributes).to be(false)
           end
 
           it 'does not run if the command exits zero' do
             resource[param] = cmd_pass
-            expect(resource.check_all_attributes).to be(false)
+            expect(resource.check_all_attributes).to be(true)
           end
         end
 
         context 'with an array with a single item' do
           it 'runs if the command exits non-zero' do
             resource[param] = [cmd_fail]
-            expect(resource.check_all_attributes).to be(true)
+            expect(resource.check_all_attributes).to be(false)
           end
 
           it 'does not run if the command exits zero' do
             resource[param] = [cmd_pass]
-            expect(resource.check_all_attributes).to be(false)
+            expect(resource.check_all_attributes).to be(true)
           end
         end
 
         context 'with an array with multiple items' do
           it 'runs if all the commands exits non-zero' do
             resource[param] = [cmd_fail] * 3
-            expect(resource.check_all_attributes).to be(true)
+            expect(resource.check_all_attributes).to be(false)
           end
 
           it 'does not run if one command exits zero' do
             resource[param] = [cmd_pass, cmd_fail, cmd_pass]
-            expect(resource.check_all_attributes).to be(false)
+            expect(resource.check_all_attributes).to be(true)
           end
 
           it 'does not run if all command exits zero' do
             resource[param] = [cmd_pass] * 3
-            expect(resource.check_all_attributes).to be(false)
+            expect(resource.check_all_attributes).to be(true)
           end
         end
 
@@ -299,24 +299,24 @@ describe Puppet::Type.type(:archive) do
 
           it 'runs if all the commands exits non-zero' do
             resource[param] = [[cmd_fail, '--flag'], [cmd_fail], [cmd_fail, '--flag']]
-            expect(resource.check_all_attributes).to be(true)
+            expect(resource.check_all_attributes).to be(false)
           end
 
           it 'does not run if one command exits zero' do
             resource[param] = [[cmd_pass, '--flag'], [cmd_pass], [cmd_fail, '--flag']]
-            expect(resource.check_all_attributes).to be(false)
+            expect(resource.check_all_attributes).to be(true)
           end
 
           it 'does not run if all command exits zero' do
             resource[param] = [[cmd_pass, '--flag'], [cmd_pass], [cmd_pass, '--flag']]
-            expect(resource.check_all_attributes).to be(false)
+            expect(resource.check_all_attributes).to be(true)
           end
         end
 
         it 'emits output to debug' do
           Puppet::Util::Log.level = :debug
           resource[param] = cmd_fail
-          expect(resource.check_all_attributes).to be(true)
+          expect(resource.check_all_attributes).to be(false)
           expect(@logs.shift.message).to eq('test output')
         end
 
@@ -324,7 +324,7 @@ describe Puppet::Type.type(:archive) do
           Puppet::Util::Log.level = :debug
           resource[param] = cmd_fail
           allow(resource.parameters[param]).to receive(:sensitive).and_return(true)
-          expect(resource.check_all_attributes).to be(true)
+          expect(resource.check_all_attributes).to be(false)
           expect(@logs).not_to include(an_object_having_attributes(level: :debug, message: 'test output'))
           expect(@logs).to include(an_object_having_attributes(level: :debug, message: '[output redacted]'))
         end
