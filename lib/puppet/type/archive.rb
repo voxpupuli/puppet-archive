@@ -4,7 +4,6 @@ require 'pathname'
 require 'uri'
 require 'puppet/util'
 require 'puppet/parameter/boolean'
-require 'pry'
 
 Puppet::Type.newtype(:archive) do
   @doc = 'Manage archive file download, extraction, and cleanup.'
@@ -264,9 +263,9 @@ Puppet::Type.newtype(:archive) do
 
     # Support both arrays and colon-separated fields.
     def value=(*values)
-      @value = values.flatten.collect { |val|
+      @value = values.flatten.map do |val|
         val.split(File::PATH_SEPARATOR)
-      }.flatten
+      end.flatten
     end
   end
 
@@ -280,14 +279,12 @@ Puppet::Type.newtype(:archive) do
     validate do |values|
       values = [values] unless values.is_a? Array
       values.each do |value|
-        unless value =~ /\w+=/
-          raise ArgumentError, _("Invalid environment setting '%{value}'") % { value: value }
-        end
+        raise ArgumentError, "Invalid environment setting '#{value}'" unless value =~ %r{\w+=}
       end
     end
   end
 
-  newcheck(:creates, :parent => Puppet::Parameter::Path) do
+  newcheck(:creates, parent: Puppet::Parameter::Path) do
     desc 'if file/directory exists, will not download/extract archive.'
 
     accept_arrays
@@ -295,14 +292,14 @@ Puppet::Type.newtype(:archive) do
     # If the file exists, return false (i.e., don't run the command),
     # else return true
     def check(value)
-      #TRANSLATORS 'creates' is a parameter name and should not be translated
-      debug(_("Checking that 'creates' path '%{creates_path}' exists") % { creates_path: value })
+      # TRANSLATORS 'creates' is a parameter name and should not be translated
+      debug("Checking that 'creates' path '#{value}' exists")
       Puppet::FileSystem.exist?(value)
     end
   end
 
   newcheck(:unless) do
-    desc <<-'EOT'
+    desc <<-EOT
         A test command that checks the state of the target system and restricts
         when the `archive` can run. If present, Puppet runs this test command
         first, then runs the main command unless the test has an exit code of 0
@@ -333,7 +330,7 @@ Puppet::Type.newtype(:archive) do
 
         This `archive` would only run if every command in the array has a
         non-zero exit code.
-      EOT
+    EOT
 
     validate do |cmds|
       cmds = [cmds] unless cmds.is_a? Array
@@ -348,16 +345,16 @@ Puppet::Type.newtype(:archive) do
       begin
         output, status = provider.run(value, true)
       rescue Timeout::Error
-        err _("Check %{value} exceeded timeout") % { value: value.inspect }
+        err format('Check %{value} exceeded timeout', value: value.inspect)
         return false
       end
 
       if sensitive
-        self.debug("[output redacted]")
+        debug('[output redacted]')
       else
-        output.split(/\n/).each { |line|
-          self.debug(line)
-        }
+        output.split(%r{\n}).each do |line|
+          debug(line)
+        end
       end
 
       status.exitstatus != 0
@@ -365,7 +362,7 @@ Puppet::Type.newtype(:archive) do
   end
 
   newcheck(:onlyif) do
-    desc <<-'EOT'
+    desc <<-EOT
         A test command that checks the state of the target system and restricts
         when the `archive` can run. If present, Puppet runs this test command
         first, and only runs the main command if the test has an exit code of 0
@@ -396,7 +393,7 @@ Puppet::Type.newtype(:archive) do
 
         This `archive` would only run if every command in the array has an
         exit code of 0 (success).
-      EOT
+    EOT
 
     validate do |cmds|
       cmds = [cmds] unless cmds.is_a? Array
@@ -411,19 +408,19 @@ Puppet::Type.newtype(:archive) do
       begin
         output, status = provider.run(value, true)
       rescue Timeout::Error
-        err _("Check %{value} exceeded timeout") % { value: value.inspect }
+        err format('Check %{value} exceeded timeout', value: value.inspect)
         return false
       end
 
       if sensitive
-        self.debug("[output redacted]")
+        debug('[output redacted]')
       else
-        output.split(/\n/).each { |line|
-          self.debug(line)
-        }
+        output.split(%r{\n}).each do |line|
+          debug(line)
+        end
       end
 
-      status.exitstatus == 0
+      status.exitstatus.zero?
     end
   end
 
@@ -460,9 +457,8 @@ Puppet::Type.newtype(:archive) do
   # Verify that we pass all of the checks.  The argument determines whether
   # we skip the :refreshonly check, which is necessary because we now check
   # within refresh
-  def check_all_attributes(refreshing = false)
-    self.class.checks.each { |check|
-
+  def check_all_attributes(_refreshing = false)
+    self.class.checks.each do |check|
       next unless @parameters.include?(check)
 
       val = @parameters[check].value
@@ -472,13 +468,13 @@ Puppet::Type.newtype(:archive) do
 
         # Give a debug message so users can figure out what command would have been
         # but don't print sensitive commands or parameters in the clear
-        sourcestring = @parameters[:source].sensitive ? "[command redacted]" : @parameters[:source].value
+        sourcestring = @parameters[:source].sensitive ? '[command redacted]' : @parameters[:source].value
 
-        debug(_("'%{source}' won't be executed because of failed check '%{check}'") % { source: sourcestring, check: check })
+        debug(format("'%{source}' won't be executed because of failed check '%{check}'", source: sourcestring, check: check))
 
         return false
       end
-    }
+    end
     true
   end
 
@@ -492,13 +488,13 @@ Puppet::Type.newtype(:archive) do
 
   # Run the command, or optionally run a separately-specified command.
   def refresh
-    if check_all_attributes(true)
-      cmd = self[:refresh]
-      if cmd
-        provider.run(cmd)
-      else
-        property(:returns).sync
-      end
+    return unless check_all_attributes(true)
+
+    cmd = self[:refresh]
+    if cmd
+      provider.run(cmd)
+    else
+      property(:returns).sync
     end
   end
 
@@ -507,7 +503,7 @@ Puppet::Type.newtype(:archive) do
   def set_sensitive_parameters(sensitive_parameters)
     # If any are sensitive, mark all as sensitive
     sensitive = false
-    parameters_to_check = [:command, :unless, :onlyif]
+    parameters_to_check = %i[command unless onlyif]
 
     parameters_to_check.each do |p|
       if sensitive_parameters.include?(p)
@@ -518,9 +514,7 @@ Puppet::Type.newtype(:archive) do
 
     if sensitive
       parameters_to_check.each do |p|
-        if parameters.include?(p)
-          parameter(p).sensitive = true
-        end
+        parameter(p).sensitive = true if parameters.include?(p)
       end
     end
 

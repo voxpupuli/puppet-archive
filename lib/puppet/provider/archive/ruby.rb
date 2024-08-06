@@ -256,33 +256,32 @@ Puppet::Type.type(:archive).provide(:ruby) do
     if Facter.value(:osfamily) == 'windows'
       if absolute_path?(exe)
         if !Puppet::FileSystem.exist?(exe)
-          raise ArgumentError, _("Could not find command '%{exe}'") % { exe: exe }
+          raise ArgumentError, format(_("Could not find command '%{exe}'"), exe: exe)
         elsif !File.file?(exe)
-          raise ArgumentError, _("'%{exe}' is a %{klass}, not a file") % { exe: exe, klass: File.ftype(exe) }
+          raise ArgumentError, format(_("'%{exe}' is a %{klass}, not a file"), exe: exe, klass: File.ftype(exe))
         end
       end
-    else
-      if File.expand_path(exe) == exe
-        if !Puppet::FileSystem.exist?(exe)
-          raise ArgumentError, _("Could not find command '%{exe}'") % { exe: exe }
-        elsif !File.file?(exe)
-          raise ArgumentError, _("'%{exe}' is a %{klass}, not a file") % { exe: exe, klass: File.ftype(exe) }
-        elsif !File.executable?(exe)
-          raise ArgumentError, _("'%{exe}' is not executable") % { exe: exe }
-        end
+    elsif File.expand_path(exe) == exe
+      if !Puppet::FileSystem.exist?(exe)
+        raise ArgumentError, format(_("Could not find command '%{exe}'"), exe: exe)
+      elsif !File.file?(exe)
+        raise ArgumentError, format(_("'%{exe}' is a %{klass}, not a file"), exe: exe, klass: File.ftype(exe))
+      elsif !File.executable?(exe)
+        raise ArgumentError, format(_("'%{exe}' is not executable"), exe: exe)
       end
     end
 
     if resource[:env_path]
-      Puppet::Util.withenv :PATH => resource[:env_path].join(File::PATH_SEPARATOR) do
+      Puppet::Util.withenv PATH: resource[:env_path].join(File::PATH_SEPARATOR) do
         return if which(exe)
       end
     end
 
     # 'which' will only return the command if it's executable, so we can't
     # distinguish not found from not executable
-    raise ArgumentError, _("Could not find command '%{exe}'") % { exe: exe }
+    raise ArgumentError, format(_("Could not find command '%{exe}'"), exe: exe)
   end
+
   def environment
     env = {}
 
@@ -294,19 +293,17 @@ Puppet::Type.type(:archive).provide(:ruby) do
 
     envlist = [envlist] unless envlist.is_a? Array
     envlist.each do |setting|
-      unless (match = /^(\w+)=((.|\n)*)$/.match(setting))
-        warning _("Cannot understand environment setting %{setting}") % { setting: setting.inspect }
+      unless (match = %r{^(\w+)=((.|\n)*)$}.match(setting))
+        warning format(_('Cannot understand environment setting %{setting}'), setting: setting.inspect)
         next
       end
       var = match[1]
       value = match[2]
 
-      if env.include?(var) || env.include?(var.to_sym)
-        warning _("Overriding environment setting '%{var}' with '%{value}'") % { var: var, value: value }
-      end
+      warning format(_("Overriding environment setting '%{var}' with '%{value}'"), var: var, value: value) if env.include?(var) || env.include?(var.to_sym)
 
       if value.nil? || value.empty?
-        msg = _("Empty environment setting '%{var}'") % { var: var }
+        msg = format(_("Empty environment setting '%{var}'"), var: var)
         Puppet.warn_once('undefined_variables', "empty_env_var_#{var}", msg, resource.file, resource.line)
       end
 
@@ -317,10 +314,9 @@ Puppet::Type.type(:archive).provide(:ruby) do
   end
 
   def run(command, check = false)
-    output = nil
     checkexe(command)
 
-    debug "Executing#{check ? " check": ""} #{command}"
+    debug "Executing#{check ? ' check' : ''} #{command}"
 
     cwd = resource[:extract] ? resource[:extract_path] : File.dirname(resource[:path])
     # It's ok if cwd is nil. In that case Puppet::Util::Execution.execute() simply will not attempt to
@@ -329,7 +325,7 @@ Puppet::Type.type(:archive).provide(:ruby) do
     # the working directory can fail under some circumstances, so avoiding the directory change attempt
     # is preferable to defaulting cwd to that directory.
 
-    # note that we are passing "false" for the "override_locale" parameter, which ensures that the user's
+    # NOTE: that we are passing "false" for the "override_locale" parameter, which ensures that the user's
     # default/system locale will be respected.  Callers may override this behavior by setting locale-related
     # environment variables (LANG, LC_ALL, etc.) in their 'environment' configuration.
     output = Puppet::Util::Execution.execute(
@@ -344,9 +340,8 @@ Puppet::Type.type(:archive).provide(:ruby) do
       sensitive: false
     )
     # The shell returns 127 if the command is missing.
-    if output.exitstatus == 127
-      raise ArgumentError, output
-    end
+    raise ArgumentError, output if output.exitstatus == 127
+
     # Return output twice as processstatus was returned before, but only exitstatus was ever called.
     # Output has the exitstatus on it so it is returned instead. This is here twice as changing this
     #  would result in a change to the underlying API.
@@ -357,12 +352,12 @@ Puppet::Type.type(:archive).provide(:ruby) do
     if command.is_a? Array
       command.first
     else
-      match = /^"([^"]+)"|^'([^']+)'/.match(command)
+      match = %r{^"([^"]+)"|^'([^']+)'}.match(command)
       if match
         # extract whichever of the two sides matched the content.
         match[1] or match[2]
       else
-        command.split(/ /)[0]
+        command.split(%r{ })[0]
       end
     end
   end
@@ -370,6 +365,6 @@ Puppet::Type.type(:archive).provide(:ruby) do
   def validatecmd(command)
     exe = extractexe(command)
     # if we're not fully qualified, require a path
-    self.fail _("'%{exe}' is not qualified and no path was specified. Please qualify the command or specify a path.") % { exe: exe } if !absolute_path?(exe) and resource[:path].nil?
+    self.fail format(_("'%{exe}' is not qualified and no path was specified. Please qualify the command or specify a path."), exe: exe) if !absolute_path?(exe) && resource[:path].nil?
   end
 end

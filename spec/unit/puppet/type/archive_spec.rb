@@ -136,164 +136,197 @@ describe Puppet::Type.type(:archive) do
     end.not_to raise_error
   end
 
-  describe "#check" do
-    describe ":creates" do
-      before :each do
-        @exist   = tmpfile('exist')
-        FileUtils.touch(@exist)
-        @unexist = tmpfile('unexist')
+  describe 'when setting environment' do
+    { 'single values'   => 'foo=bar',
+      'multiple values' => ['foo=bar', 'baz=quux'], }.each do |name, data|
+      it "accepts #{name}" do
+        resource[:environment] = data
+        expect(resource[:environment]).to eq(data)
+      end
+    end
+
+    { 'single values' => 'foo',
+      'only values'   => %w[foo bar],
+      'any values'    => ['foo=bar', 'baz'] }.each do |name, data|
+      it "rejects #{name} without assignment" do
+        expect { resource[:environment] = data }.
+          to raise_error Puppet::Error, %r{Invalid environment setting}
+      end
+    end
+  end
+
+  describe '#check' do
+    describe ':creates' do
+      let(:exist_file) do
+        tmpfile('exist')
+      end
+      let(:unexist_file) do
+        tmpfile('unexist')
       end
 
-      context "with a single item" do
-        it "should run when the item does not exist" do
-          resource[:creates] = @unexist
-          expect(resource.check_all_attributes).to eq(false)
+      before do
+        FileUtils.touch(exist_file)
+      end
+
+      context 'with a single item' do
+        it 'runs when the item does not exist' do
+          resource[:creates] = unexist_file
+          expect(resource.check_all_attributes).to be(false)
         end
 
-        it "should not run when the item exists" do
-          resource[:creates] = @exist
-          expect(resource.check_all_attributes).to eq(true)
+        it 'does not run when the item exists' do
+          resource[:creates] = exist_file
+          expect(resource.check_all_attributes).to be(true)
         end
       end
 
-      context "with an array with one item" do
-        it "should run when the item does not exist" do
-          resource[:creates] = [@unexist]
-          expect(resource.check_all_attributes).to eq(false)
+      context 'with an array with one item' do
+        it 'runs when the item does not exist' do
+          resource[:creates] = [unexist_file]
+          expect(resource.check_all_attributes).to be(false)
         end
 
-        it "should not run when the item exists" do
-          resource[:creates] = [@exist]
-          expect(resource.check_all_attributes).to eq(true)
+        it 'does not run when the item exists' do
+          resource[:creates] = [exist_file]
+          expect(resource.check_all_attributes).to be(true)
         end
 
-        it "should not run when all items exist" do
-          resource[:creates] = [@exist] * 3
+        it 'does not run when all items exist' do
+          resource[:creates] = [exist_file] * 3
         end
 
-        context "when creates is being checked" do
-          it "should be logged to debug when the path does exist" do
+        context 'when creates is being checked' do
+          it 'is logged to debug when the path does exist' do
             Puppet::Util::Log.level = :debug
-            resource[:creates] = @exist
-            expect(resource.check_all_attributes).to eq(true)
-            expect(@logs).to include(an_object_having_attributes(level: :debug, message: "Checking that 'creates' path '#{@exist}' exists"))
+            resource[:creates] = exist_file
+            expect(resource.check_all_attributes).to be(true)
+            expect(@logs).to include(an_object_having_attributes(level: :debug, message: "Checking that 'creates' path '#{exist_file}' exists"))
           end
 
-          it "should be logged to debug when the path does not exist" do
+          it 'is logged to debug when the path does not exist' do
             Puppet::Util::Log.level = :debug
-            resource[:creates] = @unexist
-            expect(resource.check_all_attributes).to eq(false)
-            expect(@logs).to include(an_object_having_attributes(level: :debug, message: "Checking that 'creates' path '#{@unexist}' exists"))
+            resource[:creates] = unexist_file
+            expect(resource.check_all_attributes).to be(false)
+            expect(@logs).to include(an_object_having_attributes(level: :debug, message: "Checking that 'creates' path '#{unexist_file}' exists"))
           end
         end
       end
     end
 
-
-    { :onlyif => { :pass => false, :fail => true  },
-      :unless => { :pass => true,  :fail => false },
-    }.each do |param, sense|
+    { onlyif: { pass: false, fail: true  },
+      unless: { pass: true,  fail: false }, }.each do |param, sense|
       describe ":#{param}" do
-        before :each do
-          @pass = make_absolute("/magic/pass")
-          @fail = make_absolute("/magic/fail")
+        let(:cmd_pass) do
+          make_absolute('/magic/pass')
+        end
+        let(:cmd_fail) do
+          make_absolute('/magic/fail')
+        end
+        let(:pass_status) do
+          double('status', exitstatus: sense[:pass] ? 0 : 1)
+        end
+        let(:fail_status) do
+          double('status', exitstatus: sense[:fail] ? 0 : 1)
+        end
 
-          @pass_status = double('status', :exitstatus => sense[:pass] ? 0 : 1)
-          @fail_status = double('status', :exitstatus => sense[:fail] ? 0 : 1)
+        before do
+          pass_status = double('status', exitstatus: sense[:pass] ? 0 : 1)
+          fail_status = double('status', exitstatus: sense[:fail] ? 0 : 1)
 
           allow(resource.provider).to receive(:checkexe).and_return(true)
           [true, false].each do |check|
-            allow(resource.provider).to receive(:run).with(@pass, check).
-              and_return(['test output', @pass_status])
-            allow(resource.provider).to receive(:run).with(@fail, check).
-              and_return(['test output', @fail_status])
+            allow(resource.provider).to receive(:run).with(cmd_pass, check).
+              and_return(['test output', pass_status])
+            allow(resource.provider).to receive(:run).with(cmd_fail, check).
+              and_return(['test output', fail_status])
           end
         end
 
-        context "with a single item" do
-          it "should run if the command exits non-zero" do
-            resource[param] = @fail
-            expect(resource.check_all_attributes).to eq(true)
+        context 'with a single item' do
+          it 'runs if the command exits non-zero' do
+            resource[param] = cmd_fail
+            expect(resource.check_all_attributes).to be(true)
           end
 
-          it "should not run if the command exits zero" do
-            resource[param] = @pass
-            expect(resource.check_all_attributes).to eq(false)
-          end
-        end
-
-        context "with an array with a single item" do
-          it "should run if the command exits non-zero" do
-            resource[param] = [@fail]
-            expect(resource.check_all_attributes).to eq(true)
-          end
-
-          it "should not run if the command exits zero" do
-            resource[param] = [@pass]
-            expect(resource.check_all_attributes).to eq(false)
+          it 'does not run if the command exits zero' do
+            resource[param] = cmd_pass
+            expect(resource.check_all_attributes).to be(false)
           end
         end
 
-        context "with an array with multiple items" do
-          it "should run if all the commands exits non-zero" do
-            resource[param] = [@fail] * 3
-            expect(resource.check_all_attributes).to eq(true)
+        context 'with an array with a single item' do
+          it 'runs if the command exits non-zero' do
+            resource[param] = [cmd_fail]
+            expect(resource.check_all_attributes).to be(true)
           end
 
-          it "should not run if one command exits zero" do
-            resource[param] = [@pass, @fail, @pass]
-            expect(resource.check_all_attributes).to eq(false)
+          it 'does not run if the command exits zero' do
+            resource[param] = [cmd_pass]
+            expect(resource.check_all_attributes).to be(false)
+          end
+        end
+
+        context 'with an array with multiple items' do
+          it 'runs if all the commands exits non-zero' do
+            resource[param] = [cmd_fail] * 3
+            expect(resource.check_all_attributes).to be(true)
           end
 
-          it "should not run if all command exits zero" do
-            resource[param] = [@pass] * 3
-            expect(resource.check_all_attributes).to eq(false)
+          it 'does not run if one command exits zero' do
+            resource[param] = [cmd_pass, cmd_fail, cmd_pass]
+            expect(resource.check_all_attributes).to be(false)
+          end
+
+          it 'does not run if all command exits zero' do
+            resource[param] = [cmd_pass] * 3
+            expect(resource.check_all_attributes).to be(false)
           end
         end
 
         context 'with an array of arrays with multiple items' do
           before do
             [true, false].each do |check|
-              allow(resource.provider).to receive(:run).with([@pass, '--flag'], check).
-                and_return(['test output', @pass_status])
-              allow(resource.provider).to receive(:run).with([@fail, '--flag'], check).
-                and_return(['test output', @fail_status])
-              allow(resource.provider).to receive(:run).with([@pass], check).
-                and_return(['test output', @pass_status])
-              allow(resource.provider).to receive(:run).with([@fail], check).
-                and_return(['test output', @fail_status])
+              allow(resource.provider).to receive(:run).with([cmd_pass, '--flag'], check).
+                and_return(['test output', pass_status])
+              allow(resource.provider).to receive(:run).with([cmd_fail, '--flag'], check).
+                and_return(['test output', fail_status])
+              allow(resource.provider).to receive(:run).with([cmd_pass], check).
+                and_return(['test output', pass_status])
+              allow(resource.provider).to receive(:run).with([cmd_fail], check).
+                and_return(['test output', fail_status])
             end
           end
-          it "runs if all the commands exits non-zero" do
-            resource[param] = [[@fail, '--flag'], [@fail], [@fail, '--flag']]
-            expect(resource.check_all_attributes).to eq(true)
+
+          it 'runs if all the commands exits non-zero' do
+            resource[param] = [[cmd_fail, '--flag'], [cmd_fail], [cmd_fail, '--flag']]
+            expect(resource.check_all_attributes).to be(true)
           end
 
-          it "does not run if one command exits zero" do
-            resource[param] = [[@pass, '--flag'], [@pass], [@fail, '--flag']]
-            expect(resource.check_all_attributes).to eq(false)
+          it 'does not run if one command exits zero' do
+            resource[param] = [[cmd_pass, '--flag'], [cmd_pass], [cmd_fail, '--flag']]
+            expect(resource.check_all_attributes).to be(false)
           end
 
-          it "does not run if all command exits zero" do
-            resource[param] = [[@pass, '--flag'], [@pass], [@pass, '--flag']]
-            expect(resource.check_all_attributes).to eq(false)
+          it 'does not run if all command exits zero' do
+            resource[param] = [[cmd_pass, '--flag'], [cmd_pass], [cmd_pass, '--flag']]
+            expect(resource.check_all_attributes).to be(false)
           end
         end
 
-        it "should emit output to debug" do
+        it 'emits output to debug' do
           Puppet::Util::Log.level = :debug
-          resource[param] = @fail
-          expect(resource.check_all_attributes).to eq(true)
-          expect(@logs.shift.message).to eq("test output")
+          resource[param] = cmd_fail
+          expect(resource.check_all_attributes).to be(true)
+          expect(@logs.shift.message).to eq('test output')
         end
 
-        it "should not emit output to debug if sensitive is true" do
+        it 'does not emit output to debug if sensitive is true' do
           Puppet::Util::Log.level = :debug
-          resource[param] = @fail
+          resource[param] = cmd_fail
           allow(resource.parameters[param]).to receive(:sensitive).and_return(true)
-          expect(resource.check_all_attributes).to eq(true)
-          expect(@logs).not_to include(an_object_having_attributes(level: :debug, message: "test output"))
-          expect(@logs).to include(an_object_having_attributes(level: :debug, message: "[output redacted]"))
+          expect(resource.check_all_attributes).to be(true)
+          expect(@logs).not_to include(an_object_having_attributes(level: :debug, message: 'test output'))
+          expect(@logs).to include(an_object_having_attributes(level: :debug, message: '[output redacted]'))
         end
       end
     end

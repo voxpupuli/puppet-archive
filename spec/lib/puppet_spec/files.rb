@@ -1,3 +1,7 @@
+# frozen_string_literal: true
+
+# file from https://github.com/puppetlabs/puppet/blob/6.x/spec/lib/puppet_spec/files.rb
+
 require 'fileutils'
 require 'tempfile'
 require 'tmpdir'
@@ -7,9 +11,9 @@ require 'pathname'
 module PuppetSpec::Files
   def self.cleanup
     $global_tempfiles ||= []
-    while path = $global_tempfiles.pop do
+    while (path = $global_tempfiles.pop)
       begin
-        FileUtils.rm_rf path, :secure => true
+        FileUtils.rm_rf path, secure: true
       rescue Errno::ENOENT
         # nothing to do
       end
@@ -34,7 +38,7 @@ module PuppetSpec::Files
 
   def file_containing(name, contents)
     file = tmpfile(name)
-    File.open(file, 'wb') { |f| f.write(contents) }
+    File.binwrite(file, contents)
     file
   end
 
@@ -46,8 +50,8 @@ module PuppetSpec::Files
     else
       text = contents[:posix]
     end
-    File.open(file, 'wb') { |f| f.write(text) }
-    Puppet::FileSystem.chmod(0755, file)
+    File.binwrite(file, text)
+    Puppet::FileSystem.chmod(0o755, file)
     file
   end
 
@@ -65,8 +69,8 @@ module PuppetSpec::Files
       raise ArgumentError, "unexpected prefix: #{prefix.inspect}")
     suffix &&= (String.try_convert(suffix) or
       raise ArgumentError, "unexpected suffix: #{suffix.inspect}")
-    t = Time.now.strftime("%Y%m%d")
-    path = "#{prefix}#{t}-#{$$}-#{rand(0x100000000).to_s(36)}".dup
+    t = Time.now.strftime('%Y%m%d')
+    path = "#{prefix}#{t}-#{$PROCESS_ID}-#{rand(0x100000000).to_s(36)}".dup
     path << "-#{n}" if n
     path << suffix if suffix
     path
@@ -77,13 +81,13 @@ module PuppetSpec::Files
   end
 
   def dir_contained_in(dir, contents_hash)
-    contents_hash.each do |k,v|
+    contents_hash.each do |k, v|
       if v.is_a?(Hash)
-        Dir.mkdir(tmp = File.join(dir,k))
+        Dir.mkdir(tmp = File.join(dir, k))
         dir_contained_in(tmp, v)
       else
         file = File.join(dir, k)
-        File.open(file, 'wb') {|f| f.write(v) }
+        File.binwrite(file, v)
       end
     end
     dir
@@ -96,11 +100,11 @@ module PuppetSpec::Files
   end
 
   def expect_file_mode(file, mode)
-    actual_mode = "%o" % Puppet::FileSystem.stat(file).mode
+    actual_mode = format('%o', Puppet::FileSystem.stat(file).mode)
     target_mode = if Puppet::Util::Platform.windows?
                     mode
                   else
-                    "10" + "%04i" % mode.to_i
+                    "10#{format('%04i', mode.to_i)}"
                   end
     expect(actual_mode).to eq(target_mode)
   end

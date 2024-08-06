@@ -133,13 +133,13 @@ RSpec.describe ruby_provider do
       end
     end
 
-    context "when handling checks", unless: Puppet::Util::Platform.jruby? do
-      before :each do
+    context 'when handling checks', unless: Puppet::Util::Platform.jruby? do
+      before do
         Puppet[:log_level] = 'debug'
       end
 
-      let(:onlyifsecret) { "onlyifsecret" }
-      let(:unlesssecret) { "unlesssecret" }
+      let(:onlyifsecret) { 'onlyifsecret' }
+      let(:unlesssecret) { 'unlesssecret' }
       let(:supersecret) { 'supersecret' }
       let(:path) do
         if Puppet::Util::Platform.windows?
@@ -147,31 +147,27 @@ RSpec.describe ruby_provider do
           # we can't reference that in our manifest. Windows PATHs can contain
           # double quotes and trailing backslashes, which confuse HEREDOC
           # interpolation below. So sanitize it:
-          ENV['PATH'].split(File::PATH_SEPARATOR)
-                     .map { |dir| dir.gsub(/"/, '\"').gsub(/\\$/, '') }
-                     .map { |dir| Pathname.new(dir).cleanpath.to_s }
-                     .join(File::PATH_SEPARATOR)
+          ENV['PATH'].split(File::PATH_SEPARATOR).
+            map { |dir| dir.gsub(%r{"}, '\"').gsub(%r{\\$}, '') }.
+            map { |dir| Pathname.new(dir).cleanpath.to_s }.
+            join(File::PATH_SEPARATOR)
         else
-          ENV['PATH']
+          ENV.fetch('PATH', nil)
         end
       end
 
-      def ruby_exit_0
-        "ruby -e 'exit 0'"
-      end
-
-      def echo_from_ruby_exit_0(message)
+      def echo_from_ruby_exit0(message)
         # Escape double quotes due to HEREDOC interpolation below
-        "ruby -e 'puts \"#{message}\"; exit 0'".gsub(/"/, '\"')
+        "ruby -e 'puts \"#{message}\"; exit 0'".gsub(%r{"}, '\"')
       end
 
-      def echo_from_ruby_exit_1(message)
+      def echo_from_ruby_exit1(message)
         # Escape double quotes due to HEREDOC interpolation below
-        "ruby -e 'puts \"#{message}\"; exit 1'".gsub(/"/, '\"')
+        "ruby -e 'puts \"#{message}\"; exit 1'".gsub(%r{"}, '\"')
       end
 
-      it "redacts command and onlyif outputs" do
-        onlyif = echo_from_ruby_exit_0(onlyifsecret)
+      it 'redacts command and onlyif outputs' do
+        onlyif = echo_from_ruby_exit0(onlyifsecret)
 
         apply_compiled_manifest(<<-MANIFEST)
           archive { '/tmp/favicon.ico':
@@ -181,11 +177,11 @@ RSpec.describe ruby_provider do
             env_path      => "#{path}",
           }
         MANIFEST
-        expect(@logs).to include(an_object_having_attributes(level: :debug, message: "Executing check ruby -e 'puts \"onlyifsecret\"; exit 0'", source: /Archive\[\/tmp\/favicon.ico\]/))
+        expect(@logs).to include(an_object_having_attributes(level: :debug, message: "Executing check ruby -e 'puts \"onlyifsecret\"; exit 0'", source: %r{Archive\[/tmp/favicon.ico\]}))
       end
 
       it "redacts the command that would have been executed but didn't due to onlyif" do
-        onlyif = echo_from_ruby_exit_1(onlyifsecret)
+        onlyif = echo_from_ruby_exit1(onlyifsecret)
 
         apply_compiled_manifest(<<-MANIFEST)
           archive { '/tmp/favicon.ico':
@@ -198,8 +194,8 @@ RSpec.describe ruby_provider do
         expect(@logs).to include(an_object_having_attributes(level: :debug, message: "'https://www.google.com/favicon.ico' won't be executed because of failed check 'onlyif'"))
       end
 
-      it "redacts command and unless outputs" do
-        unlesscmd = echo_from_ruby_exit_1(unlesssecret)
+      it 'redacts command and unless outputs' do
+        unlesscmd = echo_from_ruby_exit1(unlesssecret)
 
         apply_compiled_manifest(<<-MANIFEST)
           archive { '/tmp/favicon.ico':
@@ -209,11 +205,11 @@ RSpec.describe ruby_provider do
             env_path      => "#{path}",
           }
         MANIFEST
-        expect(@logs).to include(an_object_having_attributes(level: :debug, message: "Executing check ruby -e 'puts \"unlesssecret\"; exit 1'", source: /Archive\[\/tmp\/favicon.ico\]/))
+        expect(@logs).to include(an_object_having_attributes(level: :debug, message: "Executing check ruby -e 'puts \"unlesssecret\"; exit 1'", source: %r{Archive\[/tmp/favicon.ico\]}))
       end
 
       it "redacts the command that would have been executed but didn't due to unless" do
-        unlesscmd = echo_from_ruby_exit_0(unlesssecret)
+        unlesscmd = echo_from_ruby_exit0(unlesssecret)
 
         apply_compiled_manifest(<<-MANIFEST)
           archive { '/tmp/favicon.ico':

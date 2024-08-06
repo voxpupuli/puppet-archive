@@ -1,10 +1,14 @@
+# frozen_string_literal: true
+
+# file from https://github.com/puppetlabs/puppet/blob/6.x/spec/lib/puppet_spec/compiler.rb
+
 module PuppetSpec::Compiler
   module_function
 
   def compile_to_catalog(string, node = Puppet::Node.new('test'))
     Puppet[:code] = string
     # see lib/puppet/indirector/catalog/compiler.rb#filter
-    Puppet::Parser::Compiler.compile(node).filter { |r| r.virtual? }
+    Puppet::Parser::Compiler.compile(node).filter(&:virtual?)
   end
 
   # Does not removed virtual resources in compiled catalog (i.e. keeps unrealized)
@@ -28,11 +32,9 @@ module PuppetSpec::Compiler
     graph
   end
 
-  def apply_compiled_manifest(manifest, prioritizer = Puppet::Graph::SequentialPrioritizer.new)
+  def apply_compiled_manifest(manifest, prioritizer = Puppet::Graph::SequentialPrioritizer.new, &block)
     catalog = compile_to_ral(manifest)
-    if block_given?
-      catalog.resources.each { |res| yield res }
-    end
+    catalog.resources.each(&block) if block_given?
     transaction = Puppet::Transaction.new(catalog,
                                           Puppet::Transaction::Report.new,
                                           prioritizer)
@@ -62,15 +64,14 @@ module PuppetSpec::Compiler
     Puppet::Util::Log.with_destination(Puppet::Test::LogCollector.new(logs)) do
       yield(compiler)
     end
-    logs = logs.select { |log| log.level == :notice }.map { |log| log.message }
-    logs
+    logs.select { |log| log.level == :notice }.map(&:message)
   end
 
   def eval_and_collect_notices(code, node = Puppet::Node.new('foonode'), topscope_vars = {})
     collect_notices(code, node) do |compiler|
       unless topscope_vars.empty?
         scope = compiler.topscope
-        topscope_vars.each {|k,v| scope.setvar(k, v) }
+        topscope_vars.each { |k, v| scope.setvar(k, v) }
       end
       if block_given?
         compiler.compile do |catalog|
@@ -95,17 +96,17 @@ module PuppetSpec::Compiler
     compiler = Puppet::Parser::Compiler.new(node)
     unless variables.empty?
       scope = compiler.topscope
-      variables.each {|k,v| scope.setvar(k, v) }
+      variables.each { |k, v| scope.setvar(k, v) }
     end
 
     if source.nil?
       compiler.compile
       # see lib/puppet/indirector/catalog/compiler.rb#filter
-      return compiler.filter { |r| r.virtual? }
+      return compiler.filter(&:virtual?)
     end
 
     # evaluate given source is the context of the compiled state and return its result
-    compiler.compile do |catalog |
+    compiler.compile do |_catalog|
       Puppet::Pops::Parser::EvaluatingParser.singleton.evaluate_string(compiler.topscope, source, source_location)
     end
   end
