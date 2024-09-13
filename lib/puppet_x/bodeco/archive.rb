@@ -44,7 +44,7 @@ module PuppetX
         custom_command = opts.fetch(:custom_command, nil)
         options = opts.fetch(:options)
         Dir.chdir(path) do
-          cmd = if custom_command && custom_command =~ %r{%s}
+          cmd = if custom_command&.include?('%s')
                   custom_command % @file_path
                 elsif custom_command
                   "#{custom_command} #{options} #{@file_path}"
