@@ -23,25 +23,10 @@
       ]
     },
     {
-      "operatingsystem": "CentOS",
-      "operatingsystemrelease": [
-        "7",
-        "8",
-        "9"
-      ]
-    },
-    {
       "operatingsystem": "OracleLinux",
       "operatingsystemrelease": [
-        "7",
         "8",
         "9"
-      ]
-    },
-    {
-      "operatingsystem": "Scientific",
-      "operatingsystemrelease": [
-        "7"
       ]
     },
     {
@@ -92,12 +77,6 @@
       "operatingsystem": "Darwin",
       "operatingsystemrelease": [
         "19"
-      ]
-    },
-    {
-      "operatingsystem": "VirtuozzoLinux",
-      "operatingsystemrelease": [
-        "7"
       ]
     }
   ],
