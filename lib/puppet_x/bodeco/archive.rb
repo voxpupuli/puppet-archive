@@ -43,19 +43,17 @@ module PuppetX
 
         custom_command = opts.fetch(:custom_command, nil)
         options = opts.fetch(:options)
-        Dir.chdir(path) do
-          cmd = if custom_command && custom_command =~ %r{%s}
-                  custom_command % @file_path
-                elsif custom_command
-                  "#{custom_command} #{options} #{@file_path}"
-                else
-                  command(options)
-                end
+        cmd = if custom_command&.include?('%s')
+                custom_command % @file_path
+              elsif custom_command
+                "#{custom_command} #{options} #{@file_path}"
+              else
+                command(options)
+              end
 
-          Puppet.debug("Archive extracting #{@file} in #{path}: #{cmd}")
-          File.chmod(0o644, @file) if opts[:uid] || opts[:gid]
-          Puppet::Util::Execution.execute(cmd, uid: opts[:uid], gid: opts[:gid], failonfail: true, squelch: false, combine: true)
-        end
+        Puppet.debug("Archive extracting #{@file} in #{path}: #{cmd}")
+        File.chmod(0o644, @file) if opts[:uid] || opts[:gid]
+        Puppet::Util::Execution.execute(cmd, uid: opts[:uid], gid: opts[:gid], cwd: path, failonfail: true, squelch: false, combine: true)
       end
 
       private
