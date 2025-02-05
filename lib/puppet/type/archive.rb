@@ -8,6 +8,19 @@ require 'puppet/parameter/boolean'
 Puppet::Type.newtype(:archive) do
   @doc = 'Manage archive file download, extraction, and cleanup.'
 
+  # Create a new check mechanism.  It's basically a parameter that
+  # provides one extra 'check' method.
+  def self.newcheck(name, options = {}, &block)
+    @checks ||= {}
+
+    check = newparam(name, options, &block)
+    @checks[name] = check
+  end
+
+  def self.checks
+    @checks.keys
+  end
+
   ensurable do
     desc 'whether archive file should be present/absent (default: present)'
 
@@ -101,14 +114,6 @@ Puppet::Type.newtype(:archive) do
   newparam(:extract_flags) do
     desc "custom extraction options, this replaces the default flags. A string such as 'xvf' for a tar file would replace the default xf flag. A hash is useful when custom flags are needed for different platforms. {'tar' => 'xzf', '7z' => 'x -aot'}."
     defaultto(:undef)
-  end
-
-  newproperty(:creates) do
-    desc 'if file/directory exists, will not download/extract archive.'
-
-    def should_to_s(value)
-      "extracting in #{resource[:extract_path]} to create #{value}"
-    end
   end
 
   newparam(:cleanup) do
@@ -251,6 +256,174 @@ Puppet::Type.newtype(:archive) do
     end
   end
 
+  newparam(:env_path) do
+    desc "The search path used for check execution.
+        Commands must be fully qualified if no path is specified.  Paths
+        can be specified as an array or as a '#{File::PATH_SEPARATOR}' separated list."
+
+    # Support both arrays and colon-separated fields.
+    def value=(*values)
+      @value = values.flatten.map do |val|
+        val.split(File::PATH_SEPARATOR)
+      end.flatten
+    end
+  end
+
+  newparam(:environment) do
+    desc "An array of any additional environment variables you want to set for a
+        command, such as `[ 'HOME=/root', 'MAIL=root@example.com']`.
+        Note that if you use this to set PATH, it will override the `path`
+        attribute. Multiple environment variables should be specified as an
+        array."
+
+    validate do |values|
+      values = [values] unless values.is_a? Array
+      values.each do |value|
+        raise ArgumentError, "Invalid environment setting '#{value}'" unless value =~ %r{\w+=}
+      end
+    end
+  end
+
+  newcheck(:creates, parent: Puppet::Parameter::Path) do
+    desc 'if file/directory exists, will not download/extract archive.'
+
+    accept_arrays
+
+    # If the file exists, return false (i.e., don't run the command),
+    # else return true
+    def check(value)
+      # TRANSLATORS 'creates' is a parameter name and should not be translated
+      debug("Checking that 'creates' path '#{value}' exists")
+      !Puppet::FileSystem.exist?(value)
+    end
+  end
+
+  newcheck(:unless) do
+    desc <<-EOT
+        A test command that checks the state of the target system and restricts
+        when the `archive` can run. If present, Puppet runs this test command
+        first, then runs the main command unless the test has an exit code of 0
+        (success). For example:
+
+          ```
+          archive { '/tmp/jta-1.1.jar':
+            ensure        => present,
+            extract       => true,
+            extract_path  => '/tmp',
+            source        => 'http://central.maven.org/maven2/javax/transaction/jta/1.1/jta-1.1.jar',
+            unless        => 'test `java -version 2>&1 | awk -F '"' '/version/ {print $2}' | awk -F '.' '{sub("^$", "0", $2); print $1$2}'` -gt 15',
+            cleanup       => true,
+            env_path      => ["/bin", "/usr/bin", "/sbin", "/usr/sbin"],
+          }
+          ```
+
+        Since this command is used in the process of determining whether the
+        `archive` is already in sync, it must be run during a noop Puppet run.
+
+        This parameter can also take an array of commands. For example:
+
+            unless => ['test -f /tmp/file1', 'test -f /tmp/file2'],
+
+        or an array of arrays. For example:
+
+            unless => [['test', '-f', '/tmp/file1'], 'test -f /tmp/file2']
+
+        This `archive` would only run if every command in the array has a
+        non-zero exit code.
+    EOT
+
+    validate do |cmds|
+      cmds = [cmds] unless cmds.is_a? Array
+
+      cmds.each do |command|
+        provider.validatecmd(command)
+      end
+    end
+
+    # Return true if the command does not return 0.
+    def check(value)
+      begin
+        output, status = provider.run(value, true)
+      rescue Timeout::Error
+        err format('Check %{value} exceeded timeout', value: value.inspect)
+        return false
+      end
+
+      if sensitive
+        debug('[output redacted]')
+      else
+        output.split(%r{\n}).each do |line|
+          debug(line)
+        end
+      end
+
+      status.exitstatus != 0
+    end
+  end
+
+  newcheck(:onlyif) do
+    desc <<-EOT
+        A test command that checks the state of the target system and restricts
+        when the `archive` can run. If present, Puppet runs this test command
+        first, and only runs the main command if the test has an exit code of 0
+        (success). For example:
+
+          ```
+          archive { '/tmp/jta-1.1.jar':
+            ensure        => present,
+            extract       => true,
+            extract_path  => '/tmp',
+            source        => 'http://central.maven.org/maven2/javax/transaction/jta/1.1/jta-1.1.jar',
+            onlyif        => 'test `java -version 2>&1 | awk -F '"' '/version/ {print $2}' | awk -F '.' '{sub("^$", "0", $2); print $1$2}'` -gt 15',
+            cleanup       => true,
+            env_path      => ["/bin", "/usr/bin", "/sbin", "/usr/sbin"],
+          }
+          ```
+
+        Since this command is used in the process of determining whether the
+        `archive` is already in sync, it must be run during a noop Puppet run.
+
+        This parameter can also take an array of commands. For example:
+
+            onlyif => ['test -f /tmp/file1', 'test -f /tmp/file2'],
+
+        or an array of arrays. For example:
+
+            onlyif => [['test', '-f', '/tmp/file1'], 'test -f /tmp/file2']
+
+        This `archive` would only run if every command in the array has an
+        exit code of 0 (success).
+    EOT
+
+    validate do |cmds|
+      cmds = [cmds] unless cmds.is_a? Array
+
+      cmds.each do |command|
+        provider.validatecmd(command)
+      end
+    end
+
+    # Return true if the command returns 0.
+    def check(value)
+      begin
+        output, status = provider.run(value, true)
+      rescue Timeout::Error
+        err format('Check %{value} exceeded timeout', value: value.inspect)
+        return false
+      end
+
+      if sensitive
+        debug('[output redacted]')
+      else
+        output.split(%r{\n}).each do |line|
+          debug(line)
+        end
+      end
+
+      status.exitstatus.zero?
+    end
+  end
+
   autorequire(:file) do
     [
       Pathname.new(self[:path]).parent.to_s,
@@ -279,5 +452,29 @@ Puppet::Type.newtype(:archive) do
     else
       self[:proxy_type] = :none
     end
+  end
+
+  # Verify that we pass all of the checks.  The argument determines whether
+  # we skip the :refreshonly check, which is necessary because we now check
+  # within refresh
+  def check_all_attributes
+    self.class.checks.each do |check|
+      next unless @parameters.include?(check)
+
+      val = @parameters[check].value
+      val = [val] unless val.is_a? Array
+      val.each do |value|
+        next if @parameters[check].check(value)
+
+        # Give a debug message so users can figure out what command would have been
+        # but don't print sensitive commands or parameters in the clear
+        sourcestring = @parameters[:source].sensitive ? '[command redacted]' : @parameters[:source].value
+
+        debug("'#{sourcestring}' won't be executed because of failed check '#{check}'")
+
+        return true
+      end
+    end
+    false
   end
 end
