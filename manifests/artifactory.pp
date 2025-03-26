@@ -84,13 +84,13 @@ define archive::artifactory (
     # Only Artifactory Pro downloads this directly but the corresponding file endpoint (where the sha1 checksum is published) doesn't exist
     # This means we can't use the artifactory_sha1 function
 
-    $latest_url_data = archive::artifactory_latest_url($url, $maven2_data)
+    $latest_url_data = archive::artifactory_latest_url($url, $maven2_data, $headers)
 
     $file_url = $latest_url_data['url']
     $sha1     = $latest_url_data['sha1']
   } else {
     $file_url = $url
-    $sha1     = archive::artifactory_checksum($url,'sha1')
+    $sha1     = archive::artifactory_checksum($url,'sha1', $headers)
   }
 
   archive { $file_path:
