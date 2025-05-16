@@ -4,6 +4,7 @@ require 'uri'
 require 'tempfile'
 
 Puppet::Type.type(:archive).provide(:curl, parent: :ruby) do
+  desc 'Curl-based implementation of the Archive resource type for http(s)/ftp-based urls.'
   commands curl: 'curl'
   defaultfor feature: :posix
 

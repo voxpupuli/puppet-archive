@@ -59,6 +59,7 @@ require 'tempfile'
 #
 
 Puppet::Type.type(:archive).provide(:ruby) do
+  desc 'Archive resource type for Puppet.'
   optional_commands aws: 'aws'
   optional_commands gsutil: 'gsutil'
   defaultfor feature: :microsoft_windows
