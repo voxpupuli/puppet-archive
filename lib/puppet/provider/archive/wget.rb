@@ -16,10 +16,11 @@ Puppet::Type.type(:archive).provide(:wget, parent: :ruby) do
     params
   end
 
-  def download(filepath)
-    params = wget_params(
+  def download(location, filepath)
+    command = wget_params(
       [
-        Shellwords.shellescape(resource[:source]),
+        'wget',
+        Shellwords.shellescape(location),
         '-O',
         filepath,
         '--max-redirect=5'
@@ -27,20 +28,6 @@ Puppet::Type.type(:archive).provide(:wget, parent: :ruby) do
     )
 
     # NOTE: Do NOT use wget(params) until https://tickets.puppetlabs.com/browse/PUP-6066 is resolved.
-    command = "wget #{params.join(' ')}"
     Puppet::Util::Execution.execute(command)
-  end
-
-  def remote_checksum
-    params = wget_params(
-      [
-        '-qO-',
-        Shellwords.shellescape(resource[:checksum_url]),
-        '--max-redirect=5'
-      ]
-    )
-
-    command = "wget #{params.join(' ')}"
-    Puppet::Util::Execution.execute(command)[%r{\b[\da-f]{32,128}\b}i]
   end
 end
