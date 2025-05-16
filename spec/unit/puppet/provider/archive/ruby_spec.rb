@@ -90,7 +90,7 @@ RSpec.describe ruby_provider do
 
         it_behaves_like 'with a remote checksum'
       end
-      
+
       context 'with an s3 url' do
         let(:url) { 's3://example.com/checksum' }
 

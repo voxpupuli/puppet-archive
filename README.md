@@ -490,7 +490,7 @@ archive { '/tmp/staging/master.zip':
 * `checksum_type`: archive file checksum type (none|md5|sha1|sha2|sha256|sha384|
   sha512). (default: none)
 * `checksum`: archive file checksum (match checksum_type)
-* `checksum_url`: archive file checksum source (instead of specify checksum), 
+* `checksum_url`: archive file checksum source (instead of specify checksum),
    supports puppet|http|https|ftp|file|s3|gs|abspath uri.
 * `checksum_verify`: whether checksum will be verified (true|false). (default: true)
 * `extract`: whether archive will be extracted after download (true|false).
