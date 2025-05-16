@@ -10,17 +10,18 @@ RSpec.describe ruby_provider do
 
   describe 'ruby provider' do
     let(:name) { '/tmp/example.zip' }
+    let(:source_location) { 's3://home.lan/example.zip' }
     let(:resource_properties) do
       {
         name: name,
-        source: 's3://home.lan/example.zip'
+        source: source_location,
       }
     end
     let(:resource) { Puppet::Type::Archive.new(resource_properties) }
     let(:provider) { ruby_provider.new(resource) }
 
     let(:s3_download_options) do
-      ['s3', 'cp', 's3://home.lan/example.zip', String]
+      ['s3', 'cp', source_location, String]
     end
 
     before do
@@ -29,7 +30,7 @@ RSpec.describe ruby_provider do
 
     context 'default resource property' do
       it '#s3_download' do
-        provider.s3_download(name)
+        provider.s3_download(source_location, name)
         expect(provider).to have_received(:aws).with(s3_download_options)
       end
 
@@ -46,17 +47,13 @@ RSpec.describe ruby_provider do
 
       before do
         resource[:checksum_url] = url if url
-        allow(PuppetX::Bodeco::Util).to receive(:content). \
-          with(url, any_args).and_return(remote_hash)
       end
 
       context 'unset' do
         it { is_expected.to be_nil }
       end
 
-      context 'with a url' do
-        let(:url) { 'http://example.com/checksum' }
-
+      shared_examples 'with a remote checksum' do
         context 'responds with hash' do
           let(:remote_hash) { 'a0c38e1aeb175201b0dacd65e2f37e187657050a' }
 
@@ -81,20 +78,44 @@ RSpec.describe ruby_provider do
           it { is_expected.to eq('8fa3f0ff1f2557657e460f0f78232679380a9bcdb8670e3dcb33472123b22428') }
         end
       end
+
+      context 'with an http url' do
+        let(:url) { 'http://example.com/checksum' }
+
+        before do
+          allow(PuppetX::Bodeco::Util).to receive(:download) do |_, path|
+            File.binwrite(path, remote_hash)
+          end
+        end
+
+        it_behaves_like 'with a remote checksum'
+      end
+      
+      context 'with an s3 url' do
+        let(:url) { 's3://example.com/checksum' }
+
+        before do
+          allow(provider).to receive(:aws) do |opts|
+            File.binwrite(opts[3], remote_hash) if opts[2].eql? url
+          end
+        end
+
+        it_behaves_like 'with a remote checksum'
+      end
     end
 
     describe 'download options' do
       let(:resource_properties) do
         {
           name: name,
-          source: 's3://home.lan/example.zip',
+          source: source_location,
           download_options: ['--region', 'eu-central-1']
         }
       end
 
       context 'default resource property' do
         it '#s3_download' do
-          provider.s3_download(name)
+          provider.s3_download(source_location, name)
           expect(provider).to have_received(:aws).with(s3_download_options << '--region' << 'eu-central-1')
         end
       end
