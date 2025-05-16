@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 Puppet::Type.type(:archive).provide(:wget, parent: :ruby) do
+  desc 'Wget-based implementation of the Archive resource type for http(s)/ftp-based urls.'
   commands wget: 'wget'
 
   def wget_params(params)
