@@ -128,7 +128,7 @@ Puppet::Type.newtype(:archive) do
     desc 'archive file source, supports http|https|ftp|file uri.
     (for camptocamp/archive compatibility)'
     validate do |value|
-      raise ArgumentError, "invalid source url: #{value}" unless value =~ %r{http|https|file|ftp}
+      raise ArgumentError, "invalid source url: #{value}" unless value =~ %r{puppet|http|https|ftp|file|s3|gs} || Puppet::Util.absolute_path?(value)
     end
     munge do |val|
       resource[:source] = val
@@ -167,10 +167,16 @@ Puppet::Type.newtype(:archive) do
 
   newparam(:checksum_url) do
     desc 'archive file checksum source (instead of specifying checksum)'
+    validate do |value|
+      raise ArgumentError, "invalid checksum url: #{value}" unless value =~ %r{puppet|http|https|ftp|file|s3|gs} || Puppet::Util.absolute_path?(value)
+    end
   end
   newparam(:digest_url) do
     desc 'archive file checksum source (instead of specifying checksum)
     (this parameter is for camptocamp/archive compatibility)'
+    validate do |value|
+      raise ArgumentError, "invalid digest url: #{value}" unless value =~ %r{puppet|http|https|ftp|file|s3|gs} || Puppet::Util.absolute_path?(value)
+    end
     munge do |val|
       resource[:checksum_url] = val
     end
