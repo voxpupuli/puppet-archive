@@ -953,7 +953,8 @@ Default value: `none`
 
 ##### <a name="-archive--checksum_url"></a>`checksum_url`
 
-archive file checksum source (instead of specifying checksum)
+archive file checksum source (instead of specifying checksum),
+supports puppet|http|https|ftp|file|s3|gs|abspath uri.
 
 ##### <a name="-archive--checksum_verify"></a>`checksum_verify`
 
@@ -991,7 +992,8 @@ archive file checksum type (none|md5|sha1|sha2|sha256|sha384|sha512)
 
 ##### <a name="-archive--digest_url"></a>`digest_url`
 
-archive file checksum source (instead of specifying checksum)
+archive file checksum source (instead of specifying checksum),
+supports puppet|http|https|ftp|file|s3|gs|abspath uri.
 (this parameter is for camptocamp/archive compatibility)
 
 ##### <a name="-archive--download_options"></a>`download_options`
@@ -1061,7 +1063,7 @@ proxy type (none|ftp|http|https)
 
 ##### <a name="-archive--source"></a>`source`
 
-archive file source, supports puppet|http|https|ftp|file|s3|gs uri.
+archive file source, supports puppet|http|https|ftp|file|s3|gs|abspath uri.
 
 ##### <a name="-archive--target"></a>`target`
 
@@ -1074,7 +1076,7 @@ used.
 
 ##### <a name="-archive--url"></a>`url`
 
-archive file source, supports http|https|ftp|file uri.
+archive file source, supports puppet|http|https|ftp|file|s3|gs|abspath uri.
 (for camptocamp/archive compatibility)
 
 ##### <a name="-archive--user"></a>`user`
