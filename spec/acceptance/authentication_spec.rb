@@ -38,7 +38,11 @@ context 'authenticated download' do
 
           it 'applies idempotently with no errors' do
             shell('/bin/rm -f /tmp/testfile')
+            delay = rand(60)
+            sleep(delay) # Trying to reduce the number of simultaneous requests that cause http 503 errors
             apply_manifest(pp, catch_failures: true)
+            delay = rand(20)
+            sleep(delay)
             apply_manifest(pp, catch_changes: true)
           end
 
