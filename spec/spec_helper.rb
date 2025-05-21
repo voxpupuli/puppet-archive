@@ -7,7 +7,15 @@
 # We want to do this if lib exists and it hasn't been explicitly set.
 ENV['COVERAGE'] ||= 'yes' if Dir.exist?(File.expand_path('../lib', __dir__))
 
+dir = __dir__
+$LOAD_PATH.unshift File.join(dir, 'lib')
+
 require 'voxpupuli/test/spec_helper'
+
+# So everyone else doesn't have to include this base constant.
+module PuppetSpec
+  FIXTURE_DIR = File.join(__dir__, 'fixtures') unless defined?(FIXTURE_DIR)
+end
 
 RSpec.configure do |c|
   c.facterdb_string_keys = true
