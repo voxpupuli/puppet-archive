@@ -4,6 +4,37 @@ All notable changes to this project will be documented in this file.
 Each new release typically also includes the latest modulesync defaults.
 These should not affect the functionality of the module.
 
+## [v8.0.0](https://github.com/voxpupuli/puppet-archive/tree/v8.0.0) (2025-06-19)
+
+[Full Changelog](https://github.com/voxpupuli/puppet-archive/compare/v7.1.0...v8.0.0)
+
+**Breaking changes:**
+
+- drop EOL OSes : RedHat 7, SLES, Ubuntu 18.04, 20.04, Debian 10, AIX [\#542](https://github.com/voxpupuli/puppet-archive/pull/542) ([Tonguechaude](https://github.com/Tonguechaude))
+- drop support for EL7 [\#532](https://github.com/voxpupuli/puppet-archive/pull/532) ([jhoblitt](https://github.com/jhoblitt))
+
+**Implemented enhancements:**
+
+- add : ubuntu 2404 as supported OS [\#543](https://github.com/voxpupuli/puppet-archive/pull/543) ([Tonguechaude](https://github.com/Tonguechaude))
+- metadata.json: Add OpenVox [\#536](https://github.com/voxpupuli/puppet-archive/pull/536) ([jstraw](https://github.com/jstraw))
+
+**Fixed bugs:**
+
+- Windows does not default to extract using powershell [\#364](https://github.com/voxpupuli/puppet-archive/issues/364)
+- Resolve 7zip command checks for proper PS fallback [\#523](https://github.com/voxpupuli/puppet-archive/pull/523) ([klab-systems](https://github.com/klab-systems))
+
+**Closed issues:**
+
+- Error 503 in CI [\#540](https://github.com/voxpupuli/puppet-archive/issues/540)
+- archive does not enforce `owner:group` [\#498](https://github.com/voxpupuli/puppet-archive/issues/498)
+
+**Merged pull requests:**
+
+- add some random in acceptance tests [\#541](https://github.com/voxpupuli/puppet-archive/pull/541) ([Tonguechaude](https://github.com/Tonguechaude))
+- facterdb\_string\_keys: switch to strings [\#527](https://github.com/voxpupuli/puppet-archive/pull/527) ([bastelfreak](https://github.com/bastelfreak))
+- README: fix broken path to `tomcat.pp` [\#518](https://github.com/voxpupuli/puppet-archive/pull/518) ([corporate-gadfly](https://github.com/corporate-gadfly))
+- rubocop: resolve Style/HashSyntax [\#514](https://github.com/voxpupuli/puppet-archive/pull/514) ([bastelfreak](https://github.com/bastelfreak))
+
 ## [v7.1.0](https://github.com/voxpupuli/puppet-archive/tree/v7.1.0) (2023-10-30)
 
 [Full Changelog](https://github.com/voxpupuli/puppet-archive/compare/v7.0.0...v7.1.0)
