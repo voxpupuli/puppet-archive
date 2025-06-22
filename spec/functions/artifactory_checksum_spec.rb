@@ -3,7 +3,7 @@
 require 'spec_helper'
 
 describe 'archive::artifactory_checksum' do
-  let(:example_json) { File.read(fixtures('checksum', 'artifactory.json')) }
+  let(:example_json) { File.read(File.join('spec', 'fixtures', 'checksum', 'artifactory.json')) }
   let(:url) { 'https://repo.jfrog.org/artifactory/distributions/images/Artifactory_120x75.png' }
   let(:uri) { URI(url.sub('/artifactory/', '/artifactory/api/storage/')) }
 

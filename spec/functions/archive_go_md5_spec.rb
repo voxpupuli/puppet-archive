@@ -3,7 +3,7 @@
 require 'spec_helper'
 
 describe 'archive::go_md5' do
-  let(:example_md5) { File.read(fixtures('checksum', 'gocd.md5')) }
+  let(:example_md5) { File.read(File.join('spec', 'fixtures', 'checksum', 'gocd.md5')) }
   let(:url) { 'https://gocd.lan/path/file.md5' }
   let(:uri) { URI(url) }
 
