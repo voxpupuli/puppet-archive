@@ -6,7 +6,7 @@ require 'uri'
 context 'authenticated download' do
   let(:source) do
     parser = URI::RFC2396_Parser.new
-    parser.escape("http://httpbin.org/basic-auth/user/#{password}")
+    parser.escape("http://httpbin.io/basic-auth/user/#{password}")
   end
   let(:pp) do
     <<-EOS
@@ -48,7 +48,7 @@ context 'authenticated download' do
 
           describe file('/tmp/testfile') do
             it { is_expected.to be_file }
-            its(:content_as_json) { is_expected.to include('authenticated' => true, 'user' => 'user') }
+            its(:content_as_json) { is_expected.to include('authorized' => true, 'user' => 'user') }
           end
         end
       end
