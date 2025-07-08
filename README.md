@@ -480,7 +480,8 @@ archive { '/tmp/staging/master.zip':
 * `ensure`: whether archive file should be present/absent (default: present)
 * `path`: namevar, archive file fully qualified file path.
 * `filename`: archive file name (derived from path).
-* `source`: archive file source, supports http|https|ftp|file|s3|gs uri.
+* `source`: archive file source,
+   supports puppet|http|https|ftp|file|s3|gs|abspath uri.
 * `headers`: array of headers to pass source, like an authentication token
 * `username`: username to download source file.
 * `password`: password to download source file.
@@ -489,7 +490,8 @@ archive { '/tmp/staging/master.zip':
 * `checksum_type`: archive file checksum type (none|md5|sha1|sha2|sha256|sha384|
   sha512). (default: none)
 * `checksum`: archive file checksum (match checksum_type)
-* `checksum_url`: archive file checksum source (instead of specify checksum)
+* `checksum_url`: archive file checksum source (instead of specify checksum),
+   supports puppet|http|https|ftp|file|s3|gs|abspath uri.
 * `checksum_verify`: whether checksum will be verified (true|false). (default: true)
 * `extract`: whether archive will be extracted after download (true|false).
   (default: false)

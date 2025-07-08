@@ -59,6 +59,7 @@ require 'tempfile'
 #
 
 Puppet::Type.type(:archive).provide(:ruby) do
+  desc 'Archive resource type for Puppet.'
   optional_commands aws: 'aws'
   optional_commands gsutil: 'gsutil'
   defaultfor feature: :microsoft_windows
@@ -112,15 +113,12 @@ Puppet::Type.type(:archive).provide(:ruby) do
   end
 
   def remote_checksum
-    PuppetX::Bodeco::Util.content(
-      resource[:checksum_url],
-      username: resource[:username],
-      password: resource[:password],
-      cookie: resource[:cookie],
-      proxy_server: resource[:proxy_server],
-      proxy_type: resource[:proxy_type],
-      insecure: resource[:allow_insecure]
-    )[%r{\b[\da-f]{32,128}\b}i]
+    temp_path = download_file(resource[:checksum_url])
+    raise(Puppet::Error, 'Unable to create temporary checksum file.') if temp_path.nil?
+
+    File.read(temp_path)[%r{\b[\da-f]{32,128}\b}i]
+  ensure
+    FileUtils.rm_f(temp_path) if temp_path && File.exist?(temp_path)
   end
 
   # Private: See if local archive checksum matches.
@@ -160,36 +158,14 @@ Puppet::Type.type(:archive).provide(:ruby) do
   end
 
   def transfer_download(archive_filepath)
-    raise Puppet::Error, "Temporary directory #{resource[:temp_dir]} doesn't exist" if resource[:temp_dir] && !File.directory?(resource[:temp_dir])
+    raise(Puppet::Error, 'Unable to fetch archive, the source parameter is nil.') if resource[:source].nil?
 
-    tempfile = Tempfile.new(tempfile_name, resource[:temp_dir])
-
-    temppath = tempfile.path
-    tempfile.close!
-
-    case resource[:source]
-    when %r{^(puppet)}
-      puppet_download(temppath)
-    when %r{^(http|ftp)}
-      download(temppath)
-    when %r{^file}
-      uri = URI(resource[:source])
-      FileUtils.copy(Puppet::Util.uri_to_path(uri), temppath)
-    when %r{^s3}
-      s3_download(temppath)
-    when %r{^gs}
-      gs_download(temppath)
-    when nil
-      raise(Puppet::Error, 'Unable to fetch archive, the source parameter is nil.')
-    else
-      raise(Puppet::Error, "Source file: #{resource[:source]} does not exists.") unless File.exist?(resource[:source])
-
-      FileUtils.copy(resource[:source], temppath)
-    end
+    temp_path = download_file(resource[:source])
+    raise(Puppet::Error, 'Unable to create temporary file.') if temp_path.nil?
 
     # conditionally verify checksum:
     if resource[:checksum_verify] == :true && resource[:checksum_type] != :none
-      archive = PuppetX::Bodeco::Archive.new(temppath)
+      archive = PuppetX::Bodeco::Archive.new(temp_path)
       actual_checksum = archive.checksum(resource[:checksum_type])
       if actual_checksum != checksum
         destroy
@@ -197,9 +173,33 @@ Puppet::Type.type(:archive).provide(:ruby) do
       end
     end
 
-    move_file_in_place(temppath, archive_filepath)
+    move_file_in_place(temp_path, archive_filepath)
   ensure
-    FileUtils.rm_f(temppath) if File.exist?(temppath)
+    FileUtils.rm_f(temp_path) if temp_path && File.exist?(temp_path)
+  end
+
+  def download_file(location)
+    raise Puppet::Error, "Temporary directory #{resource[:temp_dir]} doesn't exist" if resource[:temp_dir] && !File.directory?(resource[:temp_dir])
+
+    Dir::Tmpname.create(tempfile_name, resource[:temp_dir]) do |temp_path|
+      case location
+      when %r{^(puppet)}
+        puppet_download(location, temp_path)
+      when %r{^(http|ftp)}
+        download(location, temp_path)
+      when %r{^file}
+        uri = URI(location)
+        FileUtils.copy(Puppet::Util.uri_to_path(uri), temp_path)
+      when %r{^s3}
+        s3_download(location, temp_path)
+      when %r{^gs}
+        gs_download(location, temp_path)
+      else
+        raise(Puppet::Error, "Source file: #{location} does not exists.") unless File.exist?(location)
+
+        FileUtils.copy(location, temp_path)
+      end
+    end
   end
 
   def move_file_in_place(from, to)
@@ -208,9 +208,9 @@ Puppet::Type.type(:archive).provide(:ruby) do
     FileUtils.mv(from, to)
   end
 
-  def download(filepath)
+  def download(location, filepath)
     PuppetX::Bodeco::Util.download(
-      resource[:source],
+      location,
       filepath,
       username: resource[:username],
       password: resource[:password],
@@ -221,18 +221,18 @@ Puppet::Type.type(:archive).provide(:ruby) do
     )
   end
 
-  def puppet_download(filepath)
+  def puppet_download(location, filepath)
     PuppetX::Bodeco::Util.puppet_download(
-      resource[:source],
+      location,
       filepath
     )
   end
 
-  def s3_download(path)
+  def s3_download(location, path)
     params = [
       's3',
       'cp',
-      resource[:source],
+      location,
       path
     ]
     params += resource[:download_options] if resource[:download_options]
@@ -240,10 +240,10 @@ Puppet::Type.type(:archive).provide(:ruby) do
     aws(params)
   end
 
-  def gs_download(path)
+  def gs_download(location, path)
     params = [
       'cp',
-      resource[:source],
+      location,
       path
     ]
     params += resource[:download_options] if resource[:download_options]
