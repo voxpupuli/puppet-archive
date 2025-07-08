@@ -4,6 +4,23 @@ All notable changes to this project will be documented in this file.
 Each new release typically also includes the latest modulesync defaults.
 These should not affect the functionality of the module.
 
+## [v8.1.0](https://github.com/voxpupuli/puppet-archive/tree/v8.1.0) (2025-07-08)
+
+[Full Changelog](https://github.com/voxpupuli/puppet-archive/compare/v8.0.0...v8.1.0)
+
+**Implemented enhancements:**
+
+- Feature/support all uri schemas in checksum url [\#538](https://github.com/voxpupuli/puppet-archive/pull/538) ([jvdmr](https://github.com/jvdmr))
+
+**Fixed bugs:**
+
+- Avoid Dir.chdir by passing cwd to execute\(\) and simplify %s detection in custom\_command [\#531](https://github.com/voxpupuli/puppet-archive/pull/531) ([ekohl](https://github.com/ekohl))
+
+**Closed issues:**
+
+- uninitialized constant PuppetX::Bodeco::PUPPET [\#471](https://github.com/voxpupuli/puppet-archive/issues/471)
+- checksum\_url doesn't work for puppet URIs [\#339](https://github.com/voxpupuli/puppet-archive/issues/339)
+
 ## [v8.0.0](https://github.com/voxpupuli/puppet-archive/tree/v8.0.0) (2025-06-19)
 
 [Full Changelog](https://github.com/voxpupuli/puppet-archive/compare/v7.1.0...v8.0.0)
