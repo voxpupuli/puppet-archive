@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'spec_helper'
 
 describe 'archive' do
@@ -61,11 +63,12 @@ describe 'archive' do
       end
 
       it do
-        is_expected.to contain_package('7zip').with(
+        expect(subject).to contain_package('7zip').with(
           name: '7zip',
           provider: 'chocolatey'
         )
       end
+
       it { is_expected.not_to contain_archive('awscli-bundle.zip') }
     end
 
@@ -85,7 +88,7 @@ describe 'archive' do
       end
 
       it do
-        is_expected.to contain_package('7zip').with(
+        expect(subject).to contain_package('7zip').with(
           name: '7-Zip 9.20 (x64 edition)',
           source: 'C:/Windows/Temp/7z920-x64.msi',
           provider: 'windows'

@@ -132,7 +132,7 @@ archive { '/tmp/jta-1.1.jar':
   extract_path  => '/tmp',
   source        => 'http://central.maven.org/maven2/javax/transaction/jta/1.1/jta-1.1.jar',
   checksum      => '2ca09f0b36ca7d71b762e14ea2ff09d5eac57558',
-  checksum_type => 'sha1',
+  checksum_type => sha1,
   creates       => '/tmp/javax',
   cleanup       => true,
 }
@@ -183,7 +183,7 @@ archive { '/home/myuser/help':
 ### File permission
 
 When extracting files as non-root user, either ensure the target directory
-exists with the appropriate permission (see [tomcat.pp](tests/tomcat.pp) for
+exists with the appropriate permission (see [tomcat.pp](examples/tomcat.pp) for
 full working example):
 
 ```puppet
@@ -202,7 +202,7 @@ archive { $filename:
   path          => "/tmp/${filename}",
   source        => 'http://www-eu.apache.org/dist/tomcat/tomcat-9/v9.0.0.M3/bin/apache-tomcat-9.0.0.M3.zip',
   checksum      => 'f2aaf16f5e421b97513c502c03c117fab6569076',
-  checksum_type => 'sha1',
+  checksum_type => sha1,
   extract       => true,
   extract_path  => '/opt',
   creates       => "${install_path}/bin",
@@ -229,11 +229,11 @@ archive { $filename:
   path          => "/tmp/${filename}",
   source        => "http://www-eu.apache.org/dist/tomcat/tomcat-9/v9.0.0.M3/bin/apache-tomcat-9.0.0.M3.zip",
   checksum      => 'f2aaf16f5e421b97513c502c03c117fab6569076',
-  checksum_type => 'sha1',
+  checksum_type => sha1,
   extract       => true,
   extract_path  => '/opt',
-  creates       => $install_path,
-  cleanup       => 'true',
+  creates       => "${install_path}/bin",
+  cleanup       => true,
   require       => File[$install_path],
 }
 
@@ -255,7 +255,7 @@ archive { '/nfs/repo/software.zip':
   source        => '/nfs/repo/software.zip'
   extract       => true,
   extract_path  => '/opt',
-  checksum_type => 'none', # typically unecessary
+  checksum_type => none,   # typically unecessary
   cleanup       => false,  # keep the file on the server
 }
 ```
@@ -335,6 +335,25 @@ class { 'archive':
 archive { '/tmp/gravatar.png':
   ensure => present,
   source => 'gs://bodecoio/gravatar.png',
+}
+```
+
+### Passing headers
+
+Sometimes headers need to be passed to source. This can be accomplished
+using `headers` parameter:
+
+```puppet
+archive { '/tmp/slack-desktop-4.28.184-amd64.deb':
+  ensure        => present,
+  extract       => true,
+  extract_path  => '/tmp',
+  source        => 'https://downloads.slack-edge.com/releases/linux/4.28.184/prod/x64/slack-desktop-4.28.184-amd64.deb',
+  checksum      => 'e5d63dc6bd112d40c97f210af4c5f66444d4d5e8',
+  checksum_type => sha1,
+  headers       => ['Authorization: OAuth ABC123']
+  creates       => '/usr/local/bin/slack',
+  cleanup       => true,
 }
 ```
 
@@ -461,7 +480,9 @@ archive { '/tmp/staging/master.zip':
 * `ensure`: whether archive file should be present/absent (default: present)
 * `path`: namevar, archive file fully qualified file path.
 * `filename`: archive file name (derived from path).
-* `source`: archive file source, supports http|https|ftp|file|s3|gs uri.
+* `source`: archive file source,
+   supports puppet|http|https|ftp|file|s3|gs|abspath uri.
+* `headers`: array of headers to pass source, like an authentication token
 * `username`: username to download source file.
 * `password`: password to download source file.
 * `allow_insecure`: Ignore HTTPS certificate errors (true|false). (default: false)
@@ -469,7 +490,8 @@ archive { '/tmp/staging/master.zip':
 * `checksum_type`: archive file checksum type (none|md5|sha1|sha2|sha256|sha384|
   sha512). (default: none)
 * `checksum`: archive file checksum (match checksum_type)
-* `checksum_url`: archive file checksum source (instead of specify checksum)
+* `checksum_url`: archive file checksum source (instead of specify checksum),
+   supports puppet|http|https|ftp|file|s3|gs|abspath uri.
 * `checksum_verify`: whether checksum will be verified (true|false). (default: true)
 * `extract`: whether archive will be extracted after download (true|false).
   (default: false)
@@ -489,7 +511,9 @@ archive { '/tmp/staging/master.zip':
   file permission to 0644 so the user can read the file).
 * `cleanup`: whether archive file will be removed after extraction (true|false).
   (default: true)
-* `creates`: if file/directory exists, will not download/extract archive.
+* `creates`: if file/directory exists, will not download/extract archive. If
+  `extract` and `cleanup` are both `true`, this should be set to prevent Puppet
+  from re-downloading and re-extracting the archive every run.
 * `proxy_server`: specify a proxy server, with port number if needed. ie:
   `https://example.com:8080`.
 * `proxy_type`: proxy server type (none|http|https|ftp)
@@ -512,27 +536,62 @@ archive { '/tmp/staging/master.zip':
 * `extract`: whether to extract the files (true/false).
 * `creates`: the file created when the archive is extracted (true/false).
 * `cleanup`: remove archive file after file extraction (true/false).
+* `headers`: array of headers to pass source
 
 #### Archive::Artifactory Example
 
-```puppet
-$dirname = 'gradle-1.0-milestone-4-20110723151213+0300'
-$filename = "${dirname}-bin.zip"
+* retrieve gradle without authentication
 
-archive::artifactory { $filename:
-  archive_path => '/tmp',
-  url          => "http://repo.jfrog.org/artifactory/distributions/org/gradle/${filename}",
-  extract      => true,
-  extract_path => '/opt',
-  creates      => "/opt/${dirname}",
-  cleanup      => true,
-}
+  ```puppet
+  $dirname = 'gradle-1.0-milestone-4-20110723151213+0300'
+  $filename = "${dirname}-bin.zip"
 
-file { '/opt/gradle':
-  ensure => link,
-  target => "/opt/${dirname}",
-}
-```
+  archive::artifactory { $filename:
+    archive_path => '/tmp',
+    url          => "http://repo.jfrog.org/artifactory/distributions/org/gradle/${filename}",
+    extract      => true,
+    extract_path => '/opt',
+    creates      => "/opt/${dirname}",
+    cleanup      => true,
+  }
+
+  file { '/opt/gradle':
+    ensure => link,
+    target => "/opt/${dirname}",
+  }
+  ```
+
+* retrieve gradle with api token:
+
+  ```puppet
+  $dirname = 'gradle-1.0-milestone-4-20110723151213+0300'
+  $filename = "${dirname}-bin.zip"
+
+  archive::artifactory { $filename:
+    archive_path => '/tmp',
+    url          => "http://repo.jfrog.org/artifactory/distributions/org/gradle/${filename}",
+    headers      => ['X-JFrog-Art-Api: ABC123'],
+    extract      => true,
+    extract_path => '/opt',
+    creates      => "/opt/${dirname}",
+    cleanup      => true,
+  }
+
+  file { '/opt/gradle':
+    ensure => link,
+    target => "/opt/${dirname}",
+  }
+  ```
+
+* setup resource defaults
+
+  ```puppet
+  $artifactory_authentication = lookup('jfrog_token')
+
+  Archive::Artifactory {
+    headers => ["X-JFrog-Art-Api: ${artifactory_authentication}"],
+  }
+  ```
 
 #### Archive::Nexus
 

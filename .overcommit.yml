@@ -1,4 +1,5 @@
-# Managed by https://github.com/voxpupuli/modulesync_configs
+# Managed by modulesync - DO NOT EDIT
+# https://voxpupuli.org/docs/updating-files-managed-with-modulesync/
 #
 # Hooks are only enabled if you take action.
 #
@@ -42,10 +43,12 @@ PreCommit:
     enabled: true
     description: 'Runs rubocop on modified files only'
     command: ['bundle', 'exec', 'rubocop']
-  PuppetLint:
+  RakeTarget:
     enabled: true
-    description: 'Runs puppet-lint on modified files only'
-    command: ['bundle', 'exec', 'puppet-lint']
+    description: 'Runs lint on modified files only'
+    targets:
+      - 'lint'
+    command: ['bundle', 'exec', 'rake']
   YamlSyntax:
     enabled: true
   JsonSyntax:

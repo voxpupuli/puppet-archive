@@ -1,58 +1,70 @@
-# Define: archive::artifactory
-# ============================
 #
-# archive wrapper for downloading files from artifactory
+# @summary Archive wrapper for downloading files from artifactory
 #
-# Parameters
-# ----------
+# @param url
+#   artifactory download URL
+# @param headers
+#   HTTP header(s) to pass to source
+# @param path
+#   absolute path for the download file (or use archive_path and only supply filename)
+# @param ensure
+#   ensure download file present/absent
+# @param cleanup
+#   remove archive after file extraction
+# @param extract
+#   whether to extract the files
+# @param archive_path
+#   parent directory to download archive into
+# @param creates
+#   the file created when the archive is extracted
+# @param extract_path
+#   absolute path to extract archive into
+# @param group
+#   file group (see archive params for defaults)
+# @param mode
+#   file mode (see archive params for defaults)
+# @param owner
+#   file owner (see archive params for defaults)
+# @param password
+#   Password to authenticate with
+# @param username
+#   User to authenticate as
 #
-# * path: fully qualified filepath for the download the file or use archive_path and only supply filename. (namevar).
-# * ensure: ensure the file is present/absent.
-# * url: artifactory download URL.
-# * owner: file owner (see archive params for defaults).
-# * group: file group (see archive params for defaults).
-# * mode: file mode (see archive params for defaults).
-# * archive_path: the parent directory of local filepath.
-# * extract: whether to extract the files (true/false).
-# * creates: the file created when the archive is extracted (true/false).
-# * cleanup: remove archive file after file extraction (true/false).
+# @example
+#   archive::artifactory { '/tmp/logo.png':
+#     url   => 'https://repo.jfrog.org/artifactory/distributions/images/Artifactory_120x75.png',
+#     owner => 'root',
+#     group => 'root',
+#     mode  => '0644',
+#   }
+# @example
+#   $dirname = 'gradle-1.0-milestone-4-20110723151213+0300'
+#   $filename = "${dirname}-bin.zip"
 #
-# Examples
-# --------
-#
-# archive::artifactory { '/tmp/logo.png':
-#   url   => 'https://repo.jfrog.org/artifactory/distributions/images/Artifactory_120x75.png',
-#   owner => 'root',
-#   group => 'root',
-#   mode  => '0644',
-# }
-#
-# $dirname = 'gradle-1.0-milestone-4-20110723151213+0300'
-# $filename = "${dirname}-bin.zip"
-#
-# archive::artifactory { $filename:
-#   archive_path => '/tmp',
-#   url          => "http://repo.jfrog.org/artifactory/distributions/org/gradle/${filename}",
-#   extract      => true,
-#   extract_path => '/opt',
-#   creates      => "/opt/${dirname}",
-#   cleanup      => true,
-# }
+#   archive::artifactory { $filename:
+#     archive_path => '/tmp',
+#     url          => "http://repo.jfrog.org/artifactory/distributions/org/gradle/${filename}",
+#     extract      => true,
+#     extract_path => '/opt',
+#     creates      => "/opt/${dirname}",
+#     cleanup      => true,
+#   }
 #
 define archive::artifactory (
-  Stdlib::HTTPUrl                $url,
-  String                         $path         = $name,
-  Enum['present', 'absent']      $ensure       = present,
-  Optional[String]               $owner        = undef,
-  Optional[String]               $group        = undef,
-  Optional[String]               $mode         = undef,
-  Optional[Boolean]              $extract      = undef,
-  Optional[String]               $extract_path = undef,
-  Optional[String]               $creates      = undef,
-  Optional[Boolean]              $cleanup      = undef,
-  Optional[String]               $username     = undef,
-  Optional[String]               $password     = undef,
+  Stdlib::HTTPUrl $url,
+  Array $headers = [],
+  Boolean $cleanup = false,
+  Boolean $extract = false,
+  Enum['present', 'absent'] $ensure = 'present',
+  String $path = $name,
   Optional[Stdlib::Absolutepath] $archive_path = undef,
+  Optional[String] $creates      = undef,
+  Optional[String] $extract_path = undef,
+  Optional[String] $group = undef,
+  Optional[String] $mode = undef,
+  Optional[String] $owner = undef,
+  Optional[String] $password = undef,
+  Optional[String] $username = undef,
 ) {
   include archive::params
 
@@ -69,7 +81,7 @@ define archive::artifactory (
   $maven2_data = archive::parse_artifactory_url($url)
   if $maven2_data and $maven2_data['folder_iteg_rev'] == 'SNAPSHOT' {
     # URL represents a SNAPSHOT version. eg 'http://artifactory.example.com/artifactory/repo/com/example/artifact/0.0.1-SNAPSHOT/artifact-0.0.1-SNAPSHOT.zip'
-    # Only Artifactory Pro lets you download this directly but the corresponding fileinfo endpoint (where the sha1 checksum is published) doesn't exist.
+    # Only Artifactory Pro downloads this directly but the corresponding file endpoint (where the sha1 checksum is published) doesn't exist
     # This means we can't use the artifactory_sha1 function
 
     $latest_url_data = archive::artifactory_latest_url($url, $maven2_data)
@@ -86,6 +98,7 @@ define archive::artifactory (
     path          => $file_path,
     extract       => $extract,
     extract_path  => $extract_path,
+    headers       => $headers,
     username      => $username,
     password      => $password,
     source        => $file_url,

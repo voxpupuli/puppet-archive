@@ -1,5 +1,5 @@
----
 # Managed by modulesync - DO NOT EDIT
 # https://voxpupuli.org/docs/updating-files-managed-with-modulesync/
 
-modulesync_config_version: '10.0.0'
+--fail-on-warnings
+--no-parameter_documentation-check

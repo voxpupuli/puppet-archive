@@ -1,51 +1,55 @@
-# == Definition: archive::download
 #
-# Archive downloader with integrity verification.
+# @summary Archive downloader with integrity verification
 #
-# Parameters:
+# @param url
+#   source 
+# @param headers
+#   HTTP (s) to pass to source
+# @param allow_insecure
+#   Allow self-signed certificate on source?
+# @param checksum
+#   Should checksum be validated?
+# @param digest_type
+#   Digest to use for calculating checksum
+# @param ensure
+#   ensure file present/absent
+# @param src_target
+#   Absolute path to staging location
+# @param digest_string
+#   Value  expected checksum
+# @param digest_url
+#   URL  expected checksum value
+# @param proxy_server
+#   FQDN of proxy server
+# @param user
+#   User used to download the archive
 #
-# - *$url:
-# - *$digest_url:
-# - *$digest_string: Default value undef
-# - *$digest_type: Default value "md5".
-# - *$timeout: Default value 120. (ignored)
-# - *$src_target: Default value "/usr/src".
-# - *$allow_insecure: Default value false.
-# - *$follow_redirects: Default value false.
-# - *$verbose: Default value true.
-# - *$proxy_server: Default value undef.
-# - *$user: The user used to download the archive
-#
-# Example usage:
-#
-#  archive::download {"apache-tomcat-6.0.26.tar.gz":
-#    ensure => present,
-#    url    => "http://archive.apache.org/dist/tomcat/tomcat-6/v6.0.26/bin/apache-tomcat-6.0.26.tar.gz",
-#  }
-#
-#  archive::download {"apache-tomcat-6.0.26.tar.gz":
-#    ensure        => present,
-#    digest_string => "f9eafa9bfd620324d1270ae8f09a8c89",
-#    url           => "http://archive.apache.org/dist/tomcat/tomcat-6/v6.0.26/bin/apache-tomcat-6.0.26.tar.gz",
-#  }
+# @example
+#   archive::download {"apache-tomcat-6.0.26.tar.gz":
+#     ensure => present,
+#     url    => "http://archive.apache.org/dist/tomcat/tomcat-6/v6.0.26/bin/apache-tomcat-6.0.26.tar.gz",
+#   }
+# @example
+#   archive::download {"apache-tomcat-6.0.26.tar.gz":
+#     ensure        => present,
+#     digest_string => "f9eafa9bfd620324d1270ae8f09a8c89",
+#     url           => "http://archive.apache.org/dist/tomcat/tomcat-6/v6.0.26/bin/apache-tomcat-6.0.26.tar.gz",
+#   }
 #
 define archive::download (
-  String                        $url,
-  Enum['present', 'absent']     $ensure  = present,
-  Boolean                       $checksum         = true,
-  Optional[String]              $digest_url       = undef,
-  Optional[String]              $digest_string    = undef,
+  String $url,
+  Array $headers = [],
+  Boolean $allow_insecure = false,
+  Boolean $checksum = true,
   Enum['none', 'md5', 'sha1', 'sha2','sha256', 'sha384', 'sha512'] $digest_type = 'md5',   # bad default!
-  Integer                       $timeout          = 120,     # ignored
-  Stdlib::Compat::Absolute_path $src_target       = '/usr/src',
-  Boolean                       $allow_insecure   = false,
-  Boolean                       $follow_redirects = false,   # ignored (default)
-  Boolean                       $verbose          = true,    # ignored
-  String                        $path             = $facts['path'], # ignored
-  Optional[String]              $proxy_server     = undef,
-  Optional[String]              $user             = undef,
+  Enum['present', 'absent'] $ensure = 'present',
+  Stdlib::Absolutepath $src_target = '/usr/src',
+  Optional[String] $digest_string = undef,
+  Optional[String] $digest_url = undef,
+  Optional[String] $proxy_server = undef,
+  Optional[String] $user = undef,
 ) {
-  $target = ($title =~ Stdlib::Compat::Absolute_path) ? {
+  $target = ($title =~ Stdlib::Absolutepath) ? {
     false   => "${src_target}/${title}",
     default => $title,
   }
@@ -59,6 +63,7 @@ define archive::download (
     checksum_url    => $digest_url,
     proxy_server    => $proxy_server,
     user            => $user,
+    headers         => $headers,
     allow_insecure  => $allow_insecure,
   }
 }

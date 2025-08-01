@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'digest'
 require 'puppet/util/execution'
 require 'shellwords'
@@ -8,7 +10,7 @@ module PuppetX
       def initialize(file)
         @file = file
         @file_path =  if Facter.value(:osfamily) == 'windows'
-                        '"' + file + '"'
+                        "\"#{file}\""
                       else
                         Shellwords.shellescape file
                       end
@@ -41,32 +43,28 @@ module PuppetX
 
         custom_command = opts.fetch(:custom_command, nil)
         options = opts.fetch(:options)
-        Dir.chdir(path) do
-          cmd = if custom_command && custom_command =~ %r{%s}
-                  custom_command % @file_path
-                elsif custom_command
-                  "#{custom_command} #{options} #{@file_path}"
-                else
-                  command(options)
-                end
+        cmd = if custom_command&.include?('%s')
+                custom_command % @file_path
+              elsif custom_command
+                "#{custom_command} #{options} #{@file_path}"
+              else
+                command(options)
+              end
 
-          Puppet.debug("Archive extracting #{@file} in #{path}: #{cmd}")
-          File.chmod(0o644, @file) if opts[:uid] || opts[:gid]
-          Puppet::Util::Execution.execute(cmd, uid: opts[:uid], gid: opts[:gid], failonfail: true, squelch: false, combine: true)
-        end
+        Puppet.debug("Archive extracting #{@file} in #{path}: #{cmd}")
+        File.chmod(0o644, @file) if opts[:uid] || opts[:gid]
+        Puppet::Util::Execution.execute(cmd, uid: opts[:uid], gid: opts[:gid], cwd: path, failonfail: true, squelch: false, combine: true)
       end
 
       private
 
       def win_7zip
-        if ENV['path'].include?('7-Zip')
+        if system('where 7z.exe')
           '7z.exe'
-        elsif File.directory?('C:\\Program Files\\7-Zip')
-          'C:\\Program Files\\7-Zip\\7z.exe'
-        elsif File.directory?('C:\\Program Files (x86)\\7-zip')
-          'C:\\Program Files (x86)\\7-Zip\\7z.exe'
-        elsif system("where 7z.exe")
-          '7z.exe'
+        elsif File.exist?('C:\Program Files\7-Zip\7z.exe')
+          'C:\Program Files\7-Zip\7z.exe'
+        elsif File.exist?('C:\Program Files (x86)\7-zip\7z.exe')
+          'C:\Program Files (x86)\7-Zip\7z.exe'
         elsif @file_path =~ %r{.zip"$}
           # Fallback to powershell for zipfiles - this works with windows
           # 2012+ if your powershell/.net is too old the script will fail
@@ -79,7 +77,7 @@ module PuppetX
               Add-Type -AssemblyName System.IO.Compression.FileSystem -erroraction "silentlycontinue"
               $zipFile = [System.IO.Compression.ZipFile]::openread(#{@file_path})
               foreach ($zipFileEntry in $zipFile.Entries) {
-                  $pwd = (Get-Item -Path ".\" -Verbose).FullName
+                  $pwd = (Get-Item -Path "." -Verbose).FullName
                   $outputFile = [io.path]::combine($pwd, $zipFileEntry.FullName)
                   $dir = ([io.fileinfo]$outputFile).DirectoryName
 
@@ -98,7 +96,7 @@ module PuppetX
 
           "powershell -command #{ps.gsub(%r{"}, '\\"').gsub(%r{\n}, '; ')}"
         else
-          raise Exception, '7z.exe not available'
+          raise StandardError, '7z.exe not available'
         end
       end
 
