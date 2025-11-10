@@ -59,24 +59,24 @@ class archive (
       # Using bundled install option:
       # http://docs.aws.amazon.com/cli/latest/userguide/installing.html#install-bundle-other-os
 
-      file { '/opt/awscli-bundle':
+      file { '/opt/aws':
         ensure => 'directory',
       }
 
-      archive { 'awscli-bundle.zip':
+      archive { 'awscli-exe-linux-x86_64.zip':
         ensure       => present,
-        path         => '/opt/awscli-bundle/awscli-bundle.zip',
-        source       => 'https://s3.amazonaws.com/aws-cli/awscli-bundle.zip',
+        path         => '/opt/aws/awscli-exe-linux-x86_64.zip',
+        source       => 'https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip',
         extract      => true,
         extract_path => '/opt',
-        creates      => '/opt/awscli-bundle/install',
+        creates      => '/opt/aws/install',
         cleanup      => true,
       }
 
       exec { 'install_aws_cli':
-        command     => '/opt/awscli-bundle/install -i /usr/local/aws -b /usr/local/bin/aws',
+        command     => '/opt/aws/install -i /usr/local/aws-cli -b /usr/local/bin',
         refreshonly => true,
-        subscribe   => Archive['awscli-bundle.zip'],
+        subscribe   => Archive['awscli-exe-linux-x86_64.zip'],
       }
     }
   }
