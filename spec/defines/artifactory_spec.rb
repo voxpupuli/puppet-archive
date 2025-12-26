@@ -7,7 +7,7 @@ describe 'archive::artifactory' do
 
   # Mock Puppet V4 API ruby function with a puppet language function equivalent
   let(:pre_condition) do
-    'function archive::artifactory_checksum($url,$type) { return \'0d4f4b4b039c10917cfc49f6f6be71e4\' }'
+    'function archive::artifactory_checksum($url,$type,$headers) { return \'0d4f4b4b039c10917cfc49f6f6be71e4\' }'
   end
 
   context 'artifactory archive with defaults' do

@@ -7,13 +7,17 @@ Puppet::Functions.create_function(:'archive::artifactory_latest_url') do
   dispatch :artifactory_latest_url do
     param 'Variant[Stdlib::HTTPUrl, Stdlib::HTTPSUrl]', :url
     param 'Hash', :maven_data
+    optional_param 'Array	', :headers
   end
 
-  def artifactory_latest_url(url, maven_data)
-    # Turn provided artifactory URL into the fileinfo API endpoint of the parent directory
+  def artifactory_latest_url(url, maven_data, headers = [])
+    # Turn provided artifactory URL into the fileinfo API endpoint of the parent directory.
     uri = URI(url.sub('/artifactory/', '/artifactory/api/storage/')[%r{^(.*)/.*$}, 1])
 
-    response = PuppetX::Bodeco::Util.content(uri)
+    options = {}
+    options[:headers] = headers if headers != []
+
+    response = PuppetX::Bodeco::Util.content(uri, options)
     content  = JSON.parse(response)
 
     uris = if maven_data['classifier']
@@ -33,7 +37,7 @@ Puppet::Functions.create_function(:'archive::artifactory_latest_url') do
 
     # Now GET the fileinfo endpoint of the resolved latest version file
     uri = URI("#{content['uri']}#{latest}")
-    response = PuppetX::Bodeco::Util.content(uri)
+    response = PuppetX::Bodeco::Util.content(uri, options)
     content  = JSON.parse(response)
 
     url  = content['downloadUri']
