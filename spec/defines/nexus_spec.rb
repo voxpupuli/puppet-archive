@@ -13,21 +13,21 @@ describe 'archive::nexus' do
         url: 'https://oss.sonatype.org',
         gav: 'io.hawt:hawtio-web:1.4.36',
         repository: 'releases',
-        packaging: 'war'
+        packaging: 'war',
       }
     end
 
     it do
       expect(subject).to contain_archive('/tmp/hawtio.war').with(
         source: 'https://oss.sonatype.org/service/local/artifact/maven/content?g=io.hawt&a=hawtio-web&v=1.4.36&r=releases&p=war',
-        checksum_url: 'https://oss.sonatype.org/service/local/artifact/maven/content?g=io.hawt&a=hawtio-web&v=1.4.36&r=releases&p=war.md5'
+        checksum_url: 'https://oss.sonatype.org/service/local/artifact/maven/content?g=io.hawt&a=hawtio-web&v=1.4.36&r=releases&p=war.md5',
       )
     end
 
     it do
       expect(subject).to contain_file('/tmp/hawtio.war').that_requires('Archive[/tmp/hawtio.war]').with(
         owner: '0',
-        group: '0'
+        group: '0',
       )
     end
   end
@@ -47,7 +47,7 @@ describe 'archive::nexus' do
         extract_path: '/opt',
         creates: '/opt/artifact/WEB-INF',
         cleanup: true,
-        temp_dir: '/tmp'
+        temp_dir: '/tmp',
       }
     end
 
@@ -59,14 +59,14 @@ describe 'archive::nexus' do
         'extract_path' => '/opt',
         'creates' => '/opt/artifact/WEB-INF',
         'cleanup' => true,
-        'temp_dir' => '/tmp'
+        'temp_dir' => '/tmp',
       )
     end
 
     it do
       expect(subject).to contain_file('/tmp/artifact.war').that_requires('Archive[/tmp/artifact.war]').with(
         'owner' => 'tom',
-        'group' => 'worker'
+        'group' => 'worker',
       )
     end
   end
@@ -88,7 +88,7 @@ describe 'archive::nexus' do
         extract_path: '/opt',
         creates: '/opt/artifact/WEB-INF',
         cleanup: true,
-        checksum_verify: false
+        checksum_verify: false,
       }
     end
 
@@ -100,14 +100,14 @@ describe 'archive::nexus' do
         'extract_path' => '/opt',
         'creates' => '/opt/artifact/WEB-INF',
         'cleanup' => true,
-        'checksum_verify' => false
+        'checksum_verify' => false,
       )
     end
 
     it do
       expect(subject).to contain_file('/tmp/artifact.war').that_requires('Archive[/tmp/artifact.war]').with(
         'owner' => 'tom',
-        'group' => 'worker'
+        'group' => 'worker',
       )
     end
   end
@@ -121,7 +121,7 @@ describe 'archive::nexus' do
         gav: 'io.hawt:hawtio-web:1.4.36',
         repository: 'releases',
         packaging: 'war',
-        allow_insecure: true
+        allow_insecure: true,
       }
     end
 
@@ -137,7 +137,7 @@ describe 'archive::nexus' do
         gav: 'io.hawt:hawtio-web:1.4.36',
         repository: 'releases',
         packaging: 'war',
-        allow_insecure: false
+        allow_insecure: false,
       }
     end
 
@@ -153,7 +153,7 @@ describe 'archive::nexus' do
         gav: 'io.hawt:hawtio-web:1.4.36',
         repository: 'releases',
         packaging: 'war',
-        allow_insecure: 'foobar'
+        allow_insecure: 'foobar',
       }
     end
 
@@ -169,7 +169,7 @@ describe 'archive::nexus' do
         gav: 'io.hawt:hawtio-web:1.4.36',
         repository: 'releases',
         packaging: 'war',
-        use_nexus3_urls: false
+        use_nexus3_urls: false,
       }
     end
 
@@ -185,7 +185,7 @@ describe 'archive::nexus' do
         gav: 'io.hawt:hawtio-web:1.4.36',
         repository: 'releases',
         packaging: 'war',
-        use_nexus3_urls: true
+        use_nexus3_urls: true,
       }
     end
 

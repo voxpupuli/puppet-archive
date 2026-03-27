@@ -15,7 +15,7 @@ describe 'archive::assemble_nexus_url' do
       'a' => 'test',
       'v' => '1.0.0',
       'r' => 'binary-staging',
-      'p' => 'ear'
+      'p' => 'ear',
     }
 
     expect(subject).to run.with_params(nexus_url, parameters).and_return(expected_url)
@@ -29,7 +29,7 @@ describe 'archive::assemble_nexus_url' do
       'a' => 'test',
       'v' => '1.0.0+11',
       'r' => 'binary-staging',
-      'p' => 'ear'
+      'p' => 'ear',
     }
 
     expect(subject).to run.with_params(nexus_url, parameters).and_return(expected_url)

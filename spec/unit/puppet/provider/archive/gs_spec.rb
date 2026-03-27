@@ -14,7 +14,7 @@ RSpec.describe ruby_provider do
     let(:resource_properties) do
       {
         name: name,
-        source: source_location
+        source: source_location,
       }
     end
     let(:resource) { Puppet::Type::Archive.new(resource_properties) }
@@ -109,7 +109,7 @@ RSpec.describe ruby_provider do
         {
           name: name,
           source: source_location,
-          download_options: []
+          download_options: [],
         }
       end
 

@@ -36,8 +36,8 @@ Puppet::Type.newtype(:archive) do
 
     def change_to_s(currentvalue, newvalue)
       if currentvalue == :absent || currentvalue.nil?
-        extract = resource[:extract] == :true ? "and extracted in #{resource[:extract_path]}" : ''
-        cleanup = resource[:cleanup] == :true ? 'with cleanup' : 'without cleanup'
+        extract = (resource[:extract] == :true) ? "and extracted in #{resource[:extract_path]}" : ''
+        cleanup = (resource[:cleanup] == :true) ? 'with cleanup' : 'without cleanup'
 
         if provider.archive_checksum
           "replace archive: #{provider.archive_filepath} from #{is_to_s(currentvalue)} to #{should_to_s(newvalue)}"
@@ -264,7 +264,7 @@ Puppet::Type.newtype(:archive) do
       Pathname.new(self[:path]).parent.to_s,
       self[:extract_path],
       '/root/.aws/config',
-      '/root/.aws/credentials'
+      '/root/.aws/credentials',
     ].compact
   end
 

@@ -38,7 +38,7 @@ module PuppetX
           custom_command: nil,
           options: '',
           uid: nil,
-          gid: nil
+          gid: nil,
         }.merge(opts)
 
         custom_command = opts.fetch(:custom_command, nil)
@@ -104,7 +104,7 @@ module PuppetX
         if Facter.value(:osfamily) == 'windows'
           opt = parse_flags('x -aoa', options, '7z')
           cmd = win_7zip
-          cmd =~ %r{7z.exe} ? "#{cmd} #{opt} #{@file_path}" : cmd
+          (cmd =~ %r{7z.exe}) ? "#{cmd} #{opt} #{@file_path}" : cmd
         else
           case @file
           when %r{\.tar$}

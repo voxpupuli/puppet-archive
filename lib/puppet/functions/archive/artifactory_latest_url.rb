@@ -41,7 +41,7 @@ Puppet::Functions.create_function(:'archive::artifactory_latest_url') do
 
     {
       'url' => url,
-      'sha1' => sha1
+      'sha1' => sha1,
     }
   end
 end

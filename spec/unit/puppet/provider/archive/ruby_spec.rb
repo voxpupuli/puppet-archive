@@ -109,7 +109,7 @@ RSpec.describe ruby_provider do
         {
           name: name,
           source: source_location,
-          download_options: ['--region', 'eu-central-1']
+          download_options: ['--region', 'eu-central-1'],
         }
       end
 
