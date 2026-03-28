@@ -7,7 +7,7 @@ describe Puppet::Type.type(:archive) do
   let(:resource) do
     Puppet::Type.type(:archive).new(
       path: '/tmp/example.zip',
-      source: 'http://home.lan/example.zip'
+      source: 'http://home.lan/example.zip',
     )
   end
 
@@ -139,7 +139,7 @@ describe Puppet::Type.type(:archive) do
     let(:archive_resource) do
       described_class.new(
         path: '/tmp/example.zip',
-        source: 'http://home.lan/example.zip'
+        source: 'http://home.lan/example.zip',
       )
     end
 

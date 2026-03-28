@@ -14,7 +14,7 @@ describe 'archive::artifactory' do
     let(:title) { '/opt/app/example.zip' }
     let(:params) do
       {
-        url: 'http://home.lan:8081/artifactory/path/example.zip'
+        url: 'http://home.lan:8081/artifactory/path/example.zip',
       }
     end
 
@@ -23,7 +23,7 @@ describe 'archive::artifactory' do
         path: '/opt/app/example.zip',
         source: 'http://home.lan:8081/artifactory/path/example.zip',
         checksum: '0d4f4b4b039c10917cfc49f6f6be71e4',
-        checksum_type: 'sha1'
+        checksum_type: 'sha1',
       )
     end
 
@@ -32,7 +32,7 @@ describe 'archive::artifactory' do
         owner: '0',
         group: '0',
         mode: '0640',
-        require: 'Archive[/opt/app/example.zip]'
+        require: 'Archive[/opt/app/example.zip]',
       )
     end
   end
@@ -45,7 +45,7 @@ describe 'archive::artifactory' do
         url: 'http://home.lan:8081/artifactory/path/example.zip',
         owner: 'app',
         group: 'app',
-        mode: '0400'
+        mode: '0400',
       }
     end
 
@@ -54,7 +54,7 @@ describe 'archive::artifactory' do
         path: '/opt/app/example.zip',
         source: 'http://home.lan:8081/artifactory/path/example.zip',
         checksum: '0d4f4b4b039c10917cfc49f6f6be71e4',
-        checksum_type: 'sha1'
+        checksum_type: 'sha1',
       )
     end
 
@@ -63,7 +63,7 @@ describe 'archive::artifactory' do
         owner: 'app',
         group: 'app',
         mode: '0400',
-        require: 'Archive[/opt/app/example.zip]'
+        require: 'Archive[/opt/app/example.zip]',
       )
     end
   end
@@ -74,7 +74,7 @@ describe 'archive::artifactory' do
       {
         archive_path: '/opt/app',
         url: 'http://home.lan:8081/artifactory/path/example.zip',
-        headers: ['X-JFrog-Art-Api: 123ABC']
+        headers: ['X-JFrog-Art-Api: 123ABC'],
       }
     end
 
@@ -83,7 +83,7 @@ describe 'archive::artifactory' do
         path: '/opt/app/example.zip',
         source: 'http://home.lan:8081/artifactory/path/example.zip',
         checksum: '0d4f4b4b039c10917cfc49f6f6be71e4',
-        checksum_type: 'sha1'
+        checksum_type: 'sha1',
       )
     end
   end

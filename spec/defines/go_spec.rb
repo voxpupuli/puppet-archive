@@ -23,7 +23,7 @@ describe 'archive::go' do
         url_path: 'go/example.zip',
         md5_url_path: 'go/example.zip/checksum',
         username: 'username',
-        password: 'password'
+        password: 'password',
       }
     end
 
@@ -32,7 +32,7 @@ describe 'archive::go' do
         path: '/opt/app/example.zip',
         source: 'http://home.lan:8081/go/example.zip',
         checksum: '0d4f4b4b039c10917cfc49f6f6be71e4',
-        checksum_type: 'md5'
+        checksum_type: 'md5',
       )
     end
 
@@ -41,7 +41,7 @@ describe 'archive::go' do
         owner: '0',
         group: '0',
         mode: '0640',
-        require: 'Archive[/opt/app/example.zip]'
+        require: 'Archive[/opt/app/example.zip]',
       )
     end
   end
@@ -59,7 +59,7 @@ describe 'archive::go' do
         password: 'password',
         owner: 'app',
         group: 'app',
-        mode: '0400'
+        mode: '0400',
       }
     end
 
@@ -68,7 +68,7 @@ describe 'archive::go' do
         path: '/opt/app/example.zip',
         source: 'http://home.lan:8081/go/example.zip',
         checksum: '0d4f4b4b039c10917cfc49f6f6be71e4',
-        checksum_type: 'md5'
+        checksum_type: 'md5',
       )
     end
 
@@ -77,7 +77,7 @@ describe 'archive::go' do
         owner: 'app',
         group: 'app',
         mode: '0400',
-        require: 'Archive[/opt/app/example.zip]'
+        require: 'Archive[/opt/app/example.zip]',
       )
     end
   end

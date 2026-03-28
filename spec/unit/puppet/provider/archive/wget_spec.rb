@@ -21,7 +21,7 @@ RSpec.describe wget_provider do
         source_location,
         '-O',
         name,
-        '--max-redirect=5'
+        '--max-redirect=5',
       ]
     end
 
@@ -49,7 +49,7 @@ RSpec.describe wget_provider do
         {
           name: name,
           source: source_location,
-          username: 'foo'
+          username: 'foo',
         }
       end
 
@@ -64,7 +64,7 @@ RSpec.describe wget_provider do
         {
           name: name,
           source: source_location,
-          password: 'foo'
+          password: 'foo',
         }
       end
 
@@ -79,7 +79,7 @@ RSpec.describe wget_provider do
         {
           name: name,
           source: source_location,
-          cookie: 'foo'
+          cookie: 'foo',
         }
       end
 
@@ -94,7 +94,7 @@ RSpec.describe wget_provider do
         {
           name: name,
           source: source_location,
-          proxy_server: 'https://home.lan:8080'
+          proxy_server: 'https://home.lan:8080',
         }
       end
 
@@ -109,7 +109,7 @@ RSpec.describe wget_provider do
         {
           name: name,
           source: source_location,
-          allow_insecure: true
+          allow_insecure: true,
         }
       end
 
@@ -126,7 +126,7 @@ RSpec.describe wget_provider do
       let(:resource_properties) do
         {
           name: name,
-          source: source_location
+          source: source_location,
         }
       end
 
@@ -143,7 +143,7 @@ RSpec.describe wget_provider do
             url,
             '-O',
             String,
-            '--max-redirect=5'
+            '--max-redirect=5',
           ]
         end
 

@@ -12,7 +12,7 @@ describe 'archive::staging' do
       expect(subject).to contain_file('/opt/staging').with(
         owner: '0',
         group: '0',
-        mode: '0640'
+        mode: '0640',
       )
     end
   end
@@ -25,7 +25,7 @@ describe 'archive::staging' do
         path: '/tmp/staging',
         owner: 'puppet',
         group: 'puppet',
-        mode: '0755'
+        mode: '0755',
       }
     end
 
@@ -35,7 +35,7 @@ describe 'archive::staging' do
       expect(subject).to contain_file('/tmp/staging').with(
         owner: 'puppet',
         group: 'puppet',
-        mode: '0755'
+        mode: '0755',
       )
     end
   end
@@ -45,7 +45,7 @@ describe 'archive::staging' do
       {
         os: { family: 'Windows' },
         puppetversion: '3.4.3 (Puppet Enterprise 3.2.3)',
-        archive_windir: 'C:/Windows/Temp/staging'
+        archive_windir: 'C:/Windows/Temp/staging',
       }
     end
 
@@ -55,7 +55,7 @@ describe 'archive::staging' do
       expect(subject).to contain_file('C:/Windows/Temp/staging').with(
         owner: 'S-1-5-32-544',
         group: 'S-1-5-18',
-        mode: '0640'
+        mode: '0640',
       )
     end
   end

@@ -22,7 +22,7 @@ RSpec.describe curl_provider do
         name,
         '-fsSLg',
         '--max-redirs',
-        5
+        5,
       ]
     end
 
@@ -37,7 +37,7 @@ RSpec.describe curl_provider do
       let(:resource_properties) do
         {
           name: name,
-          source: source_location
+          source: source_location,
         }
       end
 
@@ -53,7 +53,7 @@ RSpec.describe curl_provider do
           name: name,
           source: source_location,
           username: 'foo',
-          password: 'bar'
+          password: 'bar',
         }
       end
 
@@ -84,7 +84,7 @@ RSpec.describe curl_provider do
             name: name,
             source: source_location,
             username: 'foo',
-            password: 'b ar'
+            password: 'b ar',
           }
         end
 
@@ -100,7 +100,7 @@ RSpec.describe curl_provider do
         {
           name: name,
           source: source_location,
-          allow_insecure: true
+          allow_insecure: true,
         }
       end
 
@@ -115,7 +115,7 @@ RSpec.describe curl_provider do
         {
           name: name,
           source: source_location,
-          cookie: 'foo=bar'
+          cookie: 'foo=bar',
         }
       end
 
@@ -130,7 +130,7 @@ RSpec.describe curl_provider do
         {
           name: name,
           source: source_location,
-          proxy_server: 'https://home.lan:8080'
+          proxy_server: 'https://home.lan:8080',
         }
       end
 
@@ -145,7 +145,7 @@ RSpec.describe curl_provider do
         {
           name: name,
           source: source_location,
-          headers: ['Authorization: OAuth 123ABC']
+          headers: ['Authorization: OAuth 123ABC'],
         }
       end
 
@@ -160,7 +160,7 @@ RSpec.describe curl_provider do
         {
           name: name,
           source: source_location,
-          headers: ['Authorization: OAuth 123ABC', 'Accept: application/json']
+          headers: ['Authorization: OAuth 123ABC', 'Accept: application/json'],
         }
       end
 
@@ -179,7 +179,7 @@ RSpec.describe curl_provider do
       let(:resource_properties) do
         {
           name: name,
-          source: source_location
+          source: source_location,
         }
       end
 
@@ -197,7 +197,7 @@ RSpec.describe curl_provider do
             String,
             '-fsSLg',
             '--max-redirs',
-            5
+            5,
           ]
         end
 
@@ -238,7 +238,7 @@ RSpec.describe curl_provider do
         {
           name: name,
           source: source_location,
-          download_options: ['--tlsv1']
+          download_options: ['--tlsv1'],
         }
       end
 

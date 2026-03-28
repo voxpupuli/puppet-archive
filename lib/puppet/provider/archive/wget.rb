@@ -24,8 +24,8 @@ Puppet::Type.type(:archive).provide(:wget, parent: :ruby) do
         Shellwords.shellescape(location),
         '-O',
         filepath,
-        '--max-redirect=5'
-      ]
+        '--max-redirect=5',
+      ],
     )
 
     # NOTE: Do NOT use wget(params) until https://tickets.puppetlabs.com/browse/PUP-6066 is resolved.

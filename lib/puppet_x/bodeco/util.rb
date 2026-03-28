@@ -94,7 +94,7 @@ module PuppetX
       def follow_redirect(uri, option = { limit: FOLLOW_LIMIT }, &block)
         http_opts = if uri.scheme == 'https'
                       { use_ssl: true,
-                        verify_mode: (@insecure ? OpenSSL::SSL::VERIFY_NONE : OpenSSL::SSL::VERIFY_PEER) }
+                        verify_mode: (@insecure ? OpenSSL::SSL::VERIFY_NONE : OpenSSL::SSL::VERIFY_PEER), }
                     else
                       { use_ssl: false }
                     end

@@ -54,8 +54,8 @@ Puppet::Type.type(:archive).provide(:curl, parent: :ruby) do
         filepath,
         '-fsSLg',
         '--max-redirs',
-        5
-      ]
+        5,
+      ],
     )
 
     begin

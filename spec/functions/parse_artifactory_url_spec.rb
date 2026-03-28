@@ -18,7 +18,7 @@ describe 'archive::parse_artifactory_url' do
         'folder_iteg_rev' => nil,
         'file_iteg_rev' => nil,
         'classifier' => nil,
-        'ext' => 'war'
+        'ext' => 'war',
       )
     end
 
@@ -33,7 +33,7 @@ describe 'archive::parse_artifactory_url' do
           'folder_iteg_rev' => nil,
           'file_iteg_rev' => nil,
           'classifier' => 'app',
-          'ext' => 'jar'
+          'ext' => 'jar',
         )
       end
     end
@@ -50,7 +50,7 @@ describe 'archive::parse_artifactory_url' do
         'folder_iteg_rev' => 'SNAPSHOT',
         'file_iteg_rev' => 'SNAPSHOT',
         'classifier' => nil,
-        'ext' => 'jar'
+        'ext' => 'jar',
       )
     end
 
@@ -65,7 +65,7 @@ describe 'archive::parse_artifactory_url' do
           'folder_iteg_rev' => 'SNAPSHOT',
           'file_iteg_rev' => 'SNAPSHOT',
           'classifier' => 'javadoc',
-          'ext' => 'jar'
+          'ext' => 'jar',
         )
       end
 
@@ -79,7 +79,7 @@ describe 'archive::parse_artifactory_url' do
           'folder_iteg_rev' => 'SNAPSHOT',
           'file_iteg_rev' => 'SNAPSHOT',
           'classifier' => 'tests',
-          'ext' => 'jar'
+          'ext' => 'jar',
         )
       end
     end

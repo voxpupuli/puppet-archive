@@ -149,7 +149,7 @@ Puppet::Type.type(:archive).provide(:ruby) do
       custom_command: resource[:extract_command],
       options: resource[:extract_flags],
       uid: resource[:user],
-      gid: resource[:group]
+      gid: resource[:group],
     )
   end
 
@@ -217,14 +217,14 @@ Puppet::Type.type(:archive).provide(:ruby) do
       cookie: resource[:cookie],
       proxy_server: resource[:proxy_server],
       proxy_type: resource[:proxy_type],
-      insecure: resource[:allow_insecure]
+      insecure: resource[:allow_insecure],
     )
   end
 
   def puppet_download(location, filepath)
     PuppetX::Bodeco::Util.puppet_download(
       location,
-      filepath
+      filepath,
     )
   end
 
@@ -233,7 +233,7 @@ Puppet::Type.type(:archive).provide(:ruby) do
       's3',
       'cp',
       location,
-      path
+      path,
     ]
     params += resource[:download_options] if resource[:download_options]
 
@@ -244,7 +244,7 @@ Puppet::Type.type(:archive).provide(:ruby) do
     params = [
       'cp',
       location,
-      path
+      path,
     ]
     params += resource[:download_options] if resource[:download_options]
 
