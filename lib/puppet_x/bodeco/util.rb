@@ -72,6 +72,7 @@ module PuppetX
         @password = options[:password]
         @cookie = options[:cookie]
         @insecure = options[:insecure]
+        @headers = options[:headers].nil? ? [] : options[:headers]
 
         if options[:proxy_server]
           uri = URI(options[:proxy_server])
@@ -87,6 +88,10 @@ module PuppetX
         header = @cookie && { 'Cookie' => @cookie }
 
         request = Net::HTTP::Get.new(uri.request_uri, header)
+        @headers.each do |h|
+          h_split = h.split(':', 2)
+          request[h_split[0].strip] = h_split[1].strip if h_split.length == 2
+        end
         request.basic_auth(@username, @password) if @username && @password
         request
       end
