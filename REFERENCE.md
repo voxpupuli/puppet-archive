@@ -1096,7 +1096,7 @@ Type: Ruby 4.x API
 
 A function that returns the checksum value of an artifact stored in Artifactory
 
-#### `archive::artifactory_checksum(Stdlib::HTTPUrl $url, Optional[Enum['sha1','sha256','md5']] $checksum_type)`
+#### `archive::artifactory_checksum(Stdlib::HTTPUrl $url, Optional[Enum['sha1','sha256','md5']] $checksum_type, Optional[Array] $headers)`
 
 The archive::artifactory_checksum function.
 
@@ -1115,13 +1115,19 @@ Data type: `Optional[Enum['sha1','sha256','md5']]`
 The checksum type.
 Note the function will raise an error if you ask for sha256 but your artifactory instance doesn't have the sha256 value calculated.
 
+##### `headers`
+
+Data type: `Optional[Array]`
+
+Array of headers to pass source, like an authentication token
+
 ### <a name="archive--artifactory_latest_url"></a>`archive::artifactory_latest_url`
 
 Type: Ruby 4.x API
 
 The archive::artifactory_latest_url function.
 
-#### `archive::artifactory_latest_url(Variant[Stdlib::HTTPUrl, Stdlib::HTTPSUrl] $url, Hash $maven_data)`
+#### `archive::artifactory_latest_url(Variant[Stdlib::HTTPUrl, Stdlib::HTTPSUrl] $url, Hash $maven_data, Optional[Array	] $headers)`
 
 The archive::artifactory_latest_url function.
 
@@ -1136,6 +1142,12 @@ Data type: `Variant[Stdlib::HTTPUrl, Stdlib::HTTPSUrl]`
 ##### `maven_data`
 
 Data type: `Hash`
+
+
+
+##### `headers`
+
+Data type: `Optional[Array	]`
 
 
 
