@@ -14,6 +14,7 @@ RSpec.describe curl_provider do
     let(:resource)         { Puppet::Type::Archive.new(resource_properties) }
     let(:provider)         { curl_provider.new(resource) }
     let(:netrc_tempfile)   { Tempfile.new('mock') }
+    let(:header_tempfile)  { Tempfile.new('mock') }
 
     let(:default_options) do
       [
@@ -30,7 +31,8 @@ RSpec.describe curl_provider do
       allow(FileUtils).to receive(:mv)
       allow(provider).to receive(:curl)
       allow(Tempfile).to receive(:new).and_call_original
-      allow(Tempfile).to receive(:new).with('.puppet_archive_curl').and_return(netrc_tempfile)
+      allow(Tempfile).to receive(:new).with('.puppet_archive_curl_netrc').and_return(netrc_tempfile)
+      allow(Tempfile).to receive(:new).with('.puppet_archive_curl_header').and_return(header_tempfile)
     end
 
     context 'no extra properties specified' do
@@ -140,22 +142,7 @@ RSpec.describe curl_provider do
       end
     end
 
-    context 'header specified' do
-      let(:resource_properties) do
-        {
-          name: name,
-          source: source_location,
-          headers: ['Authorization: OAuth 123ABC'],
-        }
-      end
-
-      it 'calls curl with header' do
-        provider.download(source_location, name)
-        expect(provider).to have_received(:curl).with((['--header'] << 'Authorization: OAuth 123ABC') | default_options)
-      end
-    end
-
-    context 'multiple headers specified' do
+    context 'headers specified' do
       let(:resource_properties) do
         {
           name: name,
@@ -164,9 +151,25 @@ RSpec.describe curl_provider do
         }
       end
 
-      it 'calls curl with headers' do
+      it 'populates temp header file with headers' do
+        allow(provider).to receive(:delete_headerfile) # Don't delete the file or we won't be able to examine its contents.
         provider.download(source_location, name)
-        expect(provider).to have_received(:curl).with(['--header', 'Authorization: OAuth 123ABC', '--header', 'Accept: application/json'] + default_options)
+        header_content = File.read(header_tempfile.path)
+        expect(header_content).to eq("Authorization: OAuth 123ABC\nAccept: application/json\n")
+      ensure
+        header_tempfile.unlink
+      end
+
+      it 'calls curl with default options and path to header file' do
+        header_filepath = header_tempfile.path
+        provider.download(source_location, name)
+        expect(provider).to have_received(:curl).with(default_options << '--header' << "@#{header_filepath}")
+      end
+
+      it 'deletes header file' do
+        header_filepath = header_tempfile.path
+        provider.download(source_location, name)
+        expect(File.exist?(header_filepath)).to be(false)
       end
     end
 
