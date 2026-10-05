@@ -70,6 +70,7 @@ module PuppetX
       def initialize(_url, options)
         @username = options[:username]
         @password = options[:password]
+        @headers = options[:headers]
         @cookie = options[:cookie]
         @insecure = options[:insecure]
 
@@ -84,9 +85,11 @@ module PuppetX
       end
 
       def generate_request(uri)
-        header = @cookie && { 'Cookie' => @cookie }
+        headers = {}
+        headers.merge!(@headers.to_h { |hdr| hdr.split(':', 2).map(&:strip) }) if @headers
+        headers['Cookie'] = @cookie if @cookie
 
-        request = Net::HTTP::Get.new(uri.request_uri, header)
+        request = Net::HTTP::Get.new(uri.request_uri, headers)
         request.basic_auth(@username, @password) if @username && @password
         request
       end
