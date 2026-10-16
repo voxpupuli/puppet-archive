@@ -194,7 +194,7 @@ Archive wrapper for downloading files from artifactory
 
 #### Examples
 
-##### 
+#####
 
 ```puppet
 archive::artifactory { '/tmp/logo.png':
@@ -205,7 +205,7 @@ archive::artifactory { '/tmp/logo.png':
 }
 ```
 
-##### 
+#####
 
 ```puppet
 $dirname = 'gradle-1.0-milestone-4-20110723151213+0300'
@@ -356,7 +356,7 @@ Archive downloader with integrity verification
 
 #### Examples
 
-##### 
+#####
 
 ```puppet
 archive::download {"apache-tomcat-6.0.26.tar.gz":
@@ -365,7 +365,7 @@ archive::download {"apache-tomcat-6.0.26.tar.gz":
 }
 ```
 
-##### 
+#####
 
 ```puppet
 archive::download {"apache-tomcat-6.0.26.tar.gz":
@@ -1154,6 +1154,3 @@ Returns: `Any`
 ##### `url`
 
 Data type: `Variant[Stdlib::HTTPUrl, Stdlib::HTTPSUrl]`
-
-
-
