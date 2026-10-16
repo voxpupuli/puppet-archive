@@ -10,9 +10,13 @@ Puppet::Type.type(:archive).provide(:curl, parent: :ruby) do
 
   def curl_params(location, params)
     params_ordered = []
-    params_ordered += optional_switch(resource[:headers], ['--header', '%s']) if resource[:headers]
     params_ordered += [location]
     params_ordered += params
+
+    if resource[:headers]
+      create_headerfile(resource[:headers])
+      params_ordered += ['--header', "@#{@header_file.path}"]
+    end
 
     if resource[:username]
       if resource[:username] =~ %r{\s} || resource[:password] =~ %r{\s}
@@ -32,8 +36,21 @@ Puppet::Type.type(:archive).provide(:curl, parent: :ruby) do
     params_ordered
   end
 
+  def create_headerfile(headers)
+    @header_file = Tempfile.new('.puppet_archive_curl_header')
+    @header_file.puts(headers)
+    @header_file.close
+  end
+
+  def delete_headerfile
+    return if @header_file.nil?
+
+    @header_file.unlink
+    @header_file = nil
+  end
+
   def create_netrcfile(location)
-    @netrc_file = Tempfile.new('.puppet_archive_curl')
+    @netrc_file = Tempfile.new('.puppet_archive_curl_netrc')
     machine = URI.parse(location).host
     @netrc_file.write("machine #{machine}\nlogin #{resource[:username]}\npassword #{resource[:password]}\n")
     @netrc_file.close
@@ -61,6 +78,7 @@ Puppet::Type.type(:archive).provide(:curl, parent: :ruby) do
     begin
       curl(params)
     ensure
+      delete_headerfile
       delete_netrcfile
     end
   end
