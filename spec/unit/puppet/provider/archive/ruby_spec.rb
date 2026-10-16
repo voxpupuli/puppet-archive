@@ -157,7 +157,7 @@ RSpec.describe ruby_provider do
         {
           name: name,
           source: source_location,
-          headers: ['Authorization: OAuth 123ABC']
+          headers: ['Authorization: OAuth 123ABC'],
         }
       end
 
@@ -181,7 +181,7 @@ RSpec.describe ruby_provider do
         {
           name: name,
           source: source_location,
-          headers: ['Authorization: OAuth 123ABC', 'Accept: application/json']
+          headers: ['Authorization: OAuth 123ABC', 'Accept: application/json'],
         }
       end
 
@@ -207,7 +207,7 @@ RSpec.describe ruby_provider do
           name: name,
           source: source_location,
           headers: ['Authorization: OAuth 123ABC', 'Accept: application/json'],
-          cookie: 'something'
+          cookie: 'something',
         }
       end
 

@@ -4,6 +4,28 @@ All notable changes to this project will be documented in this file.
 Each new release typically also includes the latest modulesync defaults.
 These should not affect the functionality of the module.
 
+## [v9.0.0](https://github.com/voxpupuli/puppet-archive/tree/v9.0.0) (2026-10-16)
+
+[Full Changelog](https://github.com/voxpupuli/puppet-archive/compare/v8.1.0...v9.0.0)
+
+**Breaking changes:**
+
+- Drop puppet, update openvox minimum version to 8.19 [\#548](https://github.com/voxpupuli/puppet-archive/pull/548) ([TheMeier](https://github.com/TheMeier))
+
+**Implemented enhancements:**
+
+- Implement header parameter in ruby provider [\#557](https://github.com/voxpupuli/puppet-archive/issues/557)
+- puppetlabs/stdlib: Allow 10.x [\#564](https://github.com/voxpupuli/puppet-archive/pull/564) ([bastelfreak](https://github.com/bastelfreak))
+- Update requirements to allow OpenVox 9 [\#563](https://github.com/voxpupuli/puppet-archive/pull/563) ([sebastianrakel](https://github.com/sebastianrakel))
+- Use curl header file instead of flattened arguments [\#561](https://github.com/voxpupuli/puppet-archive/pull/561) ([Joris29](https://github.com/Joris29))
+- Add support for headers parameter in ruby provider [\#558](https://github.com/voxpupuli/puppet-archive/pull/558) ([ananace](https://github.com/ananace))
+- Add Debian 13 support [\#550](https://github.com/voxpupuli/puppet-archive/pull/550) ([bastelfreak](https://github.com/bastelfreak))
+
+**Closed issues:**
+
+- archive module reveals sensitive information [\#507](https://github.com/voxpupuli/puppet-archive/issues/507)
+- Ability to install AWS CLI on windows [\#303](https://github.com/voxpupuli/puppet-archive/issues/303)
+
 ## [v8.1.0](https://github.com/voxpupuli/puppet-archive/tree/v8.1.0) (2025-07-08)
 
 [Full Changelog](https://github.com/voxpupuli/puppet-archive/compare/v8.0.0...v8.1.0)
