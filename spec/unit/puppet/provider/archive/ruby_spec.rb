@@ -150,6 +150,82 @@ RSpec.describe ruby_provider do
         expect { provider.transfer_download(name) }.to raise_error(Puppet::Error, %r{Download file checksum mismatch})
       end
     end
+
+    describe 'header specified' do
+      let(:source_location) { 'http://example.com' }
+      let(:resource_properties) do
+        {
+          name: name,
+          source: source_location,
+          headers: ['Authorization: OAuth 123ABC']
+        }
+      end
+
+      it 'downloads with header' do
+        http_dbl = double
+        allow(http_dbl).to receive(:request) do |request|
+          expect(request['Authorization']).to eq('OAuth 123ABC')
+        end
+        allow(Net::HTTP).to receive(:start).and_yield(http_dbl)
+
+        provider.download(source_location, name)
+
+        expect(Net::HTTP).to have_received(:start)
+        expect(http_dbl).to have_received(:request)
+      end
+    end
+
+    describe 'multiple headers specified' do
+      let(:source_location) { 'http://example.com' }
+      let(:resource_properties) do
+        {
+          name: name,
+          source: source_location,
+          headers: ['Authorization: OAuth 123ABC', 'Accept: application/json']
+        }
+      end
+
+      it 'downloads with headers' do
+        http_dbl = double
+        allow(http_dbl).to receive(:request) do |request|
+          expect(request['Authorization']).to eq('OAuth 123ABC')
+          expect(request['Accept']).to eq('application/json')
+        end
+        allow(Net::HTTP).to receive(:start).and_yield(http_dbl)
+
+        provider.download(source_location, name)
+
+        expect(Net::HTTP).to have_received(:start)
+        expect(http_dbl).to have_received(:request)
+      end
+    end
+
+    describe 'headers and cookie specified' do
+      let(:source_location) { 'http://example.com' }
+      let(:resource_properties) do
+        {
+          name: name,
+          source: source_location,
+          headers: ['Authorization: OAuth 123ABC', 'Accept: application/json'],
+          cookie: 'something'
+        }
+      end
+
+      it 'downloads with headers and cookie' do
+        http_dbl = double
+        allow(http_dbl).to receive(:request) do |request|
+          expect(request['Authorization']).to eq('OAuth 123ABC')
+          expect(request['Accept']).to eq('application/json')
+          expect(request['Cookie']).to eq('something')
+        end
+        allow(Net::HTTP).to receive(:start).and_yield(http_dbl)
+
+        provider.download(source_location, name)
+
+        expect(Net::HTTP).to have_received(:start)
+        expect(http_dbl).to have_received(:request)
+      end
+    end
   end
 end
 # rubocop:enable RSpec/MultipleMemoizedHelpers

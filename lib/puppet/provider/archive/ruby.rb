@@ -214,6 +214,7 @@ Puppet::Type.type(:archive).provide(:ruby) do
       filepath,
       username: resource[:username],
       password: resource[:password],
+      headers: resource[:headers],
       cookie: resource[:cookie],
       proxy_server: resource[:proxy_server],
       proxy_type: resource[:proxy_type],
